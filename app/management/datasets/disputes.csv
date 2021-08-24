@@ -1,0 +1,46 @@
+ID,TYPE,CODE,DESCRIPTION,EXPLANATION
+eacb8a3c-af29-4427-8e5b-c6805508a497,D,14,Invalid EPC Number,
+0ab81f90-ffdc-49bf-8ad5-c1e3ba0a587b,D,A0,Invoice Number Missing,
+74bee856-4d5c-4ab3-9446-9735586d7e2f,D,A1,Insufficient Whosaler Inventory,Product quantity in chargeback claim exceeds known quantity in distributors
+77331f56-4fb3-4205-a3a3-fb6d2d3d8fd0,D,A2,Line Item Too Old,Requested claim on this item is past the allowable chargeback submission
+e8a6927b-b11d-441d-b8e8-7faed041a425,D,A3,Quantity Invalid - Free Goods,Chargeback was requested on free good times (Corrected by manufacturer)
+e049e195-84f4-42f2-838c-4e31d59a5a7a,D,A4,Rebill Without Offsetting Credit,Chargeback is for re-billed goods for which no offsetting credit has been received
+31a59c4f-ac56-4147-a9c2-a6318a7e6a1c,D,A5,Minimum Order Quantity Not Met,
+505ba7ad-899f-4312-bfaa-d57ed710ec17,D,AA,Contract Number Missing,
+b5413418-a920-40a1-8476-69c9845e6046,D,BB,Contract Number Incorrect,Contract number supplied does not match any valid number in manufacturer file
+eefee1bb-9b59-480c-b9de-04a031757571,D,CC,Contract Expired,Invoice date after contract expiration date
+1e876dd8-7dc4-4f5e-a015-5c0371ea6afd,D,DD,Contract Not Yet In Force,Invoice date ocurred before contract start date
+3df0844f-f0bb-4592-875f-e9a17c982471,D,EE,Invoice Date Missing or Invalid,Invoice date for chargeback claim not supplied or invalid
+f5a6aff5-97b5-420c-8075-124b21294c0c,D,FF,Customer Not Covered,Manufacturer has not record of contract with this customer
+c51b6df9-3613-4636-90dd-a51166e32058,D,GG,Customer Expired,Customer dropped from contract before invoice date
+cee0d3a6-998c-4503-8335-0f4f7dd47572,D,HH,Customer Not Yet Eligible,Invoice date precedes inclusion of customer on contract
+524184c7-958a-448e-9a3f-94f083c6a141,D,II,Customer DEA Number, Referenced ID or Address required,DEA number / customer referenced ID or name/address required to identify
+1c261be0-ba42-4534-87fd-8bd4a698c57a,D,JJ,Customer DEA Number, Referenced ID or Address Identify,Unable to identify customer / DEA number / customer referenced ID or address
+e41d2725-390c-4d9a-845e-6da30ef7fa6a,D,KK,Drug Not Covered,Drug for this chargeback not covered on this contract
+f63938ce-9829-4731-bb7f-b64dd9749d03,D,LL,Drug Expired,Drug dropped from contract before invoice date
+852739e6-08a5-4c95-8dfd-6d33f17b29d7,D,MM,Drug Not Yet Eligible,Invoice date precedes date of inclusion of drug on this contract
+c4f33b60-bc5d-4ef2-8442-083d345b6dc3,D,NN,Drug Number Missing or Invalid,Drug number not submitted or unable to identify
+8f647cd9-0a20-4155-86b9-e7f040eb9508,D,OO,Wholesaler Not Covered,Manufacturer has not record of inclusion of this distributor on this contract
+17132e64-159e-44f4-b953-1270e6162e59,D,PP,Wholesaler Expired,Distributor dropped from this contract
+f0d6e611-b7c2-4ac1-b09c-f9f097552d23,D,QQ,Wholesaler Not Yet Eligible,Invoice date precedes date of inclusion of this distributor on this contract
+44c9dad7-6291-4553-8c3b-bd6a6e28cd59,D,RI,Invalid Resubmit Number,Resubmit number does not match any resubmit number assigned or does not
+2f9777db-9c90-494a-b06a-2bc505eedb27,D,RR,Quantity Invalid or Not Supplied,Quantity on invoice invalid or not supplied as required
+67bc978f-9601-4102-ab3b-e8c1fe1d2aab,D,SS,Contract Price Missing or Incorrect,Contract price not supplied or incorrect
+db251aca-1113-40ec-8ca0-e312c202843b,D,TT,Contract Price Inserted or Corrected,Contract price was missing or incorrect but was adjusted to be correct
+d332b433-53fb-48a5-96c2-da74d2b35c5c,A,UD,Undisputed,No problems with the line. Accept full credit submitted
+873fe128-3d0d-4070-9256-fcc2c1dc3e77,D,UU,Unit Cost Missing or Incorrect,Unit contract cost missing or incorrect
+f77ca6e2-7448-41ef-8ea3-819b69f69a75,D,VV,Unit Cost Inserted or Corrected,Unit contract price was missing or incorrect but was adjusted to be correct
+8ea4edb4-8765-4909-b8d6-2b2408a8baa7,D,WW,Extended Amount Incorrect,Extended chargeback amount incorrect
+6ee26df7-2b93-4679-adba-cb0d8ecd9e0f,D,XX,Extended Amount Corrected,Extended chargeback amount was incorrect but was adjusted to be correct
+ea0030a7-404c-44f9-bd96-4dea6b40bb1b,D,YY,Duplicate Chargeback Request,Manufacturer has record of previous claims on this invoice
+841a876a-66df-45dc-aabd-918e69e9498d,I,Z1,Invalid Doct Type,Inernal - Indicates that document type is not 844
+b82c85a3-d1e8-49fe-9867-a10db1c04952,I,Z2,Invalid Account No or multiple matches found,Inernal - Indicates multiple matches found for account no in customer table or invalid account
+24d7802d-1332-4eb0-a8ae-375c9c643487,I,Z3,Invalid Chargeback date,Inernal - Indicates chargeback date is not in correct format
+f2f2386b-454d-471d-8afe-079957afa040,I,Z4,Invalid Distributor ID or multiple matches found,Inernal - Indicates multiple matches in customer address table for a DEA number
+79ddab1c-43ee-4f3a-8e77-97bd9dcbc3dd,I,Z5,Invalid WAC Amount,Inernal - Indicates WAC amount is not in correct format in import table
+8221c70e-8d8d-4176-b0e9-20a1a5c4d3fa,I,Z6,Invalid Contract Price,Inernal - Indicates contract price is not in correct format in import table
+dc141f63-de7e-4e76-981e-55b639527c8c,I,Z7,Invalid Credit Amount,Inernal - Indicates credit amount is not in correct format in import table
+29c72990-3288-4f11-bc7c-66d8728758af,I,Z8,Duplicate Chargeback Number found in history table,Inernal - Indicates duplicate chargeback found in chargeback history table
+cdefff12-b934-478c-99d8-0f91436f2cba,I,Z9,Duplicate Chargeback Number found in process table,Inernal - Indicates duplicate chargeback found in chargeback table
+ab7653d5-9f32-4bc4-a675-6aa58f5f045f,I,ZA,System WAC price cannot be found,Inernal - Indicates system WAC price not found for item
+8b081300-f479-4a3c-8261-7550ed937959,I,ZB,Multiple matches found,Inernal - Indicates multiple ship to addresses found for an indirect customer
