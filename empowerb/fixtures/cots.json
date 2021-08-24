@@ -1,0 +1,338 @@
+[
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "193c5b82-cafd-4100-bc47-91e635c91368",
+      "group": 1,
+      "value": "VA"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "a5c2da2a-3e41-4eda-b5cc-4ce67cef16bf",
+      "group": 1,
+      "value": "DOD"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "86f18615-34f0-4485-8a03-db2125790293",
+      "group": 1,
+      "value": "Indian Health Services"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "664dde40-39a6-4a40-be5b-204fc842489f",
+      "group": 1,
+      "value": "US Coast Guard"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "fe365e5c-05cc-429e-8f94-84fc06fab402",
+      "group": 1,
+      "value": "Other Government Agency"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "6267f381-43e4-4ab5-8a7c-1bc32cc6034a",
+      "group": 1,
+      "value": "City/County/State"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "1116be35-e444-4622-a08d-64ad49664675",
+      "group": 1,
+      "value": "State Veteran Home"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "3e115a36-7446-4719-ba85-453872115912",
+      "group": 2,
+      "value": "Wholesaler"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "0ccd27a2-7792-4a7e-a035-fdb7bdb8ce9f",
+      "group": 2,
+      "value": "Specialty Distributor"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "c217873a-a9ff-4f30-b662-5b8e0cb065eb",
+      "group": 2,
+      "value": "Distributor"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "8fddd82a-2738-4014-8c69-c85f854216ad",
+      "group": 2,
+      "value": "Repackager"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "22a2d030-c0b4-4fe7-8ac9-0529fa09fe00",
+      "group": 2,
+      "value": "Durable Medical Equipment"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "a0c316fd-f76d-4795-87f7-62c59385cb40",
+      "group": 2,
+      "value": "Supplier"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "581e93d4-0009-4013-8a17-c518865b2881",
+      "group": 3,
+      "value": "Physician"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "88ec68f3-2eab-48a7-a4c9-8428ad093850",
+      "group": 3,
+      "value": "Medical Group"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "cf1e7860-6e0f-4424-9fb7-e27c0d321d4f",
+      "group": 3,
+      "value": "Clinic"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "13b77668-4b12-46d4-84c6-7d596c2ace8a",
+      "group": 3,
+      "value": "Outpatient Pharmacy"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "8dcf6fd9-5edf-481e-9f87-8188a3a6cbae",
+      "group": 3,
+      "value": "Ambulance"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "d2bba876-83a4-411c-982a-ad25fa933e5c",
+      "group": 3,
+      "value": "Surgery Center"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "fdc9dc4b-93ef-4c2e-940e-90b8c98ddc3e",
+      "group": 3,
+      "value": "Hospital"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "feb05230-0f0b-4968-be70-484ddef80181",
+      "group": 4,
+      "value": "Independent Living"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "4610543c-e959-4630-a8c5-6e5bddb2bb04",
+      "group": 4,
+      "value": "Assisted Living"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "4f49ea2d-eb50-4c30-97fd-86c0e803501b",
+      "group": 4,
+      "value": "Correctional Facility"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "8b62b75e-b4f2-46bb-a5a7-79cb030a7f42",
+      "group": 4,
+      "value": "Residential Living"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "b3721457-a7ef-4b05-81d9-69a1971ac60a",
+      "group": 4,
+      "value": "LTC Pharmacy"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "9829d676-6665-471b-adea-8af6a80965f1",
+      "group": 4,
+      "value": "Nursing Home"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "d5da2aed-b7a3-44c2-ae31-3e26b6435482",
+      "group": 5,
+      "value": "Mail Order"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "1dbc2a7e-8254-4e02-8720-e554f464006e",
+      "group": 5,
+      "value": "Specialty Pharmacy"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "c2de01d9-7805-4cae-9c25-82acdd83c906",
+      "group": 5,
+      "value": "Home Health"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "71b142e4-fff5-463a-add1-48e33e84949a",
+      "group": 5,
+      "value": "HMO Staff Model"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "89b44633-0073-478a-859f-a0519a61c1c8",
+      "group": 5,
+      "value": "Compounding"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "e83edd2c-248a-46dd-a92d-4b1486aad3a5",
+      "group": 6,
+      "value": "Chain Pharmacy"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "519c58c4-b1f9-4c7b-8f88-ca80b3a9836d",
+      "group": 6,
+      "value": "Independent Retail Pharmacy"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "d9a7c60f-fe20-4383-aef3-913453a0bc54",
+      "group": 6,
+      "value": "Retail Clinic"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "851962a2-4e25-4639-ad4e-3c1c9b7c868b",
+      "group": 7,
+      "value": "Veterinary Medicine"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "bba9c8f4-ccc0-4465-be10-2bfad7e4d846",
+      "group": 7,
+      "value": "Manufacturer"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "5e8a465b-4cb3-43be-8152-d5aaeb9efc77",
+      "group": 7,
+      "value": "Laboratory"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "d22420ea-aa06-40c1-8ea3-7f536dadc405",
+      "group": 7,
+      "value": "Research"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "8c6ca85f-312f-4567-832a-745f7e4dae7d",
+      "group": 7,
+      "value": "Organization/Service"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "d502fbd2-eff9-4f99-b093-df33352801d7",
+      "group": 8,
+      "value": "GPO"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "5145dcec-b24c-46d6-8d9e-bd271bbae41e",
+      "group": 8,
+      "value": "Managed Care"
+    }
+  },
+  {
+    "model": "ermm.classoftrade",
+    "fields": {
+      "id": "3fc03c5c-2241-4971-9abf-85daf8bfd4cc",
+      "group": 8,
+      "value": "Medicaid"
+    }
+  }
+]

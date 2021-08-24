@@ -1,0 +1,44 @@
+[
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "457af242-5119-4ef5-bfad-895a3e23ec29",
+      "name": "None"
+    }
+  },
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "e2790a81-f1d2-4475-9c44-5315e28156af",
+      "name": "Manual"
+    }
+  },
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "837b7bc6-0dd3-4cea-a21d-7d3431ac2d9b",
+      "name": "Acumatica"
+    }
+  },
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "e28f8765-d49e-4217-a9bb-108724a978b6",
+      "name": "Quickbooks (Local)"
+    }
+  },
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "3ed12d49-a871-45f7-9abb-bd521778cde0",
+      "name": "Dynamics365"
+    }
+  },
+  {
+    "model": "ermm.integrationsystem",
+    "fields": {
+      "id": "d8bd7804-4bf8-45da-b4ee-22f96e609257",
+      "name": "Netsuite"
+    }
+  }
+]

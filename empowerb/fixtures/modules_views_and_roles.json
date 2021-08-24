@@ -1,0 +1,278 @@
+[
+  {
+    "model": "ermm.module",
+    "fields": {
+      "id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "name": "CHARGEBACKS",
+      "order": 1
+    }
+  },
+  {
+    "model": "ermm.module",
+    "fields": {
+      "id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "name": "EDI",
+      "order": 2
+    }
+  },
+  {
+    "model": "ermm.module",
+    "fields": {
+      "id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "name": "ADMINISTRATION",
+      "order": 3
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "4a269e90-b3ac-4650-a9de-e261a8253a59",
+      "name": "Dashboard",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 1,
+      "icon": "fas fa-chart-bar",
+      "link": "/dashboard",
+      "option": "menu_dashboard"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "d78d3547-6e72-4088-81e2-1d373e3e2367",
+      "name": "Chargebacks",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 2,
+      "icon": "fa fa-file",
+      "link": "/chargebacks",
+      "option": "menu_chargebacks"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "0ea86f1f-decf-4409-aa58-b403695ac2ca",
+      "name": "Contracts",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 3,
+      "icon": "fa fa-clipboard",
+      "link": "/contracts",
+      "option": "menu_contracts"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "71c6f02b-3338-4bae-aef6-ea48ffeec54e",
+      "name": "Products",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 4,
+      "icon": "fa fa-product-hunt",
+      "link": "/products",
+      "option": "menu_products"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "f337463c-2034-40b0-8d37-ba7839dc4ea8",
+      "name": "Direct Customers",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 5,
+      "icon": "fa fa-briefcase",
+      "link": "/customers/direct",
+      "option": "menu_direct_customers"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "a5b7f442-24db-4fc3-bdea-a54546174151",
+      "name": "Indirect Customers",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 6,
+      "icon": "fa fa-briefcase",
+      "link": "/customers/indirect",
+      "option": "menu_indirect_customers"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "1c35e76e-24e7-4beb-9536-ffc87ad6ba98",
+      "name": "Reports",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 7,
+      "icon": "fa fa-file-pdf-o",
+      "link": "/reports",
+      "option": "menu_reports"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "bbcc09e5-5d9c-46d0-98d0-0c1462622d1f",
+      "name": "Settings",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 8,
+      "icon": "fa fa-cog",
+      "link": "/settings",
+      "option": "menu_settings"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "5aa2f337-c9db-4890-a92e-7281f973eb81",
+      "name": "File Manager",
+      "module_id": "87013fb2-a6d2-4355-8b51-86b6adb8a32d",
+      "order": 9,
+      "icon": "fa fa-th-list",
+      "link": "/files",
+      "option": "menu_file_manager"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "e1791ed8-0bfa-4daf-a839-18133673c10d",
+      "name": "Dashboard",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 1,
+      "icon": "fas fa-chart-bar",
+      "link": "/edi/dashboard",
+      "option": "menu_edi_dashboard"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "4748cdca-dd33-42dc-8b8b-51bc006e8d45",
+      "name": "Trading Partners",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 2,
+      "icon": "fa fa-user-o",
+      "link": "",
+      "option": "menu_edi_trading_partners"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "9219de4a-3ed2-48fb-bd30-af872908ac3e",
+      "name": "Reports",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 3,
+      "icon": "fas fa-chart-bar",
+      "link": "",
+      "option": "menu_edi_reports"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "59bbf647-3739-4339-a13d-1d80aa3e6c82",
+      "name": "Support",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 4,
+      "icon": "fas fa-file-text",
+      "link": "",
+      "option": "menu_edi_support"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "eadd3839-e2ea-4483-831c-42ff3f9c880f",
+      "name": "Cross Reference",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 5,
+      "icon": "fas fa-chart-bar",
+      "link": "",
+      "option": "menu_edi_cross_reference"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "8f4a2d72-d44e-4202-99bc-bf33cff72899",
+      "name": "Email",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 6,
+      "icon": "fa fa-envelope",
+      "link": "",
+      "option": "menu_edi_email"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "5d129bf7-8d0c-4e77-9c81-c4d6903354d0",
+      "name": "Settings",
+      "module_id": "5466c302-6191-471f-8f0c-95cf3ee35072",
+      "order": 7,
+      "icon": "fa fa-cog",
+      "link": "",
+      "option": "menu_edi_settings"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "8520bd71-f7b3-4b89-86a7-1ca020c97fcb",
+      "name": "Service Status",
+      "module_id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "order": 1,
+      "icon": "fas fa-signal",
+      "link": "/administration/service_status",
+      "option": "menu_administration_service_status"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "844f010b-6aaa-4ada-add6-d6f2f5493c5e",
+      "name": "Trading Partners",
+      "module_id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "order": 2,
+      "icon": "fa fa-user-o",
+      "link": "",
+      "option": "menu_administration_trading_partners"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "7996f0a1-f91e-493c-b14a-ae3f0e92e613",
+      "name": "Document Tester",
+      "module_id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "order": 3,
+      "icon": "fas fa-user-edit",
+      "link": "",
+      "option": "menu_administration_document_tester"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "82057bc6-9ada-4108-b18a-5a0d1b3ccb1a",
+      "name": "EDI Mapper",
+      "module_id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "order": 4,
+      "icon": "fas fa-map-marked-alt",
+      "link": "/administration/edi_mapping/s1",
+      "option": "menu_administration_edi_mapper"
+    }
+  },
+  {
+    "model": "ermm.view",
+    "fields": {
+      "id": "ee643a74-62a8-402f-9d24-a42358b9c51f",
+      "name": "Help Desk",
+      "module_id": "32d5bd14-6701-4bd1-8462-cd17d23834b4",
+      "order": 5,
+      "icon": "fas fa-crosshairs",
+      "link": "/administration/helpdesk",
+      "option": "menu_administration_helpdesk "
+    }
+  }
+]

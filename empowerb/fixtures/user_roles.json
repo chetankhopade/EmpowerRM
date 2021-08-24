@@ -1,0 +1,16 @@
+[
+  {
+    "model": "ermm.role",
+    "fields": {
+      "id": "c55a1b32-da16-4e9f-bcee-3a923e42930a",
+      "name": "SysAdmin"
+    }
+  },
+  {
+    "model": "ermm.role",
+    "fields": {
+      "id": "ba850281-048c-4c89-9b45-e93a9515b0f5",
+      "name": "beta_user"
+    }
+  }
+]
