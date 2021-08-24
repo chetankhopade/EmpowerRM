@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_right %}
+    {% if my_related_users %}
+        <a class="btn btn-warning mb-2" data-toggle="modal" data-target="#usersModal" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+            <i class="fa fa-plus"></i> Create User
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="box">
+
+            {% for myuser in my_related_users %}
+                <div class="list box-body">
+                    <div class="list-item ">
+                        <span class="w-56 avatar circle green">
+                            {% if myuser.first_name and myuser.last_name %}
+                                {{ myuser.first_name.0 }}{{ myuser.last_name.0 }}
+                            {% endif %}
+                        </span>
+                        <div class="list-body">
+                            <a href="" class="item-title">
+                                {{ myuser.first_name }} {{ myuser.last_name }}
+                            </a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                {{ myuser.email }}
+                            </div>
+                            <!-- companies -->
+                            {% for user_company in myuser.usercompany_set.all %}
+                                <span class="badge badge-primary py-1 mt-2">{{ user_company.company }}</span> &nbsp;
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <div class="item-action dropdown text-center">
+                                <a href="#" data-toggle="dropdown" class="text-muted">
+                                    <i class="fa fa-fw fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item">
+                                        <i class="fa fa-pencil"></i>
+                                        Edit User
+                                    </a>
+                                    <a class="dropdown-item">
+                                        <i class="fa fa-lock"></i>
+                                        Reset Password
+                                    </a>
+                                    <a class="dropdown-item">
+                                        <i class="fa fa-briefcase"></i>
+                                        Companies
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item">
+                                        <i class="fa fa-cog"></i>
+                                        Inactive User
+                                    </a>
+                                    <a class="dropdown-item">
+                                        <i class="fa fa-times"></i>
+                                        Delete User
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mt-4 badge {% if myuser.is_active %}badge-success{% else %}badge-danger{% endif %} py-1 mt-2 font-10">
+                                {% if myuser.is_active %}
+                                    Active
+                                {% else %}
+                                    Inactive
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="p-4 text-center empower-color-purple">
+                    <div>
+                        <i class="fas fa-user-friends fa-6x"></i>
+                    </div>
+                    <div class="mt-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="font-16">There aren't any Users added yet</span>
+                    </div>
+                    <div class="mt-2">
+                        <a class="btn btn-warning font-12" data-toggle="modal" data-target="#usersModal" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+                            Add your first User
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    {% include 'users/modal.html' %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+        <script src="{% static 'js/app/users.js' %}"></script>
+{% endblock %}

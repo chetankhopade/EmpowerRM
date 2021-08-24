@@ -1,0 +1,42 @@
+{% load static %}
+
+<div class="tab-pane" id="tabUploads">
+    <div class="p-3 b-b _600 empower-color-blue font-14">Uploads</div>
+    <div class="col-md-7 p-3">
+        <div class="row">
+            <div class="col-8">
+                <p class="font-12">Import Company Data</p>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalImportCompanyData">
+                    Upload
+                </a>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p class="font-12">Import ChargeBack History</p>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalImportCompanyCBHistory">
+                    Upload
+                </a>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <p class="font-12">Membership File Upload</p>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-warning btn-sm" onclick="CONTRACT_Membership.download_cm_list()">Download List</a>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalMembershipFileUpload">
+                    Upload
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/app/contracts/contract_handler.js' %}"></script>

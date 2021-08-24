@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content_body %}
+
+    <div class="d-sm-flex">
+
+        <!-- Tabs Options -->
+        <div class="w-nm w-auto-xs light bg bg-auto-sm b-r">
+            <div class="py-3">
+                <div class="nav-active-border left b-primary">
+                    <ul class="nav nav-nm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-toggle="tab" data-target="#tabGeneral">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="tab" data-target="#tabChargebacks">Chargebacks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabContracts">Contracts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabCustomers">Customers</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabAlerts">Alerts</a>
+                        </li> -->
+                        <!-- ticket 723 hide the Experimental section unless the company has the allow_experimental flag enabled or the user has been assigned the role beta_user -->
+                        {% if company_settings.allow_experimental or is_beta_user %}
+                            <li class="nav-item">
+                                <a class="nav-link " href="#" data-toggle="tab" data-target="#tabExperimental">Experimental</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabUploads">Uploads</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabRecipients">Recipients</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#" data-toggle="tab" data-target="#tabEDIs">EDI</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="col p-0">
+            <div class="tab-content pos-rlt">
+
+            {########   SECTIONS   ########}
+                <!-- Genral -->
+                {% include 'settings/sections/sgenral.html' %}
+                <!-- Chargebacks -->
+                {% include 'settings/sections/schargebacks.html' %}
+                <!-- Contracts -->
+                {% include 'settings/sections/scontracts.html' %}
+                <!-- Customers -->
+                {% include 'settings/sections/scustomers.html' %}
+                <!-- Alerts -->
+                {% include 'settings/sections/salerts.html' %}
+                <!-- Experimental -->
+                {% include 'settings/sections/sexperimental.html' %}
+                <!-- Uploads -->
+                {% include 'settings/sections/suploads.html' %}
+                <!-- Recipients -->
+                {% include 'settings/sections/srecipients.html' %}
+                <!-- EDIs -->
+                {% include 'settings/sections/sedis.html' %}
+            {########   ENDSECTIONS   ########}
+
+            </div>
+        </div>
+    </div>
+
+    {########   MODALS   ########}
+
+    <!-- Chargebacks -->
+    {% include 'settings/modals/schargebacks.html' %}
+    <!-- Contracts -->
+    {% include 'settings/modals/scontracts.html' %}
+    <!-- Uploads -->
+    {% include 'settings/modals/suploads.html' %}
+    <!-- Recipients -->
+    {% include 'settings/modals/srecipients.html' %}
+
+    {########   END MODALS   ########}
+
+{% endblock %}
+
+{%  block scripts %}
+    <!-- Constants -->
+    <script>
+        const INTEGRATION_SYSTEM_NONE_ID = "{{ integration_system_none_id }}";
+        const INTEGRATION_SYSTEM_MANUAL_ID = "{{ integration_system_manual_id }}";
+        const INTEGRATION_SYSTEM_ACUMATICA_ID = "{{ integration_system_acumatica_id }}";
+        const INTEGRATION_SYSTEM_QUICKBOOKS_ID = "{{ integration_system_quickbooks_id }}";
+        const INTEGRATION_SYSTEM_DYNAMICS365_ID = "{{ integration_system_dynamics365_id }}";
+        const COMPANY_HAS_COT = "{{ company_has_cot }}";
+    </script>
+
+    {########   SCRIPTS   ########}
+
+    <!-- Chargebacks -->
+    <script src="{% static 'js/app/settings/schargebacks.js' %}"></script>
+    <!-- Contracts -->
+    <script src="{% static 'js/app/settings/scontracts.js' %}"></script>
+    <!-- Uploads -->
+    <script src="{% static 'js/app/settings/suploads.js' %}"></script>
+    <!-- Recipients -->
+    <script src="{% static 'js/app/settings/srecipients.js' %}"></script>
+    <!-- EDI -->
+    <script src="{% static 'js/app/settings/sedi.js' %}"></script>
+
+    <!-- Settings General -->
+    <script src="{% static 'js/app/settings.js' %}"></script>
+
+    {########   END SCRIPTS   ########}
+
+{% endblock %}
