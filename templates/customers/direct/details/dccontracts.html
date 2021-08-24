@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_center %}
+    <!-- menu options -->
+    {% include 'customers/direct/includes/menu.html' %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            {% if customer_has_contracts %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tableContractsForCustomerDetails" class="table table-hover table-borderless table-striped w-100">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th style="display: none" class="notexport">Id</th>
+                                <th>Contract No.</th>
+                                <th>CB Lines</th>
+                                <th>Units Solds</th>
+                                <th>Total Amount</th>
+                              <!--<th></th> -->
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body empower-color-purple text-center p-4">
+                        <i class="fas fa-file-alt fa-6x"></i>
+                        <p class="mt-2">
+                            <i class="fas fa-building"></i>
+                            <span class="font-16">There aren't any Contracts added yet</span>
+                        </p>
+                        <p class="mt-2">
+                            <span db="{{ db_name }}" target="/contracts/create">
+                                <a onclick="APP.execute_url($(this));" class="btn btn-warning mb-1">
+                                    Add your first Contract
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const DIRECT_CUSTOMER_ID = '{{ direct_customer.id }}'
+    </script>
+    <script src="{% static 'js/app/direct_customers/dc_contracts.js' %}"></script>
+{% endblock %}

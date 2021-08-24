@@ -1,0 +1,44 @@
+{% if not my_customer.account_number %}
+    <a style="cursor: pointer">
+        <span class="noAcctNoToolTip"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Needs an account number assigned"
+              style="z-index: 999999"
+        >
+            <i class="fas fa-exclamation-triangle text-danger"></i>
+        </span>
+    </a>
+{% endif %}
+
+<!-- Add Account number to unassign Direct customerrs -->
+<div id="mdMissingAcctNum" class="modal fade">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h6 class="modal-title">Account Number Missing</h6>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    {% for direct_customer in direct_customers %}
+                        {% if not direct_customer.account_number %}
+                            <div class="row directCustomerRow">
+                                <div class="col directCustomerId"
+                                    cid="{{ direct_customer.id }}"
+                                    c_name="{{ direct_customer.get_name }}"
+                                >
+                                    {{ direct_customer.get_name }}</div>
+                                <div class="col">
+                                    <input class="directCustomerAccountNo form-control" type="text">
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button onclick="CUSTOMERS.update_account_no('{{ db_name }}');" type="button" class="btn btn-sm btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

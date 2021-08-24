@@ -1,0 +1,20 @@
+
+<div class="row">
+    <div class="col">
+        <span db="{{ db_name }}" target="/customers/indirect/{{ indirect_customer.id }}/details/info" class="mr-4">
+            <a onclick="APP.execute_url($(this))" class="text-black tt" title="Information">
+                <i class="fas fa-exclamation-circle font-12"></i>
+            </a>
+        </span>
+        <span db="{{ db_name }}" target="/customers/indirect/{{ indirect_customer.id }}/details/contracts" class="mr-4">
+            <a onclick="APP.execute_url($(this))" class="text-black tt" title="Related Contracts">
+                <i class="fas fa-th-list font-12"></i>
+            </a>
+        </span>
+        <span db="{{ db_name }}" target="/customers/indirect/{{ indirect_customer.id }}/details/products">
+            <a onclick="APP.execute_url($(this))" class="text-black tt" title="Related Products">
+                <i class="fas fa-prescription-bottle-alt font-12"></i>
+            </a>
+        </span>
+    </div>
+</div>

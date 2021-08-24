@@ -1,0 +1,513 @@
+{% load static %}
+
+<!-- Create/Edit - Customer -->
+<div id="mdlCreateCustomer" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h6 class="modal-title mb-2">
+                    Create Direct Customer
+                </h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                {% include 'customers/direct/includes/main_form.html' with formid='fmCreateDirectCustomer' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create from contracts view - Customer -->
+<div id="mdlCreateCustomerContract" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h6 class="modal-title mb-2">
+                    Create Direct Customer
+                </h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                {% include 'customers/direct/includes/main_form.html' with formid='fmAddModalCustomer' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="assignNewCustomerModal" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h6 class="modal-title mb-2">
+                    Assign New Direct Customer
+                </h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                <input type="text" class="width-100 form-control" id="inputAssignCustomerFilter" placeholder="Search customer"/>
+                <table class="table table-striped fixed_header" style="overflow-y: auto; height: 150px">
+                    <tbody>
+                    {% for global_customer in global_customers %}
+                        <tr class='font-12 height-40 filterable'>
+                            <td style="width: 1%">
+                                <label class="md-check">
+                                    <input type="checkbox" class="checkboxCustomer" cid="{{ global_customer.id }}" />
+                                    <i class="green"></i>
+                                </label>
+                            </td>
+                            <td style="text-align: left">
+                                {{ global_customer.name|default_if_none:'' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <a class="btn btn-warning tt" title="Create Customer" id="btnOpenCreateCustomer" data-toggle="modal" data-target="#mdlCreateCustomerContract">
+                    <i class="fa fa-plus"></i>
+                </a>
+                <div>
+                    <a id="btnAddCustomers" class="btn btn-warning" onclick="CUSTOMERS.add_customers_via_modal('/{{ db_name }}/customers/direct/add')">
+                        Assign New Customer
+                    </a>
+                    <a class="btn btn-primary" data-dismiss="modal" id="closeAssignNewCustomerModalBtn">
+                        Close
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdAddExistingCustomer"  tabindex="-1" role="dialog" aria-labelledby="mdAddExistingCustomerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Matching Customer Found</h5>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-around">
+                    <p class="font-weight-bold font-14">We found this matching company in our records.</p>
+                    <p class="font-weight-bold font-14">Or did you intend to create a brand new one?</p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-borderless table-sm">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <p class="font-weight-bold mt-3 font-10">Account No.:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="m-0 p-0 pull-right mt-3 mr-5">N/A</p>
+                            </td>
+                            <td>
+                                <p class="font-weight-bold mt-3 font-10 ml-5">Account No.:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_account_number" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_account_number|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Name:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="font-10 mt-3 pull-right mr-5" id="existing_name_label"></p>
+                                <input type="hidden" name="existing_name"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Name:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_name" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_name|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Type:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="font-10 mt-3 pull-right mr-5"> N/A </p>
+                                <input type="hidden" name="existing_name"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Type:</p>
+                            </td>
+                            <td>
+                                <select id="selectCustomerType" name="c_type" class="form-control myselect2 w-100" {% if disable %}disabled{% endif %} data-placeholder="Select a type" tabindex="-1" aria-hidden="true">
+                                    <option value="{{ direct_customer_type.0 }}">{{ direct_customer_type.1 }}</option>
+                                    {% for customer_type in customers_types %}
+                                        <option value="{{ customer_type.0 }}">{{ customer_type.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Email:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="font-10 mt-3 pull-right mr-5"> N/A </p>
+                                <input type="hidden" name="existing_name" disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Email:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_email" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_email|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Phone:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="font-10 mt-3 pull-right mr-5"> N/A </p>
+                                <input type="hidden" name="existing_name"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Phone:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_phone" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_phone|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Address 1:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="mt-3 font-10 pull-right mr-5" id="existing_address1_label"></p>
+                                <input type="hidden" name="existing_address1"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Address 1:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_address1" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_address1|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Address 2:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="mt-3 font-10 pull-right mr-5" id="existing_address2_label"></p>
+                                <input type="hidden" name="existing_address2"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Address 2:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_address2" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_address2|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">City:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="mt-3 font-10 pull-right mr-5" id="existing_city_label"></p>
+                                <input type="hidden" name="existing_city"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">City:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_city" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_city|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">State:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="mt-3 font-10 pull-right mr-5" id="existing_state_label"></p>
+                                <input type="hidden" name="existing_state"  disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">State:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_state" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_state|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3">Zip Code:</p>
+                            </td>
+                            <td class="border-right border-info">
+                                <p class="mt-3 font-10 pull-right mr-5" id="existing_zip_code_label"></p>
+                                <input type="hidden" name="existing_zip_code" disabled/>
+                            </td>
+                            <td>
+                                <p class="font-10 font-weight-bold mt-3 ml-5">Zip Code:</p>
+                            </td>
+                            <td>
+                                <input type="text" name="c_zip_code" class="form-control height-25 w-100" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_zip_code|default_if_none:'' }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="border-right border-info">
+                                <div class="pull-right">
+                                    <span class="mx-1">(Recommended)</span>
+                                    <button
+                                            class="btn btn-warning mx-1"
+                                            onclick="CUSTOMERS.add_existing_customer('/{{ db_name }}/customers/direct/add');">
+                                        Use this Master Record
+                                    </button>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div class="pull-right">
+                                    <a class="btn btn-warning mx-1"
+                                       onclick="CUSTOMERS.submit_customer('/{{ db_name }}/customers/direct/add/existing', 'fmContCreateDirectCustomer');">
+                                        Create Customer from Scratch
+                                    </a>
+                                    <a class="btn btn-default mx-1"
+                                       data-dismiss="modal">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Metadata to Customer -->
+<div id="mdlAddMetadata" class="modal black-overlay" data-backdrop="false">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;">
+                <h6 class="modal-title mb-2">
+                    Add Metadata to Customer
+                </h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                <form class="p-x-xs" id="fmAddMetadata">
+                    {% csrf_token %}
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+                            Field
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="c_field" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+                            Value
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="c_value" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2" style="text-align: right">
+                        <label class="col-sm-2 col-form-label font-10 font-weight-bold"></label>
+                        <div class="col-sm-10">
+                            <a class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </a>
+                            <a class="btn btn-warning" onclick="CUSTOMERS.add_metadata('/{{ db_name }}/customers/direct/{{ direct_customer.id }}/metadata');">
+                                Submit
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Distribution Centers in Direct Customer list -->
+<div id="modalDistributionCenters" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Distribution Centers</h5>
+            </div>
+            <div class="modal-body">
+
+                <!-- Distributor Info Table -->
+                <div id="divDistributionCenterTable">
+                    <table id="tableDistributionCenters" class="table table-hover table-borderless table-striped w-100">
+                        <thead class="bg-light">
+                        <tr class="font-10 text-black">
+                            <th style="display: none">Id</th>
+                            <th>DEA</th>
+                            <th>Name</th>
+                            <th>Address1</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZipCode</th>
+                            <th>Edit</th>
+                        </tr>
+                        </thead>
+                        <tbody class="font-10"></tbody>
+                    </table>
+                </div>
+
+                <!-- Distributor Create New -->
+                <div id="divDistributionCenterCreateForm" class="m-3" style="display: None">
+                    <div class="card p-3">
+                        {% include 'distribution_centers/main_form.html' %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="mr-auto">
+                    {% if is_read_only_user %}
+                    <a onclick="APP.get_read_only_user_error();" class="btn btn-warning mb-1 ml-2">
+                        <i class="fa fa-plus-circle"></i> New DC
+                    </a>
+                    {% else %}
+                    <a id="btnShowModalCreateDistributionCenter" class="btn btn-warning mb-1 ml-2">
+                        <i class="fa fa-plus-circle"></i> New DC
+                    </a>
+                    {% endif %}
+                </div>
+                <div>
+                    <a href="#" class="btn btn-primary width-80px" data-dismiss="modal"> Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Distribution Centers in Direct Customer tabs menu -->
+<div id="modalDistributionCentersforCustomerDetails" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Create Distribution Center</h5>
+            </div>
+            <div class="modal-body">
+                <div class="card p-3">
+                    <form id="formDistributionCenterforCustomerDetails">
+                        <div class="form-group row mt-2 required">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3 control-label">
+                                DEA No.
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCDEANumberforCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+
+                        <div class="form-group row required">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3 control-label">
+                                Name
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCNameforCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+
+                        <div class="form-group row mt-2 required">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3 control-label">
+                                Address 1
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCAddress1forCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+                        <div class="form-group row mt-2">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3 control-label">
+                                Address 2
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCAddress2forCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+                        <div class="form-group row mt-2">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3">
+                                City
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCCityforCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+
+                        <div class="form-group row mt-2">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3">
+                                State
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCStateforCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+
+                        <div class="form-group row mt-2">
+                            <span class="col-sm-1"></span>
+                            <label class="col-sm-2 col-form-label font-10 font-weight-bold ml-3">
+                                ZipCode
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" id="inputDCZipCodeforCustomerDetails" class="form-control height-25">
+                            </div>
+                            <span class="col-sm-1"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <a onclick="DC_DISTRIBUTORS.create_distributor($(this));" class="btn btn-warning width-80px">Create</a>
+                    <a href="#" class="btn btn-primary width-80px" data-dismiss="modal"> Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add Account number to unassign Direct customerrs -->
+<div id="mdMissingAcctNum" class="modal fade">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h6 class="modal-title">Account Number Missing</h6>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    {% for direct_customer in direct_customers %}
+                        {% if not direct_customer.account_number %}
+                            <div class="row my-2 directCustomerRow">
+                                <div class="col directCustomerId"
+                                     cid="{{ direct_customer.id }}"
+                                     c_name="{{ direct_customer.get_name }}"
+                                >
+                                    {{ direct_customer.get_name }}</div>
+                                <div class="col">
+                                    <input class="directCustomerAccountNo form-control" type="text">
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary" data-dismiss="modal"> Close</a>
+                <a onclick="CUSTOMERS.update_account_no('{{ db_name }}');" type="button" class="btn btn-sm btn-warning">Save changes</a>
+            </div>
+        </div>
+    </div>
+</div>

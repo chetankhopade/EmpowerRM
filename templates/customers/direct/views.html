@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+        <span>
+            <a onclick="APP.get_read_only_user_error();" class="btn btn-warning">
+                Add Customers
+            </a>
+        </span>
+    {% else %}
+        <span db="{{ db_name }}" target="/customers/direct/add">
+            <a onclick="APP.execute_url($(this));" class="btn btn-warning">
+                Add Customers
+            </a>
+        </span>
+    {% endif %}
+    <a class="btn btn-warning" onclick="APP.show_notifications('DirectCustomer');">
+        <i class="fas fa-tasks"></i>
+    </a>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            {% if company.has_direct_customers %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tableDirectCustomers" class="table table-hover table-condensed table-borderless table-striped w-100">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-black">
+                                <th style="display: none" class="notexport">Id</th>
+                                <th>AccNo</th>
+                                <th>Customer</th>
+                                <th>Active Contracts</th>
+                                <th>Product Served</th>
+                                <th>Distribution Centers</th>
+                                <th class="notexport">Edit</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center p-4 empower-color-purple">
+                        <i class="fas fa-file-alt fa-6x"></i>
+                        <p class="mt-2">
+                            <i class="fas fa-building"></i>
+                            <span class="font-16">There aren't any Direct Customers added yet</span>
+                        </p>
+                        <p class="mt-2" db="{{ db_name }}" target="/customers/direct/add">
+                            <a class="btn btn-warning mb-1" onclick="APP.execute_url($(this))">
+                                Add your first Direct Customer
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- modals -->
+    {% include 'customers/direct/modals.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+     let is_read_only_user = false
+     {% if is_read_only_user %}
+          is_read_only_user = true
+     {% endif %}
+     </script>
+    <script src="{% static 'js/app/direct_customers/dc_view.js' %}"></script>
+{% endblock %}

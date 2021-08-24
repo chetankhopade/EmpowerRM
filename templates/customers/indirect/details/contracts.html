@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_center %}
+    <!-- menu options -->
+    {% include 'customers/indirect/includes/menu.html' %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <table id ="tableContractsForIndirectCustomerDetails" class="table table-hover table-condensed table-borderless table-striped w-100">
+                        <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th>Contract</th>
+                                <th>Quantity (MTD)</th>
+                                <th>Sales (MTD)</th>
+                                <th>Total Sale</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    $(function () {
+        // Contracts related with Indirect Customer
+        let dtContractsForIndirectCustomerDetails = $("#tableContractsForIndirectCustomerDetails").DataTable({
+            lengthMenu:     [[50, 100, 150, -1], [50, 100, 150, "All"]],
+            dom: "<'row'<'col-sm-4'l><'col-sm-4'i><'col-sm-4'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row dt_footer'<'col-sm-5'B><'col-sm-7'p>>",
+            buttons: [
+                {
+                extend:    'excelHtml5',
+                text:     '<i class="fa fa-file-excel-o">',
+                titleAttr: 'Download Excel',
+                className: 'btn btn-sm btn-default tt excel_dt_footer',
+				title: '',
+                action: newexportaction,
+                filename: function(){
+                var d = new Date();
+                {#var n = d.getTime();#}
+                var n = get_current_date_in_ymdhms_for_export();
+                return 'Indirect_Customer_Related_Contracts_' + n;
+                },
+                exportOptions: {
+                    columns: ':not(.notexport)',
+                 },
+
+            },
+            {
+                extend:    'csvHtml5',
+                text:      '<i class="fa fa-file-text-o"></i>',
+                titleAttr: 'Download CSV',
+				className: 'btn btn-sm btn-default tt csv_dt_footer',
+				title: '',
+                action: newexportaction,
+                filename: function(){
+                var d = new Date();
+                {#var n = d.getTime();#}
+                var n = get_current_date_in_ymdhms_for_export();
+                return 'Indirect_Customer_Related_Contracts_' + n;
+                },
+                exportOptions: {
+                    columns: ':not(.notexport)',
+                },
+
+            }
+            ],
+            scrollY:        '55vh',
+            processing:     true,
+            serverSide:     true,
+            responsive:     true,
+            order:          [0,'desc'],
+            language : {
+                search:             "",
+                searchPlaceholder:  "Search ...",
+                processing:         SPINNER_LOADER,
+                infoFiltered:       "",
+            },
+            ajax: {
+                url:    `/${DB_NAME}/customers/indirect/load_contracts_data`,
+                type: "POST",
+                data: {
+                    "indirect_customer_id":`{{ indirect_customer.id }}`
+                },
+            },
+            initComplete: function() {
+                let $searchInput = $('#tableContractsForIndirectCustomerDetails_filter input');
+                $searchInput.unbind();
+                $searchInput.bind('keyup', function(e) {
+                    if(this.value.length === 0 || this.value.length >= 3) {
+                        dtContractsForIndirectCustomerDetails.search( this.value ).draw();
+                    }
+                });
+            },
+            columnDefs: [ ],
+            columns: [
+                { data: 'number' },
+                { data: 'units_sold' },
+                {
+                    data: 'total_amount',
+                    render : function(data, type, row) {
+                        return '$ ' + data;
+                    }
+                },
+                {
+                    data: 'total_sale',
+                    render : function(data, type, row) {
+                        return '$ ' + data;
+                    }
+                },
+            ],
+        });
+    });
+    </script>
+{% endblock %}

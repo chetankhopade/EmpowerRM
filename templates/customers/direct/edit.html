@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col-7">
+            <div class="card">
+                <div class="card-body">
+                    <p class="empower-color-blue _600 font-14">{{ direct_customer.name }}</p>
+                    <!-- Customers main form fmCustomer -->
+                    {% include 'customers/direct/includes/main_form.html' with formid='fmDirectCustomerEdit' %}
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="empower-color-blue _600 font-14">Metadata</p>
+                    <p class="font-10 mb-0 no-line-height">User can add more custom data to the customer</p>
+                    <hr/>
+                    <table class="table table-borderless table-hover">
+                        <thead>
+                            <tr class="font-11">
+                                <th style="width: 120px" class="text-success">Field</th>
+                                <th class="text-primary">Value</th>
+                                <th style="width: 40px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for k, v in direct_customer.get_metadata.items %}
+                            <tr class="font-11">
+                                <td>{{ k }}</td>
+                                <td>{{ v }}</td>
+                                <td>
+                                    <a key="{{ k }}" onclick="CUSTOMERS.remove_metadata('/{{ db_name }}/customers/direct/{{ direct_customer.id }}/metadata/{{ k }}/remove')" data-toggle="tooltip" data-replacement="top" title="Remove">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="alert font-11" colspan="3">No metadata</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-right">
+                        <a class="btn btn-primary btn-xs text-white" data-toggle="modal" data-target="#mdlAddMetadata" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+                            <i class="fa fa-plus"></i> Add
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+    <script>
+        const DIRECT_CUSTOMER_ID = "{{ direct_customer.get_id_str }}"
+    </script>
+    <script src="{% static 'js/app/customers.js' %}"></script>
+
+{% endblock %}

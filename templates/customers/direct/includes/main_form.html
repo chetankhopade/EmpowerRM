@@ -1,0 +1,134 @@
+<form class="p-x-xs" id="{{ formid }}">
+    {% csrf_token %}
+
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Account No.
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_account_number" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_account_number|default_if_none:'' }}" placeholder="Enter account number that identifies the customer">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2 required">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3 control-label">
+            Name
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_name" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_name|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Type
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <select id="selectCustomerType" name="c_type" class="form-control myselect2" {% if disable %}disabled{% endif %} data-placeholder="Select a type" tabindex="-1" aria-hidden="true">
+                <option value="0"></option>
+                {% for customer_type in customers_types %}
+                    <option value="{{ customer_type.0 }}" {% if customer_type.0 == direct_customer.type %}selected{% endif %}>{{ customer_type.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Email
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_email" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_email|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Phone
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_phone" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_phone|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Address 1
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_address1" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_address1|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            Address 2
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_address2" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_address2|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            City
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_city" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_city|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            State
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_state" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_state|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group row mt-2">
+        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+            ZipCode
+        </label>
+        <div class="col-sm-7 col-sm-offset-1">
+            <input type="text" name="c_zip_code" class="form-control height-30" {% if disable %}disabled{% endif %} value="{{ direct_customer.get_zip_code|default_if_none:'' }}">
+        </div>
+    </div>
+
+    {% if not disable %}
+        <div class="form-group row mt-2" style="text-align: right">
+            <label class="col-sm-2 col-form-label font-10 font-weight-bold"></label>
+            <div class="col-sm-10">
+                {% if direct_customer %}
+                    <a href="/{{ db_name }}/customers/direct/{{ direct_customer.id }}/details/info" class="btn btn-primary width-80px">
+                        Cancel
+                    </a>
+                    <a onclick="CUSTOMERS.submit('edit', '{{ formid }}');" class="btn btn-warning width-80px" >
+                        Save
+                    </a>
+                {% else %}
+                    <a class="btn btn-primary width-80px" data-dismiss="modal">
+                        Cancel
+                    </a>
+                    {% if formid == 'fmAddModalCustomer' %}
+                        <a onclick="CUSTOMERS.submit('existing', '{{ formid }}');" class="btn btn-warning width-80px">
+                            Submit
+                        </a>
+                    {% else %}
+                        {% if formid == 'headerfmCreateDirectCustomer' %}
+                        <a onclick="HEADER.customer_submit();" class="btn btn-warning width-80px">
+                            Submit
+                        </a>
+                        {% else %}
+                        <a onclick="CUSTOMERS.submit('create', '{{ formid }}');" class="btn btn-warning width-80px">
+                            Create
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+</form>

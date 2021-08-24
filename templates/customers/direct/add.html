@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_right %}
+    <span db="{{ db_name }}" target="/customers/direct">
+        <a onclick="APP.execute_url($(this));" class="btn btn-primary mb-1">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+    </span>
+
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <input type="text" class="width-100 form-control" id="inputCustomerSearch" placeholder="Search customer" style="border: 1px solid #eee"/>
+                    <table class="table fixed_header">
+                        <thead style="background-color: #eee">
+                        <tr>
+                            <th class="width-100px"></th>
+                            <th class="width-400px">Name</th>
+                            <th class="width-500px">Address</th>
+                            <th class="width-200px">Email / Phone</th>
+                            <th class="width-100px">AcctNo.</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for global_customer in global_customers %}
+                            <tr class='font-12 height-40 filterable globalCustomer'>
+                                <td class="width-100px">
+                                    <label class="md-check">
+                                        <input type="checkbox" class="checkboxCustomer" cid="{{ global_customer.id }}" />
+                                        <i class="green"></i>
+                                    </label>
+                                </td>
+                                <td class="width-400px inputCompare">
+                                    {{ global_customer.name|default_if_none:'' }}
+                                </td>
+                                <td class="width-500px">
+                                    {{ global_customer.get_complete_address|default_if_none:'' }}
+                                    <br/>
+                                    {{ global_customer.city|default_if_none:'' }}{% if global_customer.state %}, {{ global_customer.state|default_if_none:'' }}{% endif %}{% if global_customer.zip_code %}, {{ global_customer.zip_code|default_if_none:'' }}{% endif %}
+                                </td>
+                                <td class="width-200px">
+                                    {{ global_customer.email|default_if_none:'' }}
+                                    <br/>
+                                    {{ global_customer.phone|default_if_none:'' }}
+                                </td>
+                                <td class="width-100px">
+                                    {{ global_customer.account_number|default_if_none:'' }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer" style="margin-top: -20px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-warning mb-1" data-toggle="modal" data-target="#mdlCreateCustomer">
+                                Create New Customer
+                            </a>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a id="btnAddCustomers" class="btn btn-warning" onclick="CUSTOMERS.add_customers('/{{ db_name }}/customers/direct/add')">
+                                Submit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'customers/direct/modals.html' %}
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+    <script src="{% static 'js/app/customers.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <a onclick="APP.get_read_only_user_error();" action="create" class="btn btn-warning">
+        Create Customer
+    </a>
+    {% else %}
+    <a onclick="INDIRECT_CUSTOMERS.show_modal($(this));" action="create" class="btn btn-warning">
+        Create Customer
+    </a>
+    {% endif %}
+    <a class="btn btn-warning" onclick="APP.show_notifications('IndirectCustomer');">
+        <i class="fas fa-tasks"></i>
+    </a>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            {% if company.has_indirect_customers %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="tableIndirectCustomers" class="table table-condensed table-hover table-borderless table-striped w-100">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th style="display: none" class="notexport">Id</th>
+                                <th>Customer Name</th>
+                                <th>Location No.</th>
+                                <th>Address1</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip Code</th>
+                                <th>CoT</th>
+                                <th>GLN_No</th>
+                                <th>340B_ID</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body empower-color-purple text-center p-4">
+                        <i class="fas fa-file-alt fa-6x"></i>
+                        <p class="mt-2">
+                            <span class="font-16">There aren't any Indirect Customers added yet</span>
+                        </p>
+                        <p class="mt-2">
+                            <a class="btn btn-warning mb-1" data-toggle="modal" data-target="#mdlCreateIndirectCustomer" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+                                Add your first Indirect Customer
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+    <!-- modals -->
+    {% include 'customers/indirect/modals.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/indirect_customers.js' %}"></script>
+{% endblock %}

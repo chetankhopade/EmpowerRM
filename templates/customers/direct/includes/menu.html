@@ -1,0 +1,45 @@
+<!-- Head Menu -->
+<div class="justify-content-end nav-active-primary">
+    <ul class="nav nav-tabs font-11">
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/info" class="nav-link {% if active_tab == 'i' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-info"></i> Info
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/contracts" class="nav-link {% if active_tab == 'c' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fas fa-th-list"></i> Contracts
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/products" class="nav-link {% if active_tab == 'p' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-product-hunt"></i> Products
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/distributors" class="nav-link {% if active_tab == 'd' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fas fa-dolly"></i> Distributors
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/contacts" class="nav-link {% if active_tab == 't' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fas fa-user-friends"></i> Contacts
+                </a>
+            </span>
+        </li>
+
+    </ul>
+</div>

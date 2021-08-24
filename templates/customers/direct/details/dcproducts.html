@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_center %}
+    <!-- menu options -->
+    {% include 'customers/direct/includes/menu.html' %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <table id="tableCProductsForCustomerDetails" class="table table-hover table-borderless table-striped w-100">
+                        <thead class="bg-light">
+                        <tr class="font-11 text-dark">
+                            <th style="display: none" class="notexport">Id</th>
+                            <th>Description</th>
+                            <th>NDC</th>
+                            <th>Units Sold</th>
+                            <th>Total Amount</th>
+                           <!--<th></th> -->
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const DIRECT_CUSTOMER_ID = '{{ direct_customer.id }}'
+    </script>
+    <script src="{% static 'js/app/direct_customers/dc_products.js' %}"></script>
+{% endblock %}

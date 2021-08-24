@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_center %}
+    <!-- menu options -->
+    {% include 'customers/direct/includes/menu.html' %}
+{% endblock %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <a onclick="APP.get_read_only_user_error()" class="btn btn-warning">
+        <i class="fa fa-plus-circle"></i> New DC
+    </a>
+    {% else %}
+         <a onclick="DC_DISTRIBUTORS.show_modal($(this))" action='create' class="btn btn-warning">
+        <i class="fa fa-plus-circle"></i> New DC
+    </a>
+     {% endif %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <table id="tableDistributionCentersDirectCustomerDetails" class="table table-hover table-borderless table-striped w-100">
+                        <thead class="bg-light">
+                        <tr class="font-11 text-black">
+                            <th style="display: none" class="notexport">Id</th>
+                            <th>DEA</th>
+                            <th>Name</th>
+                            <th>Address1</th>
+                            <th>Address2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZipCode</th>
+                            <th class="notexport"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="font-11"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modals -->
+    {% include 'customers/distributors.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const DIRECT_CUSTOMER_ID = '{{ direct_customer.id }}'
+    </script>
+    <script>
+     let is_read_only_user = false
+     {% if is_read_only_user %}
+          is_read_only_user = true
+     {% endif %}
+     </script>
+    <script src="{% static 'js/app/direct_customers/dc_distributors.js' %}"></script>
+{% endblock %}

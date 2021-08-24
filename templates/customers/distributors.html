@@ -1,0 +1,83 @@
+<div id="modalCustomerDC" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-nm">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body text-center p-lg">
+                    <form class="p-x-xs" id="fmCustomerDc" autocomplete="off">
+                        <input type="hidden" id="inputDistributionCenterID" value="">
+                        <div class="form-group row required">
+                            <label for="inputCustomerDCDEA" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                                DEA No.
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCDEA" class="form-control height-25">
+                                <span id="DCDEAError" style="display:block;color:red;text-align:left;padding: 4px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row required">
+                            <label for="inputCustomerDCName" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                                Name
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCName" class="form-control height-25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row required">
+                            <label for="inputCustomerDCAddress1" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                                Address 1
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCAddress1" class="form-control height-25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputCustomerDCAddress2" class="col-3 col-form-label font-10 font-weight-bold">
+                                Address 2
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCAddress2" class="form-control height-25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputCustomerDCCity" class="col-3 col-form-label font-10 font-weight-bold">
+                                City
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCCity" class="form-control height-25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputCustomerDCState" class="col-3 col-form-label font-10 font-weight-bold">
+                                State
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCState" class="form-control height-25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputCustomerDCZipCode" class="col-3 col-form-label font-10 font-weight-bold">
+                                ZipCode
+                            </label>
+                            <div class="col-9">
+                                <input type="text" id="inputCustomerDCZipCode" class="form-control height-25">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                    <a id="btnCustomerDCSubmit" class="btn btn-warning" onclick="DC_DISTRIBUTORS.submit($(this));"></a>
+                </div>
+            </div>
+        </div>
+    </div>

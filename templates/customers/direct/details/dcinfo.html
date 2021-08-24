@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_center %}
+    {% include 'customers/direct/includes/menu.html' %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">{{ direct_customer.name }}</p>
+                        </div>
+                        <div class="col text-right">
+                            {% if is_read_only_user %}
+                            <span>
+                                <a onclick="APP.get_read_only_user_error()" class="tt" title="Edit">
+                                    <i class="fa fa-pencil font-14"></i>
+                                </a>
+                            </span>
+                            {% else %}
+                             <span db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/edit">
+                                <a onclick="APP.execute_url($(this))" class="tt" title="Edit">
+                                    <i class="fa fa-pencil font-14"></i>
+                                </a>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Customers main form fmCustomer -->
+                    {% include 'customers/direct/includes/main_form.html' with formid='fmDirectCustomerEdit' disable=True %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col pl-0">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="empower-color-blue _600 font-14">Custom fields</p>
+                    <hr/>
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                        <tr class="font-11">
+                            <th style="width: 120px" class="text-success">Field</th>
+                            <th class="text-primary">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for k, v in direct_customer.get_metadata.items %}
+                            <tr class="font-11">
+                                <td>{{ k }}</td>
+                                <td>{{ v }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="alert font-11" colspan="3">No metadata</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

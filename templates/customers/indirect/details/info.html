@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_center %}
+    <!-- menu options -->
+    {% include 'customers/indirect/includes/menu.html' %}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">{{ indirect_customer.company_name }}</p>
+                        </div>
+                        <div class="col text-right">
+                             {% if is_read_only_user %}
+                            <span>
+                                <a onclick="APP.get_read_only_user_error()" class="tt" title="Edit">
+                                    <i class="fa fa-pencil font-14"></i>
+                                </a>
+                            </span>
+                            {% else %}
+                            <span db="{{ db_name }}" target="/customers/indirect/{{ indirect_customer.id }}/edit_details">
+                                <a onclick="APP.execute_url($(this))" class="tt" title="Edit">
+                                    <i class="fa fa-pencil font-14"></i>
+                                </a>
+                            </span>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Customers main form fmCustomer -->
+                    {% include 'customers/indirect/includes/main_form.html' with formid='fmIndirectCustomerEdit' disable=True %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="empower-color-blue _600 font-14">At a Glance</p>
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Active Indirect Contracts</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">{{ indirect_customer.count_active_indirect_contracts_from_history|floatformat:0 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Total Product Revenue (MTD)</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">${{ total_product_revenue_mtd|floatformat:2|intcomma }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Total Product Sales</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">{{ indirect_customer.get_total_products_sales|floatformat:0 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Top Product</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">{{ indirect_customer.get_top_product }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Top Contract</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">{{ indirect_customer.get_top_contract }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-right">
+                            <p class="mt-3"> Top Distributor</p>
+                        </div>
+                        <div class="col text-left">
+                            <span class="font-20">{{ indirect_customer.get_top_distributor }}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let INDIRECT_CUSTOMER_ID = "{{ indirect_customer.get_id_str }}";
+    </script>
+    <script src="{% static 'js/app/indirect_customers.js' %}"></script>
+{% endblock %}

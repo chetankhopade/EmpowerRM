@@ -1,0 +1,63 @@
+<div class="modal fade" id="modalCustomerContact" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-nm">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body text-center p-lg">
+                <form class="p-x-xs" id="fmCustomerContact" autocomplete="off">
+                    <input type="hidden" id="inputContactID" value="">
+                    <div class="form-group row required">
+                        <label for="inputContactFirstName" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            First Name
+                        </label>
+                        <div class="col-9">
+                            <input type="text" id="inputContactFirstName" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputContactLastName" class="col-3 col-form-label font-10 font-weight-bold">
+                            Last Name
+                        </label>
+                        <div class="col-9">
+                            <input type="text" id="inputContactLastName" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row required">
+                        <label for="inputContactEmail" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Email
+                        </label>
+                        <div class="col-9">
+                            <input type="text" id="inputContactEmail" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputContactPhone" class="col-3 col-form-label font-10 font-weight-bold">
+                            Phone
+                        </label>
+                        <div class="col-9">
+                            <input type="text" id="inputContactPhone" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputContactJobTitle" class="col-3 col-form-label font-10 font-weight-bold">
+                            Job Title
+                        </label>
+                        <div class="col-9">
+                            <input type="text" id="inputContactJobTitle" class="form-control height-25">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                <a id="btnCustomerContactSubmit" class="btn btn-warning" onclick="DC_CONTACTS.submit($(this));"></a>
+            </div>
+        </div>
+    </div>
+</div>
