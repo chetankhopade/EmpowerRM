@@ -1,0 +1,86 @@
+{% load static %}
+
+<div class="col">
+    <div class="card">
+        <div class="card-body">
+            <form id="fmReportContractFilters" autocomplete="off" action="">
+                <div class="row">
+
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            Contract Entity
+                        </label>
+                        <div class="input-group">
+                            <select id="selectReportContractFiltersCustomer" class="myselect2">
+                                <option value="">All Customers</option>
+                                {% for customer in customers %}
+                                    <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            Contract Number
+                        </label>
+                        <div class="input-group">
+                            <select id="selectReportContractFiltersContractId" class="myselect2">
+                                <option value="">All Contracts </option>
+                                {% for contract in contracts %}
+                                    <option value="{{ contract.id }}">{{ contract.number }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            Status
+                        </label>
+                        <div class="input-group">
+                            <select id="selectReportContractFiltersStatus" class="myselect2">
+                                <option value="" {% if not status_selected %}selected{% endif %}>All Status</option>
+                                <option value="{{ status_active }}" {% if status_active == status_selected %}selected{% endif %}>ACTIVE</option>
+                                <option value="{{ status_inactive }}" {% if status_inactive == status_selected %}selected{% endif %}>INACTIVE</option>
+                                <option value="{{ status_pending }}" {% if status_pending == status_selected %}selected{% endif %}>PENDING</option>
+                                <option value="{{ status_proposed }}" {% if status_proposed == status_selected %}selected{% endif %}>PROPOSED</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            Start Date
+                        </label>
+                        <div class="input-group">
+                            <input id="inputReportContractFiltersStartDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" value="" style="height: 33px!important;">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            End Date
+                        </label>
+                        <div class="input-group">
+                            <input id="inputReportContractFiltersEndDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" data-im-insert="false" value="" style="height: 33px!important;">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label class="col-form-label font-10 font-weight-bold">
+                            Create Date
+                        </label>
+                        <div class="input-group">
+                            <input id="inputReportContractFiltersCreateAt" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" value="" style="height: 33px!important;">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="text-right mt-3">
+                <a class="btn btn-primary width-80px" onclick="APP.show_app_loader(); location.reload();">Clear</a>
+                <a class="btn btn-warning width-80px ml-1" onclick="REPORT_CONTRACTS.search();">Search</a>
+                <a class="btn btn-primary width-80px ml-1" onclick="APP.show_app_loader(); location.href='/{{ db_name }}/reports' ">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>

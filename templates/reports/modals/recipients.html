@@ -1,0 +1,53 @@
+<div class="modal fade" id="modalScheduleRecipients" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Recipients - Assign to Schedule</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="report_schedule_id" value="" />
+                <div class="row">
+                    <div class="col">
+                        <table id="tableAssignRecipientsToSchedule" class="table table-condensed table-striped table-borderless w-100 mt-4">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th>Email</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Close</a>
+                <a id="submitSaveRecipients" class="btn btn-warning" onclick="SCHEDULE_REPORT.save_recipients($(this));" style="display: none"> Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add Item -->
+<div class="modal fade" id="modalScheduleRecipientsAddItem" tabindex="1" role="dialog" aria-hidden="true" style="top: 20%">
+    <div class="modal-dialog modal-nm" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title font-13">Add Recipients</h5>
+            </div>
+            <div class="modal-body height-150" style="overflow-y: scroll">
+                <div class="row font-12 text-black font-weight-bold">
+                    <div class="col-10">Email</div>
+                </div>
+                <div id="divScheduleRecipientsContainer">
+                    <!-- rows will go here dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer mt-2">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="SCHEDULE_REPORT.add_new_recipients();"> Add</a>
+            </div>
+        </div>
+    </div>
+</div>

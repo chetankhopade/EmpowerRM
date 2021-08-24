@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_body %}
+    <div class="row">
+        <div class="col-4 text-left empower-color-blue font-14">{{ header_title }}</div>
+        <div class="col-4 text-center"></div>
+        <div class="col-4 text-right"></div>
+    </div>
+    <hr class="empower_background_blue p-0 mt-0"/>
+    <div class="row">
+        {% include 'reports/includes/report_chargebacks_filters_form.html' %}
+    </div>
+
+    <div class="row mt-1">
+        <div class="col">
+            <div class="card p-1">
+                <div class="text-right">
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_CHARGEBACKS.export('excel')" title="Export to Excel">
+                        <i class="fa fa-file-excel-o"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_CHARGEBACKS.export('csv')" title="Export to CSV">
+                        <i class="fa fa-file-text-o"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="tableReportChargebacks" class="table table-condensed table-hover table-borderless nowrap">
+                        <thead class="bg-light">
+                        <tr class="font-10 text-dark">
+                            <th style="display: none">Id</th>
+                            <th>CB Type</th>
+                            <th >Credit Memo Number</th>
+                            <th>Credit Memo Date</th>
+                            <th>Parent Wholesaler</th>
+                            <th>Wholesaler Name</th>
+                            <th>Wholesaler ID</th>
+                            <th>WholesalerID Type</th>
+                            <th>Wholesaler Address</th>
+                            <th>Wholesaler City</th>
+                            <th>Wholesaler State</th>
+                            <th>Wholesaler Zip Code</th>
+                            <th>Contract Name</th>
+                            <th>Contract Tier No.</th>
+                            <th>Invoice No.</th>
+                            <th>Invoice Date</th>
+                            <th>Customer Name</th>
+                            <th>Customer Location No.</th>
+                            <th>Customer ID Type</th>
+                            <th>Customer COT</th>
+                            <th>Ship Address 1</th>
+                            <th>Ship Address 2</th>
+                            <th>Ship City</th>
+                            <th>Ship State</th>
+                            <th>Ship Zip code</th>
+                            <th>NDC</th>
+                            <th>Brand Name</th>
+                            <th>Product Name</th>
+                            <th>UOM</th>
+                            <th>QTY</th>
+                            <th>Wac System</th>
+                            <th>Wac Submitted</th>
+                            <th>Contract Price System</th>
+                            <th>Contract Price Submitted</th>
+                            <th>Total Chargeback</th>
+                            <th>Credit Amount Submitted</th>
+                            <th>Extended Wholesaler Sales</th>
+                            <th>Extended Contract Sales</th>
+                            <th>Debit Memo No.</th>
+                            <th>Debit Memo Date</th>
+                            <th>System Line ID</th>
+                        </tr>
+                        </thead>
+                        <tbody class="font-10"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/reports/chargebacks.js' %}"></script>
+{% endblock %}

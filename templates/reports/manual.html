@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_body %}
+    <div class="row">
+        <div class="col-4 text-left empower-color-blue font-14">{{ header_title }}</div>
+        <div class="col-4 text-center"></div>
+        <div class="col-4 text-right"></div>
+    </div>
+    <hr class="empower_background_blue p-0 mt-0"/>
+    <div class="row">
+        {% include 'reports/includes/report_manual_filters_form.html' %}
+    </div>
+
+    <div class="row mt-1">
+        <div class="col">
+            <div class="card p-1">
+                <div class="text-right">
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_MANUAL.export('excel')" title="Export to Excel">
+                        <i class="fa fa-file-excel-o"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_MANUAL.export('csv')" title="Export to CSV">
+                        <i class="fa fa-file-text-o"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="tableReportManual" class="table table-condensed table-hover table-borderless nowrap">
+                        <thead class="bg-light">
+                        <tr class="font-10 text-dark">
+                            <th style="display: none">Id</th>
+                            <th>Manufacturer Name</th>
+                            <th>Wholesaler Name</th>
+                            <th>Line ID</th>
+                            <th>Debit Memo Number</th>
+                            <th>Debit Memo Date</th>
+                            <th>Debit Memo Amount</th>
+                            <th>EDI Line Type</th>
+                            <th>Credit Memo Number</th>
+                            <th>Credit Memo Date</th>
+                            <th>Credit Memo Amount</th>
+                            <th>Accepted Status</th>
+                            <th>Corrected Indicator</th>
+                            <th>Rejection Reason Codes</th>
+                            <th>Corrected Contract ID</th>
+                            <th>Corrected Customer ID</th>
+                            <th>Corrected Customer ID Qualifier</th>
+                            <th>Corrected Product ID</th>
+                            <th>Corrected Product ID Qualifier</th>
+                            <th>Corrected Wholesaler Cost</th>
+                            <th>Corrected Contract Price</th>
+                            <th>Corrected Quantity</th>
+                            <th>Corrected Unit of Measure</th>
+                            <th>Corrected Chargeback Amount</th>
+                            <th>Corrected Extended Chargeback Amount</th>
+                            <th>Corrected Invoice Number</th>
+                            <th>Corrected Invoice Date</th>
+                            <th>Disputes Notes</th>
+                            <th>Customer Ship To Name</th>
+                            <th>Customer Ship To Address</th>
+                            <th>Customer Ship To City</th>
+                            <th>Customer Ship To State</th>
+                            <th>Customer Ship To Zip</th>
+                            <th>Customer Ship To Country</th>
+                        </tr>
+                        </thead>
+                        <tbody class="font-10"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/reports/manual.js' %}"></script>
+{% endblock %}
