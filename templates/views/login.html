@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block visitors_content %}
+
+    <div class="my-3 text-sm text-muted">
+        Welcome back ! Please enter your credentials to log in
+    </div>
+
+    <form id="fmLogin" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="col-sm-12">
+            <div class="md-form-group float-label">
+                <input id="email" name="email" type="email" class="md-input text-lowercase" value="" onkeyup="this.setAttribute('value', this.value);" required>
+                <label for="email">Email </label>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="md-form-group float-label">
+                <input id="password" name="password" type="password" class="md-input" value="" onkeyup="this.setAttribute('value', this.value);" required>
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="md-check pull-left text-muted">
+                <input type="checkbox"><i class="primary"></i> Remember me
+            </label>
+            <a href="{% url 'forgot_password' %}" class="_400 pull-right">
+                Forgot password?
+            </a>
+        </div>
+        <br/>
+        <div class="my-4">
+            <div class="row">
+                <div class="col-6">
+                    <a id="btnSubmit" class="btn btn-warning btn-block">Log in</a>
+                </div>
+                <div class="col-6">
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-block pull-right">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        $(function () {
+
+            $(document).bind('keypress', function(e) {
+                if(e.keyCode === 13){
+                     $('#btnSubmit').trigger('click');
+                 }
+             });
+
+            $("#btnSubmit").click(function () {
+
+                let fmLogin = $("#fmLogin");
+                let email = $("#email").val();
+                let password = $("#password").val();
+
+                if (email === ''){
+                    show_toast_error_message('Email is required');
+                    return false;
+                }else{
+                    if (!isValidEmailAddress(email)){
+                        show_toast_error_message('Invalid email address');
+                        return false;
+                    }
+                }
+                if(password === ''){
+                    show_toast_error_message('Password is required');
+                    return false;
+                }
+
+                if (email && password){
+                    let formData = new FormData(fmLogin[0]);
+                    formData.append('ret', "{{ ret }}");
+
+                    $.ajax({
+                        url: "{% url 'login' %}",
+                        data: formData,
+                        type: "POST",
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                            }
+                        },
+
+                        success: function (response) {
+                            if(response.result === 'ok') {
+                                location.href = response.redirect_url;
+                            }else{
+                                show_toast_error_message(response.message);
+                            }
+                        },
+
+                        error: function (response) {
+                            show_toast_error_message(response.message);
+                        }
+                    });
+
+                }
+
+            });
+
+        });
+    </script>
+
+{% endblock %}
