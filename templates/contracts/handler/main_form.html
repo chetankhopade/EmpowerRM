@@ -1,0 +1,160 @@
+<!-- form -->
+<div class="mx-2">
+    <form class="p-x-xs" id="fmContract">
+        <div class="form-group row required">
+            <label for="inputContractNumber" class="col-sm-1 col-form-label font-weight-bold control-label">
+                Number
+            </label>
+            <div class="col-sm-5">
+                <input id="inputContractNumber" type="text" class="form-control input-lg" value="{{ contract.number }}">
+                <p class="form-text text-muted font-10 pull-left mb-0">
+                    Enter the contract number customers will use to identify this contract.
+                </p>
+            </div>
+
+            <label class="col-sm-1 col-form-label font-weight-bold control-label">
+                Type
+            </label>
+            <div class="col-sm-2">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <a onclick="CONTRACT_HANDLER.set_contract_type($(this))"  class="btnCreateContractTypes btn {% if contract.type == contract_type_direct %}btn-warning{% else %}btn-default{% endif %}" value="{{ contract_type_direct }}" style="width: 80px">
+                        Direct
+                    </a>
+                    <a onclick="CONTRACT_HANDLER.set_contract_type($(this))" class="btnCreateContractTypes btn {% if contract.type == contract_type_indirect %}btn-warning{% else %}btn-default{% endif %} ml-1" value="{{ contract_type_indirect }}" style="width: 85px">
+                        Indirect
+                    </a>
+                    <input type="hidden" id="inputContractType" value="{{ contract.type }}" />
+                </div>
+            </div>
+
+            <label for="spanContractStatus" class="col-sm-1 font-weight-bold text-right mt-2">
+                Status
+            </label>
+            <span id="spanContractStatus" class="col-sm-2 font-12 _600 {% if contract.status == status_pending %}text-warning{% elif contract.status == status_inactive  %}text-danger{% else %}text-success{% endif %}">
+                {{ contract.get_status_display }}
+            </span>
+        </div>
+
+        <div class="form-group row required">
+            <label for="selectContractCustomer" class="col-sm-1 col-form-label font-11 font-weight-bold control-label">
+                Customer
+            </label>
+            <div class="col-sm-5">
+                <span data-toggle="tooltip" data-placement="top" title="Start typing to filter customer names">
+                    <select id="selectContractCustomer" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                        <option value="" {% if not contract %}selected{% endif %}>Select a Customer</option>
+                        {% for customer in my_customers %}
+                            <option value="{{ customer.id }}" {% if contract.customer.id == customer.id %}selected{% endif %}>{{ customer }}</option>
+                        {% endfor %}
+                    </select>
+                </span>
+            </div>
+
+            <label for="inputContractStartDate" class="col-sm-1 col-form-label font-weight-bold">
+                Start Date
+            </label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <input id="inputContractStartDate" type="text" placeholder="mm/dd/yyyy" class="form-control input-lg datepicker" value="{{ contract.start_date|date:'m/d/Y' }}" onchange="CONTRACT_HANDLER.update_status_from_dates_range();" />
+                </div>
+            </div>
+            <label for="inputContractEndDate" class="col-sm-1 col-form-label font-weight-bold">
+                End Date
+            </label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <input id="inputContractEndDate" type="text" placeholder="mm/dd/yyyy" class="form-control input-lg datepicker" value="{{ contract.end_date|date:'m/d/Y' }}" onchange="CONTRACT_HANDLER.update_status_from_dates_range();" />
+                    <input id="actualContractEndDate" type="hidden"  class="" value="{{ contract.end_date|date:'m/d/Y' }}"  />
+                    <input id="inputFutureContractEndDate" type="hidden"  value="0" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            <label for="inputContractDescription" class="col-sm-1 col-form-label font-weight-bold">
+                Description
+            </label>
+            <div class="col-sm-5">
+                <input type="text" id="inputContractDescription" class="form-control height-30 input-lg" value="{{ contract.description|default_if_none:'' }}" />
+            </div>
+            {% if contract and contract.type != contract_type_direct %}
+                <label class="col-sm-1 col-form-label font-weight-bold">
+                    Validations
+                </label>
+                <label class="col-form-label font-weight-bold">
+                    Membership
+                </label>
+                <div class="col-sm-1">
+                    <label class="switch">
+                        <input id="toggleMembershipValidation" type="checkbox" {% if contract.member_eval == 1 %} checked {% endif %} />
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <label class="col-sm-1 col-form-label font-weight-bold">
+                    Class of Trade
+                </label>
+                <div class="col-sm-1">
+                    <label class="switch">
+                        <input id="toggleCotValidation" type="checkbox" {% if contract.cot_eval == 1 %} checked {% endif %}/>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group row mt-2">
+            <label for="selectContractEligibility" class="col-sm-1 col-form-label font-weight-bold">
+                Eligibility
+            </label>
+            <div class="col-sm-5">
+                <select id="selectContractEligibility" class="form-control myselect2" data-placeholder="Select a eligibility" tabindex="-1" aria-hidden="true">
+                    <option value='0'>Select Eligibility</option>
+                    {% for eligibility in eligibilities %}
+                        <option value="{{ eligibility.0 }}" {% if contract.eligibility == eligibility.0 %}selected{% endif %}>{{ eligibility.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if contract and contract.type != contract_type_direct %}
+                <label for="inputContractCOTs" class="col-sm-1 col-form-label font-weight-bold">
+                    Allowed CoTs
+                </label>
+                <div class="col-sm-5">
+                    <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="{% if class_of_trade_validation_enabled %}#modalAssignCotToContract{% else %}#mdlEnableCoT{% endif %}">
+                        <span id="spanCoTButtonName">{% if class_of_trade_validation_enabled %}Manage{% else %}Disabled{% endif %}</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+    </form>
+</div>
+
+<!-- buttons -->
+<div class="text-right" id="action_buttons">
+    {% if contract %}
+        <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details">
+            <a class="btn btn-primary" onclick="APP.execute_url($(this))" style="width: 80px">
+                Cancel
+            </a>
+        </span>
+        {% if contract_line_count or contract_my_membership_count or contract_my_servers_count %}
+        <a class="btn btn-warning mr-2" onclick="CONTRACT_HANDLER.submit('edit')" style="width: 85px">
+            Save
+        </a>
+        {% else %}
+        <a class="btn btn-warning mr-2" onclick="CONTRACT_HANDLER.submit('edit','','',true,false)" style="width: 85px">
+            Save
+        </a>
+        {% endif %}
+    {% else %}
+        <span db="{{ db_name }}" target="/contracts">
+            <a class="btn btn-primary" id="action_close_modal" onclick="APP.execute_url($(this))" style="width: 80px">
+                Cancel
+            </a>
+        </span>
+        <a class="btn btn-warning mr-2" id="action_create_contract" onclick="CONTRACT_HANDLER.submit('create')" style="width: 80px">
+            Create
+        </a>
+    {% endif %}
+</div>

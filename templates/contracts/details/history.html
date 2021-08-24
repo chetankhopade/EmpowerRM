@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_header_center %}
+    {% include 'contracts/details/menu.html' %}
+{% endblock %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% else %}
+    <span db="{{ db_name }}" target="/contracts/create">
+        <a onclick="APP.execute_url($(this))" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% endif %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% else %}
+    <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/edit?active_tab=1">
+        <a onclick="APP.execute_url($(this))" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% endif %}
+{#    <a class="btn btn-warning" onclick="APP.show_notifications('Contract');">#}
+{#        <i class="fas fa-tasks"></i>#}
+{#    </a>#}
+{% endblock %}
+
+
+{% block content_body %}
+    <div class="row mt-2">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <p class="empower-color-blue _600 font-13">
+                                History
+                            </p>
+                        </div>
+                    </div>
+
+                    <table id="tableContractDetailsHistory" class="table table-condensed table-borderless mt-2 nowrap">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-dark">
+                                    <th>Date(UTC)</th>
+                                    <th>Time(UTC)</th>
+                                    <th>User</th>
+                                    <th>Change Type</th>
+                                    <th>Field Name</th>
+                                    <th>Product</th>
+                                    <th>Change</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'contracts/modals.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+    <script src="{% static 'js/app/contracts/history.js' %}"></script>
+    <script>
+        let CONTRACT_ID = '';
+        {% if contract %}
+            CONTRACT_ID = "{{ contract.get_id_str }}";
+        {% endif %}
+    </script>
+{% endblock %}

@@ -1,0 +1,641 @@
+{% load static %}
+
+<!-- modal Validation Contract -->
+<div id="modalValidationContractOwner" class="modal fade" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Existing Contract - Owner relation</h5>
+            </div>
+            <div class="modal-body font-12 text-justify"></div>
+            <div class="modal-footer">
+                <a class="btn btn-warning" id="btnValidationContractOwnerEdit"></a>
+                <a class="btn btn-primary" data-dismiss="modal">
+                    Resume Contract Creation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Manage Servers -->
+<div id="mdlManageServers" class="modal fade" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content" style="max-height: 95vh;">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Add Server</h5>
+            </div>
+            <div class="modal-body text-center p-lg" style="overflow: scroll;max-height: 90vh;">
+                <!-- servers list goes here -->
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary mr-2" data-dismiss="modal">Cancel</a>
+                <a class="btn btn-warning" onclick="TAB_MANAGE_SERVERS.update_servers_list_from_modal();">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Membership Modal with DataTable -->
+<div class="modal fade" id="modalContractMember" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Add Members</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="inputContractManageMembershipEffectiveDate">Contract Start Date</label>
+                        <input type="text" id="inputContractManageMembershipEffectiveDate" class="form-control mx-sm-3 datepicker" placeholder="mm/dd/yyyy" value="{{ contract.start_date|date:'m/d/Y' }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="inputContractManageMembershipEndDate">Contract End Date</label>
+                        <input type="text" id="inputContractManageMembershipEndDate" class="form-control mx-sm-3 datepicker" placeholder="mm/dd/yyyy" value="{{ contract.end_date|date:'m/d/Y' }}" />
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col">
+                        <label class="md-check">
+                            <input type="checkbox" id="selectAllMembers" onclick="TAB_MANAGE_MEMBERSHIP.update_all_checkboxes($(this))" />
+                            <i class="blue"></i>
+                        </label>
+                        <span>Select All</span>
+                        <table id="tableContractMember" class="table table-condensed table-striped table-borderless w-100 mt-4">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th>Location</th>
+                                <th></th>
+                                <th>Company Name</th>
+                                <th>Location Number</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="TAB_MANAGE_MEMBERSHIP.update_membership_list();"> Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mebmbership Error -->
+<div id="mdlMebmbershipError" class="modal fade" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="max-height: 95vh;">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Errors while adding membership</h5>
+            </div>
+            <div class="modal-body text-center p-lg" style="overflow: scroll;max-height: 90vh;">
+                <!-- Error list with members-->
+            </div>
+            <div class="modal-footer">
+                <div class="text-right">
+                    <a class="btn btn-primary mr-2" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CoT - Ask Enable CoT -->
+<div class="modal fade" id="mdlEnableCoT" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Enable CoT</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p class="text-justify font-13">
+                            CoT management is currently disabled for this company. Would you like to turn it on?
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">No</a>
+                <a class="btn btn-warning" onclick="CONTRACT_HANDLER.enable_cot();">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CoT Modal - List of Items -->
+<div class="modal fade" id="modalAssignCotToContract" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Class of Trade - Assign to Contract</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="tableAssignCotToContract" class="table table-condensed table-striped table-borderless w-100 mt-4">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th style="display: none">Id</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Assign</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="CONTRACT_HANDLER.save_cots($(this));"> Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CoT Modal - Add Item -->
+<div class="modal fade" id="modalAssignCotToContractAddItem" tabindex="1" role="dialog" aria-hidden="true" style="top: 20%">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Assigned Contract - Add New CoT</h5>
+            </div>
+            <div class="modal-body height-150" style="overflow-y: scroll">
+                <div class="row font-12 text-black font-weight-bold">
+                    <div class="col-5">Name</div>
+                    <div class="col">Description</div>
+                </div>
+                <div id="divAssignCotToContractAddCoTContainer">
+                    <!-- rows will go here dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer mt-2">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="CONTRACT_HANDLER.add_new_cots();"> Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alias Modal - List of Items -->
+<div class="modal fade" id="modalAssignAliasToContract" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Alias - Assign to Contract</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="tableAssignAliasToContract" class="table table-condensed table-striped table-borderless w-100 mt-4">
+                            <thead class="bg-light">
+                            <tr class="font-11 text-dark">
+                                <th style="display: none">Id</th>
+                                <th>Name</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="CONTRACT_HANDLER.save_aliases($(this));"> Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alias Modal - Add Item -->
+<div class="modal fade" id="modalAssignAliasToContractAddItem" tabindex="1" role="dialog" aria-hidden="true" style="top: 20%">
+    <div class="modal-dialog modal-nm" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title font-13">Assigned Contract - Add Alias</h5>
+            </div>
+            <div class="modal-body height-150" style="overflow-y: scroll">
+                <div class="row font-12 text-black font-weight-bold">
+                    <div class="col-10">Name</div>
+                </div>
+                <div id="divAssignAliasToContractAddAliasContainer">
+                    <!-- rows will go here dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer mt-2">
+                <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                <a class="btn btn-warning" onclick="CONTRACT_HANDLER.add_new_alias();"> Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contract Line Edit modal -->
+<div id="modalContractLineEdit" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body text-center p-lg">
+                <form class="p-x-xs" id="fmCLEdir" autocomplete="off">
+                    <input type="hidden" id="contractLineId" value=""/>
+                    {% csrf_token %}
+
+                    <div class="form-group row">
+                        <label for="clNdc" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            NDC
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="clNdc" class="form-control height-25" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="clDescription" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Description
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="clDescription" class="form-control height-25" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="clPrice" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Price
+                        </label>
+                        <div class="col-sm-9 text-left">
+                            <input type="text" id="clPrice" class="form-control height-25">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="clStartDate" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Start Date
+                        </label>
+                        <div class="col-sm-9 text-left">
+                            <input type="text" id="clStartDate" class="form-control height-25 datepicker" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="clEndDate" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            End Date
+                        </label>
+                        <div class="col-sm-9 text-left">
+                            <input type="text" id="clEndDate" class="form-control height-25 datepicker" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="clStatus" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Status
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="clStatus">
+                                {% for status in statuses %}
+                                    <option value="{{ status.0 }}">{{ status.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-warning" onclick="PRODUCTS_ON_CONTRACTS.update_contract_line($(this));">Edit</a>
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contract Upload Updates modal -->
+<div class="modal fade" id="modalUploadUpdatesContracts" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Upload Update Contracts</h5>
+            </div>
+            <div class="modal-body">
+                <p class="text-right"><button id="download_upload_template" onclick="CONTRACTS_VIEW.download_sample_upload()" class="btn btn-sm btn-warning">Download template</button>
+                <form id="formUploadUpdatesContractsDropZone" action="/{{ db_name }}/contracts/upload_update" class="dropzone">
+                    <div class="fallback">
+                        <input type="file" name="file" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" onclick="CONTRACTS_VIEW.closeModalUploadUpdatesContracts()" data-dz-remove>Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUploadUpdatesContractsResults" tabindex="1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadContinue" class="btn btn-warning" style="display: none" onclick="CONTRACTS_VIEW.check_and_process_upload()">Continue</a>
+                <a id="uploadClose" class="btn btn-primary" filename="" onclick="CONTRACTS_VIEW.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUploadConfirmContractsResults" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadConfirmContinue" class="btn btn-warning" style="display: none" onclick="CONTRACTS_VIEW.confirm_and_process_upload()">Continue</a>
+                <a id="uploadConfirmClose" class="btn btn-primary" filename="" onclick="CONTRACTS_VIEW.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contract Add Missing Contract -->
+<div class="modal fade" id="addMissingContract" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxxlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Create Contract</h5>
+            </div>
+            <div class="modal-body height-300" style="overflow-y: scroll">
+                {% include 'contracts/handler/main_form.html' %}
+            </div>
+            <div class="modal-footer" id="addMissingContractFooter">
+                <!-- Appending the contract main form action buttons here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete ContractLines -->
+<div class="modal fade" id="modalDeleteContractLine" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="max-height: 95vh;">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Delete Contract Line</h5>
+            </div>
+            <div class="modal-body p-3">
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <img src="{% static 'images/alert_warning.png' %}" width="40" />
+                    </div>
+                    <div class="col">
+                        <p class="_600 text-justify font-11">
+                            The contract line will be permanently and irreversibly deleted from the system.
+                            If you perform this action, all data related to the contract line will be lost.
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <input id="inputDeleteContractLineID" type="hidden" value="" />
+                        <table id="tableDeleteContractLine" class="table table-condensed">
+                            <thead class="bg-light">
+                            <tr class="font-10 text-dark">
+                                <th>NDC</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody class="font-10"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer font-11">
+                <div class="col">
+                    <label for="inputDeleteContractLineText">Type DELETE to confirm</label>
+                </div>
+                <div class="col">
+                    <span id="helpTextinputDeleteContractLineText" class="help-text font-9 text-danger hide"></span>
+                    <input class="form-control" id="inputDeleteContractLineText" type="text" placeholder="DELETE" style="text-transform: uppercase"/>
+                </div>
+                <div class="col-4 text-right">
+                    <a class="btn btn-primary font-10" data-dismiss="modal">Cancel</a>
+                    <a onclick="TAB_ACTIVE_CONTRACT.delete_contract_line($(this));" class="btn btn-danger text-white font-10"> Delete</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Import Membership Upload Button -->
+<div class="modal fade" id="modalMembershipFileUpload" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Membership File Upload</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <p class="text-right"><button id="download_upload_template" onclick="CONTRACT_Membership.download_cm_list()" class="btn btn-sm btn-warning">Download List</button>
+                        <!-- EA-1225 - Membership Uploads Improvements -->
+                    <form id="formMembershipFileUploadDZ" action="/{{ db_name }}/settings/uploads/membership_data" class="dropzone">
+                        <div class="fallback">
+                            <input type="file" name="file" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col"></div>
+                <div class="col text-right">
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUploadMemberConfirmContractsResults" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Membership Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadMemberConfirmContinue" class="btn btn-warning" style="display: none" onclick="CONTRACT_Membership.confirm_and_process_upload()">Continue</a>
+                <a id="uploadMemberConfirmClose" class="btn btn-primary" filename="" onclick="CONTRACT_Membership.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalContractMembersUploadResults" tabindex="1" role="dialog" aria-hidden="true" style="z-index:1046">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadMembersContinue" class="btn btn-warning" style="display: none" onclick="CONTRACT_Membership.check_and_process_upload()">Continue</a>
+                <a id="uploadMembersClose" class="btn btn-primary" filename="" onclick="CONTRACT_Membership.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalProduct" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body text-center p-lg">
+                {% include 'products/main_form.html' %}
+            </div>
+            <div class="modal-footer">
+                <a id="btnProductSubmit" class="btn btn-warning" onclick="PRODUCTS.submit($(this));"></a>
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="pleaseWaitDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background:#0000003d;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top: 50%;">
+            <div class="modal-header">
+                <h5 style="margin-top:-11px;">Processing...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped bg-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        <span class="sr-only">100% Complete (success)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalConfirmContractsUpdate" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxlg"  role="document">
+        <div class="modal-dialog" style="max-width: 700px !important;">
+            <!---- Manage Contract Line Items Grid Starts here --->
+            <div class="modal-content" id="step1">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Contract End Date Extension</h5>
+                </div>
+                <div class="modal-body">
+                    <p>The following contract lines currently end on the old contract end date.  Should they be extended as well?</p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col">
+                            <table id="tableContractActiveContractLineItems" class="table table-hover table-borderless table-condensed w-100">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-dark">
+                                    <th></th>
+                                    <th>NDC</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="contractUpdateClose" class="btn btn-warning"  onclick="CONTRACT_HANDLER.submit('edit','','',true,false)">Cancel</a>
+                    <a id="contractUpdateContinue" class="btn btn-primary" onclick="CONTRACT_HANDLER.continue('2')">Continue</a>
+                </div>
+            </div>
+            <!---- Manage Contract Line Items Grid End here --->
+            <!---- Manage Server Grid Start here --->
+            <div class="modal-content" id="step2">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Contract End Date Extension Server</h5>
+                </div>
+                <div class="modal-body">
+                    <p>The following server lines currently end on the old contract end date.  Should they be extended as well?</p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col">
+                            <table id="tableContractActiveManageServer" class="table table-hover table-borderless table-condensed w-100">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-dark">
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>ZipCode</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="contractUpdateBack" class="btn btn-warning"  onclick="CONTRACT_HANDLER.updateback('1')">Back</a>
+                    <a id="contractUpdateContinue" class="btn btn-primary" onclick="CONTRACT_HANDLER.continue('3')">Continue</a>
+                </div>
+            </div>
+            <!---- Manage Server Grid end here --->
+            <!---- Manage Membership Grid Start here --->
+            <div class="modal-content" id="step3">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Contract End Date Extension Membership</h5>
+                </div>
+                <div class="modal-body">
+                    <p>The following membership lines currently end on the old contract end date. Should they be extended as well?</p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col">
+                            <table id="tableContractActiveManageMembership" class="table table-hover table-borderless table-condensed w-100">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-dark">
+                                    <th></th>
+                                    <th>Location Number</th>
+                                    <th>Company Name</th>
+                                    <th>Bid 340</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="contractUpdateBack" class="btn btn-warning"  onclick="CONTRACT_HANDLER.updateback('2')">Back</a>
+                    <a id="contractUpdate" class="btn btn-primary" onclick="CONTRACT_HANDLER.submit('edit','','',false,false)">Update</a>
+                </div>
+            </div>
+            <!---- Manage Membership Grid close here --->
+        </div>
+    </div>
+</div>

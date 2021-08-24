@@ -1,0 +1,62 @@
+<div class="b-b b-primary nav-active-primary">
+    <ul id="tabs" class="nav nav-tabs z-index-0" data-tabs="tabs">
+        <li class="nav-item width-80px text-center tt" title="Active Contract" id="active_contract">
+            <a class="nav-link active" href="#tabActiveContract" data-toggle="tab" data-target="#tabActiveContract">
+                <i class="fas fa-receipt"></i>
+            </a>
+        </li>
+        <li class="nav-item width-80px text-center tt" title="Price Change" id="price_change">
+            <a class="nav-link" href="#" data-toggle="tab" data-target="#tabPriceChange">
+                <i class="fas fa-hand-holding-usd"></i>
+            </a>
+        </li>
+        <li class="nav-item width-80px text-center tt" title="Assign Products" id="assign_products">
+            <a class="nav-link" href="#" data-toggle="tab" data-target="#tabAssignProduct">
+                <i class="fas fa-prescription-bottle-alt"></i>
+            </a>
+        </li>
+        <li class="nav-item width-80px text-center tt" title="Manage Servers" id="manage_servers">
+            <a class="nav-link" href="#" data-toggle="tab" data-target="#tabManageServer">
+                <i class="fas fa-dolly"></i>
+            </a>
+        </li>
+        <li class="nav-item width-80px text-center tt" title="Manage Membership" id="manage_membership">
+            <a class="nav-link" href="#" data-toggle="tab" data-target="#tabManageMembership">
+                <i class="fas fa-user-friends"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="tab-content">
+    <div class="tab-pane animate fadeIn text-muted active" id="tabActiveContract">
+        {% include 'contracts/includes/active_contract.html' %}
+    </div>
+    <div class="tab-pane animate fadeIn text-muted" id="tabPriceChange">
+        {% include 'contracts/includes/price_change.html' %}
+    </div>
+    <div class="tab-pane animate fadeIn text-muted" id="tabAssignProduct">
+        {% include 'contracts/includes/assign_products.html' %}
+    </div>
+    <div class="tab-pane animate fadeIn text-muted" id="tabManageServer">
+        {% include 'contracts/includes/manage_server.html' %}
+    </div>
+    <div class="tab-pane animate fadeIn text-muted" id="tabManageMembership">
+        {% include 'contracts/includes/manage_membership.html' %}
+    </div>
+</div>
+
+<!-- TAB ASSIGN PRODUCTS RESULT MODAL -->
+<div class="modal fade" id="modalPricingConflicts" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Pricing Conflicts</h5>
+            </div>
+            <div class="modal-body" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="closePricingConflicts" class="btn btn-primary" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>

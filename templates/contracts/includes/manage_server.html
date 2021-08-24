@@ -1,0 +1,69 @@
+{% load static %}
+{% load extras %}
+
+<div class="card mt-2">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-4">
+                <a onclick="TAB_MANAGE_SERVERS.show_hide_server_list_form(true);" class="mr-2 btn btn-outline-primary btn-xs font-12 tt" title="Alter servers">
+                    <i class="fas fa-wrench"></i>
+                </a>
+                Servers (Customers)
+            </div>
+            <div class="col-8">
+                <div class="nav-active-border b-primary bottom">
+                    <div id="divContractTabOptionsManageServer" class="nav nav-md pull-right font-11">
+                        <a onclick="TAB_MANAGE_SERVERS.load_data($(this), '{{ status_active }}')" class="nav-link active">
+                            <i class="fa fa-check-circle"></i> Active
+                        </a>
+                        <a onclick="TAB_MANAGE_SERVERS.load_data($(this), '{{ status_inactive }}')" class="nav-link">
+                            <i class="fa fa-times-circle"></i> Inactive
+                        </a>
+                        <a onclick="TAB_MANAGE_SERVERS.load_data($(this), '{{ status_pending }}')" class="nav-link">
+                            <i class="fa fa-info-circle"></i> Pending
+                        </a>
+                        <a onclick="TAB_MANAGE_SERVERS.load_data($(this), '0')" class="nav-link">
+                            <i class="fa fa-circle"></i> All
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table id="tableContractManageServer" class="table table-hover table-borderless table-condensed w-100">
+            <thead class="bg-light">
+                <tr class="font-11 text-dark">
+                    <th style="display: none">Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZipCode</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="mt-2">
+            <a onclick="TAB_MANAGE_SERVERS.open_modal_servers();" class="btn btn-warning w-100">
+                <i class="far fa-plus-square"></i>
+            </a>
+        </div>
+
+        <div id="divContractManageServerContainerButtons" class="invisible text-right mt-2">
+            <a class="btn btn-primary btn-xs font-11" onclick="TAB_MANAGE_SERVERS.show_hide_server_list_form(false)">
+                Cancel
+            </a>
+            <a class="btn btn-warning btn-xs font-11" onclick="TAB_MANAGE_SERVERS.update_servers_list_from_datatable();">
+                Save
+            </a>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,43 @@
+<!-- Head Menu -->
+<div class="justify-content-end nav-active-primary">
+    <ul class="nav nav-tabs font-11">
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details" class="nav-link {% if active_tab == 'i' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-info"></i> Info
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details/products?tab=p" class="nav-link {% if active_tab == 'p' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-product-hunt"></i> Products
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details/servers?tab=s" class="nav-link {% if active_tab == 's' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-server"></i> Servers
+                </a>
+            </span>
+        </li>
+
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details/members?tab=m" class="nav-link {% if active_tab == 'm' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-server"></i> Members
+                </a>
+            </span>
+        </li>
+        <li class="nav-item">
+            <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/details/history?tab=h" class="nav-link {% if active_tab == 'h' %}active{% endif %}">
+                <a class="tt" onclick="APP.execute_url($(this))">
+                    <i class="fa fa-server"></i> History
+                </a>
+            </span>
+        </li>
+    </ul>
+</div>

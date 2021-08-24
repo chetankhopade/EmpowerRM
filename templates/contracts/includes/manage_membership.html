@@ -1,0 +1,68 @@
+{% load static %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <a onclick="TAB_MANAGE_MEMBERSHIP.enable_disable_lines(true)" class="mr-2 btn btn-outline-primary btn-xs font-12 tt" title="Edit current lines">
+                    <i class="fas fa-wrench"></i>
+                </a>
+                Membership
+            </div>
+            <div class="col-8">
+                <div class="nav-active-border b-primary bottom">
+                    <div id="divContractTabOptionsManageMembership" class="nav nav-md pull-right font-11">
+
+                        <a onclick="TAB_MANAGE_MEMBERSHIP.load_data($(this), '{{ status_active }}')" class="nav-link active">
+                            <i class="fa fa-check-circle"></i> Active
+                        </a>
+                        <a onclick="TAB_MANAGE_MEMBERSHIP.load_data($(this), '{{ status_inactive }}')" class="nav-link">
+                            <i class="fa fa-times-circle"></i> Inactive
+                        </a>
+                        <a onclick="TAB_MANAGE_MEMBERSHIP.load_data($(this), '{{ status_pending }}')" class="nav-link">
+                            <i class="fa fa-info-circle"></i> Pending
+                        </a>
+                        <a onclick="TAB_MANAGE_MEMBERSHIP.load_data($(this), '{{ status_proposed }}')" class="nav-link">
+                            <i class="fa fa-info-circle"></i> Proposed
+                        </a>
+                        <a onclick="TAB_MANAGE_MEMBERSHIP.load_data($(this), '0')" class="nav-link">
+                            <i class="fa fa-circle"></i> All
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="tableContractManageMembership" class="table table-hover table-borderless table-condensed w-100">
+            <thead class="bg-light">
+                <tr class="font-11 text-dark">
+                    <th style="display: none">Id</th>
+                    <th>Location Number</th>
+                    <th>Company Name</th>
+                    <th>Location Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip Code</th>
+                    <th>Cot</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="mt-2">
+            <a class="btn btn-warning w-100" data-toggle="modal" data-target="#modalContractMember">
+                    <i class="far fa-plus-square"></i>
+                </a>
+        </div>
+        <div id="divManageMembershipContainerButtons" class="text-right mt-2" style="display: none">
+            <a onclick="TAB_MANAGE_MEMBERSHIP.enable_disable_lines(false)" class="btn btn-primary btn-xs font-11">
+                Cancel
+            </a>
+            <a onclick="TAB_MANAGE_MEMBERSHIP.update_membership_lines_changes()" class="btn btn-warning btn-xs font-11">
+                Submit
+            </a>
+        </div>
+
+    </div>
+</div>

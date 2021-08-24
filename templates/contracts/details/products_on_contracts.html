@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_header_center %}
+    {% include 'contracts/details/menu.html' %}
+{% endblock %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% else %}
+    <span db="{{ db_name }}" target="/contracts/create">
+        <a onclick="APP.execute_url($(this))" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% endif %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% else %}
+     <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/edit?active_tab=1">
+        <a onclick="APP.execute_url($(this))" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% endif %}
+{#    <a class="btn btn-warning" onclick="APP.show_notifications('Contract');">#}
+{#        <i class="fas fa-tasks"></i>#}
+{#    </a>#}
+{% endblock %}
+
+
+{% block content_body %}
+    <div class="row mt-2">
+        <div class="col">
+
+            {% if all_contract_lines %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <p class="empower-color-blue _600 font-13">
+                                    Products on Contracts
+                                </p>
+                            </div>
+                            <div class="col-10 text-right">
+                                <div class="nav-active-border b-primary bottom">
+                                    <div id="divListTabOptions" class="nav nav-md pull-right font-10" style="margin-top: -0.5em">
+                                        <input id="inputContractStatusId" type="hidden" value="1" />
+                                        {% for status in statuses %}
+                                            <a onclick="PRODUCTS_ON_CONTRACTS.load_products_data($(this), '{{ status.0 }}')" class="{% if status.0 == status_active %}active{% endif %} nav-link" style="margin-left: -1em">
+                                                <i class="fa fa-check-circle"></i> {{ status.1 }}
+                                            </a>
+                                        {% endfor %}
+                                        <a onclick="PRODUCTS_ON_CONTRACTS.load_products_data($(this), '0')" class="nav-link ml-0" >
+                                            <i class="fa fa-circle"></i> All
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col">
+                                <table id="tableContractLines" class="table table-hover table-borderless table-condensed w-100">
+                                    <thead class="bg-light">
+                                    <tr class="font-11 text-dark">
+                                        <th style="display: none" class="notexport">Id</th>
+                                        <th>NDC</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="font-10"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card p-3 text-center empower-color-purple my-2">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <i class="fas fa-barcode fa-6x"></i>
+                        </div>
+                        <div class="card-text mt-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span class="font-16">There aren't any Products added yet</span>
+                        </div>
+                        <div class="mt-2" db="{{ db_name }}" target="/contracts/{{ contract.id }}/edit?tab=assign_product">
+                            {% if is_read_only_user %}
+                            <a class="btn btn-warning" onclick="APP.get_read_only_user_error();">
+                                Add your first Product
+                            </a>
+                            {% else %}
+                            <a class="btn btn-warning" onclick="APP.execute_url($(this))">
+                                Add your first Product
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+    {% include 'contracts/modals.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+    <script>
+        let CONTRACT_ID = '';
+        {% if contract %}
+            CONTRACT_ID = "{{ contract.get_id_str }}";
+        {% endif %}
+    </script>
+    <script>
+     let is_read_only_user = false
+     {% if is_read_only_user %}
+          is_read_only_user = true
+     {% endif %}
+     </script>
+    <script src="{% static 'js/app/contracts/products_on_contracts.js' %}"></script>
+{% endblock %}

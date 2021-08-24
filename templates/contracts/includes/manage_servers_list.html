@@ -1,0 +1,62 @@
+{% load static %}
+{% load extras %}
+
+<div class="row form-inline">
+    <div class="col-9 form-group">
+        <label for="inputContractManageServerFilter" class="col-sm-2 col-form-label">Filter</label>
+        <input id="inputContractManageServerFilter" class="form-control width-80 font-12" type="text">
+    </div>
+    <div class="col-3 form-group text-right">
+
+        <label for="inputContractManageServerBig3" class="col-sm-2 col-form-label">Big3</label>
+        <label class="md-check">
+            <input type="checkbox" id="inputContractManageServerBig3" onclick="TAB_MANAGE_SERVERS.update_big3_checkboxes($(this),{{ direct_customers_big3_ids_list }})" />
+            <i class="blue"></i>
+        </label>
+
+        <label for="inputContractManageServerAll" class="col-sm-2 col-form-label">All</label>
+        <label class="md-check">
+            <input type="checkbox" id="inputContractManageServerAll" onclick="TAB_MANAGE_SERVERS.update_all_checkboxes($(this))" />
+            <i class="blue"></i>
+        </label>
+    </div>
+</div>
+<hr/>
+<div class="row form-inline">
+    <div class="col-6 form-group">
+        <label for="inputContractManageServerEffectiveDate" class="col-sm-6 col-form-label">Effective Date</label>
+        <input id="inputContractManageServerEffectiveDate" class="form-control datepicker" type="text" placeholder="mm/dd/yyyy" value="{{ contract.start_date|date:'m/d/Y' }}" />
+    </div>
+    <div class="col-6 form-group">
+        <label for="inputContractManageServerEndDate" class="col-sm-6 col-form-label">End Date</label>
+        <input id="inputContractManageServerEndDate" class="form-control datepicker" type="text" placeholder="mm/dd/yyyy" value="{{ contract.end_date|date:'m/d/Y' }}" />
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col">
+        <table id="tableContractManageServerModal" class="table table-hover table-borderless table-condensed">
+            <tbody>
+            {% for direct_customer in direct_customers %}
+                {% with is_a_server_of_contract=direct_customer|args:contract|call:'is_a_server_of_contract' %}
+                    <tr cid="{{ direct_customer.id }}">
+                        <td>
+                            <label class="md-check">
+                                <input type="checkbox" id="checkboxContractManagerServer_{{ direct_customer.id }}" class="checkboxContractManagerServer" {% if is_a_server_of_contract %}checked{% endif %}/>
+                                <i class="blue"></i>
+                            </label>
+                        </td>
+                        <td class="text-left">{{ direct_customer.name }}</td>
+                        <td>
+                            <input type="text" class="inputManagerServerStartDate form-control datepicker" placeholder="mm/dd/yyyy" />
+                        </td>
+                        <td>
+                            <input type="text" class="inputManagerServerEndDate form-control datepicker" placeholder="mm/dd/yyyy" />
+                        </td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

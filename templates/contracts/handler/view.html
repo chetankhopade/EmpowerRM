@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3">
+                    <!-- Main Form -->
+                    {% include 'contracts/handler/main_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if contract %}
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Tab Options -->
+                        {% include 'contracts/handler/tab_options.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- modals -->
+    {% include 'contracts/modals.html' %}
+    {% include 'products/modals.html' %}
+    {% include 'customers/direct/modals.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let CONTRACT_ID = '';
+        {% if contract %}
+            CONTRACT_ID = "{{ contract.get_id_str }}";
+        {% endif %}
+    </script>
+
+    <!-- products js needed for create product -->
+    <script src="{% static 'js/libs/Chart.min.js' %}"></script>
+    <script src="{% static 'js/app/products.js' %}"></script>
+
+    <!-- handler main form actions create and edit -->
+    <script src="{% static 'js/app/contracts/contract_handler.js' %}"></script>
+
+    <!-- Tabs options -->
+    <!-- Active Contract -->
+    <script src="{% static 'js/app/contracts/tab_active_contract.js' %}"></script>
+    <!-- Price Change -->
+    <script src="{% static 'js/app/contracts/tab_price_change.js' %}"></script>
+    <!-- Assign Products -->
+    <script src="{% static 'js/app/contracts/tab_assign_products.js' %}"></script>
+    <!-- Manage Server -->
+    <script src="{% static 'js/app/contracts/tab_manage_servers.js' %}"></script>
+    <!-- Manage Membership -->
+    <script src="{% static 'js/app/contracts/tab_manage_membership.js' %}"></script>
+
+    <script>
+        $(function () {
+
+            // ticket EA-1003 On clicking 'Add your first product' user should redirect to 'Assign Product' section of the Add/Edit contract page.
+            {% if show_assign_product_tab %}
+                $('.nav-link').removeClass('active');
+                $('#assign_products').find('a').addClass('active');
+            {% endif %}
+
+            // Tabs clicks handler
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                let target = $(e.target).attr("data-target").replace(/#/g, ""); // activated tab
+
+                switch (target) {
+                    case 'tabActiveContract':
+                        TAB_ACTIVE_CONTRACT.load_data('', '1');
+                        break;
+
+                    case 'tabPriceChange':
+                        TAB_PRICE_CHANGE.load_data();
+                        TAB_PRICE_CHANGE.items_to_be_changed = [];
+                        break;
+
+                    case 'tabAssignProduct':
+                        TAB_ASSIGN_PRODUCTS.load_data();
+                        TAB_ASSIGN_PRODUCTS.items_to_be_processed = [];
+                        break;
+
+                    case 'tabManageServer':
+                        TAB_MANAGE_SERVERS.load_data();
+                        break;
+
+                    case 'tabManageMembership':
+                        TAB_MANAGE_MEMBERSHIP.load_data();
+                        break;
+                }
+            });
+
+            {# EA-1006 - Always show contract membership tab #}
+            // toggleTab("manage_membership",$("#toggleMembershipValidation").prop("checked"));
+
+            $("#toggleMembershipValidation").click(function(){
+                var toggleMembershipValidationValue = $(this).prop("checked");
+                // toggleTab("manage_membership",toggleMembershipValidationValue);
+                CONTRACT_HANDLER.change_manage_membership_validation();
+            });
+
+            //Hide and show Membership tab depending on Membership toggle
+            function toggleTab(elem,value){
+                if(value){
+                    $("#"+elem).show();
+                }
+                else{
+                    $("#tabs a[href='#tabActiveContract']").tab('show');
+                    $("#"+elem).hide();
+                }
+            }
+
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_center %}
+    {% include 'contracts/details/menu.html' %}
+{% endblock %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% else %}
+    <span db="{{ db_name }}" target="/contracts/create">
+        <a onclick="APP.execute_url($(this))" class="btn btn-warning">
+            Create Contract
+        </a>
+    </span>
+    {% endif %}
+    {% if is_read_only_user %}
+    <span>
+        <a onclick="APP.get_read_only_user_error();" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% else %}
+     <span db="{{ db_name }}" target="/contracts/{{ contract.id }}/edit?active_tab=1">
+        <a onclick="APP.execute_url($(this))" class="btn btn-primary"> Edit Contract</a>
+    </span>
+    {% endif %}
+{#    <a class="btn btn-warning" onclick="APP.show_notifications('Contract');">#}
+{#        <i class="fas fa-tasks"></i>#}
+{#    </a>#}
+{% endblock %}
+
+{% block content_body %}
+
+    <!-- 1st Section -->
+    <div class="row">
+        <div class="col">
+            <div class="card p-3 h-100">
+                <div class="row">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Number</span>
+                        <span>{{ contract.number }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Total Chargebacks</span>
+                        <span>{{ chargeback_count|floatformat:0|intcomma }}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Description</span>
+                        <span class="font-11">{{ contract.description|default_if_none:'' }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Items Sold</span>
+                        <span>{{ items_sold|floatformat:0|intcomma }}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Owner</span>
+                        <span class="font-11">{{ contract.customer|default_if_none:'' }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Chargeback Claims</span>
+                        <span>{{ issued_cbs|floatformat:2|intcomma }}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Type</span>
+                        <span class="font-11">{{ contract.get_type_display }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-11 _600 text-dark">Total WAC revenue (WAC - CB Claims)</span>
+                        <span>{{ total_wac_revenue|floatformat:2|intcomma }}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Eligibility</span>
+                        <span class="font-11">{{ contract.get_contract_eligibility }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-11 _600 text-dark">Total Revenue</span>
+                        <span>{{ total_revenue|floatformat:2|intcomma }}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">Start Date</span>
+                        <span class="font-11">{{ contract.start_date|date:'m/d/Y' }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between"></div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <span class="_600 text-dark">End Date</span>
+                        <span class="font-11">{{ contract.end_date|date:'m/d/Y' }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between"></div>
+                </div>
+                {% if contract and contract.type != contract_type_direct %}
+                    <div class="row mt-2">
+                        <div class="col-6 d-flex justify-content-between">
+                            <span class="_600 text-dark">Allowed CoTs</span>
+                            <span class="font-11">
+                            {% if is_read_only_user %}
+                                <a class="btn btn-warning btn-sm" onclick="APP.get_read_only_user_error();">
+                                    <span>{% if class_of_trade_validation_enabled %}Manage Cot{% else %}Disabled{% endif %}</span>
+                                </a>
+                            {% else %}
+                                <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="{% if class_of_trade_validation_enabled %}#modalAssignCotToContract{% else %}#mdlEnableCoT{% endif %}">
+                                    <span id="spanCoTButtonName">{% if class_of_trade_validation_enabled %}Manage Cot{% else %}Disabled{% endif %}</span>
+                                </a>
+                             {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row mt-2">
+                    <div class="col-6 d-flex justify-content-between">
+                        <span class="_600 text-dark">Aliases</span>
+                        <span class="font-11">
+                            {% if is_read_only_user %}
+                            <button class="btn btn-sm btn-warning" onclick="APP.get_read_only_user_error();"> Manage Alias </button>
+                            {% else %}
+                            <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalAssignAliasToContract"> Manage Alias </button>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col d-flex justify-content-between">
+                        <ul>
+                            {% for ca in contract_aliases %}
+                                <li>{{ ca.alias }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col d-flex justify-content-between"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col pl-0">
+            <div class="card p-3 h-100">
+                <div class="row">
+                    <div class="col-10">
+                        <p class="_400 font-15">Usage By Customers</p>
+                    </div>
+                    <div class="col">
+                        <select id="rangeSelection" class="form-control pull-righ" onchange="go_to_url($(this).val())">
+                            {% for range in data_ranges %}
+                                <option value="/{{ db_name }}/contracts/{{ contract.id }}/details?range={{ range.0 }}" {% if query == range.0 %}selected{% endif %}>{{ range.0 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <div class="col-4">
+                        <div id="chart-legends" class="font-11"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'contracts/modals.html' %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script>
+        let CONTRACT_ID = '';
+        {% if contract %}
+            CONTRACT_ID = "{{ contract.get_id_str }}";
+        {% endif %}
+    </script>
+
+    <!-- Custom Scripts -->
+    <script src="{% static 'js/libs/Chart.min.js' %}"></script>
+{#    <script src="{% static 'js/app/contracts/contract_view.js' %}"></script>#}
+    <script src="{% static 'js/app/contracts/contract_handler.js' %}"></script>
+
+    <script>
+        function go_to_url (url) {
+            APP.show_app_loader();
+            setTimeout(function(){
+                location.href = url;
+            }, 300)
+        }
+
+        $(function () {
+
+            let ctx = document.querySelector("#myChart");
+            let myDonutChart = new Chart(ctx, {
+                "type":"doughnut",
+                "data":{
+                    "datasets":[{
+                        "label": "Direct Customers",
+                        "data":[
+                            {% for c in active_customers_data %}
+                                {{ c.revenue|floatformat:0 }}{% if not forloop.last %},{% endif %}
+                            {% empty %}
+                                -1
+                            {% endfor %}
+                        ],
+                        "backgroundColor": [
+                            {% for c in active_customers_data %}
+                                {% if c.revenue %}
+                                    "{{ c.color }}" {% if not forloop.last %},{% endif %}
+                                {% else %}
+                                    "grey" {% if not forloop.last %},{% endif %}
+                                {% endif %}
+                            {% empty %}
+                                "grey"
+                            {% endfor %}
+                        ]
+                    }],
+                    "labels":[
+                        {% for c in active_customers_data %}
+                            "{{ c.name }}"{% if not forloop.last %},{% endif %}
+                        {% empty %}
+                            "No Servers Assigned"
+                        {% endfor %}
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    legendCallback: function(chart) {
+                        let colors = chart.data.datasets[0].backgroundColor;
+                        let legend = ``;
+                        let tooltip_name = ``;
+                        let label_length = chart.data.labels.length;
+
+                        for (let i=0; i < label_length; i++){
+                            if( i < 6 ){
+                                legend +=`<div class="text-wrap"><p class="d-flex align-content-start"><i class="far fa-circle mt-1" style="color: ${colors[i]}"></i> &nbsp; ${chart.data.labels[i]}</p></div>`
+                            } else {
+                                tooltip_name +=`${chart.data.labels[i]}\n`;
+                            }
+                        }
+                        if (tooltip_name !== ''){
+                            legend + `<h5 class="w-100 text-center text-primary" data-toggle="tooltip" data-placement="top" title="${tooltip_name}">See more</h5>`;
+                        }
+                        return legend
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItems, data) {
+                                if (data.datasets[0].data[tooltipItems.index] > 0){
+                                    return `$${data.datasets[0].data[tooltipItems.index]}`;
+                                } else {
+                                    return 'No Data Available'
+                                }
+                            }
+                        }
+                    },
+                }
+            });
+            document.getElementById('chart-legends').innerHTML = myDonutChart.generateLegend();
+        });
+    </script>
+
+{% endblock %}
