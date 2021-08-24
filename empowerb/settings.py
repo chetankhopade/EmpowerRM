@@ -245,4 +245,8 @@ ERM_REPORT_API_URL = "http://172.31.73.145:8004/api"
 DELTA_TO_CHECK_API_STATUS = 30000
 ERM_REPORT_API_TOKEN = "180E843A545143D384C24D1135D5D567"
 
+USE_EXTERNAL_IMPORT_SERVICE = False  # This should set to True if when we want to use Import Service project to process import
 IMPORT_SERVICE_URL = "http://172.31.0.255:8006"
+
+USE_EXTERNAL_REPORT_SERVICE = False  # This should set to True if when we want to use Report Service
+DIR_NAME_USER_REPORTS_RUN = 'reports_run'
