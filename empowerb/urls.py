@@ -1,4 +1,4 @@
-import debug_toolbar
+# import debug_toolbar
 
 from django.conf.urls.static import static
 from django.urls import path, include
@@ -530,7 +530,7 @@ if DEBUG:
     urlpatterns += [
         path('404', common_views.error_404_view, name='404_page'),
         path('500', common_views.error_500_view, name='500_page'),
-        path("__debug__/", include(debug_toolbar.urls))
+        # path("__debug__/", include(debug_toolbar.urls))
     ]
 
 # Static and Media
