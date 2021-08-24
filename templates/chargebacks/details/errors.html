@@ -1,0 +1,32 @@
+{% load static %}
+{% load humanize %}
+{% load extras %}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <table id="tableDisputesCodesErrors" class="table table-condensed table-hover table-borderless w-100">
+                    <thead class="bg-light">
+                    <tr class="font-10 _300 dark-light text-black">
+                        <th>Dispute Code</th>
+                        <th>Dispute Note</th>
+                        <th class="text-center">Dispute Field</th>
+                        <th class="text-center">Dispute Value</th>
+                        <th class="text-center">Created At</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if my_disputes %}
+                        {% for dispute in my_disputes  %}
+                            {% include 'chargebacks/includes/errors_rows.html' %}
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

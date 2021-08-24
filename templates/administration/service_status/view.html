@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+
+    <!-- System Status -->
+    {#    <div class="row">#}
+    {#        <div class="col">#}
+    {#            <div class="card">#}
+    {#                <div class="card-body">#}
+    {#                    <p class="empower-color-blue _700 font-14">SYSTEM STATUS</p>#}
+    {#                    <table class="table table-borderless table-condensed">#}
+    {#                        <thead class="bg-light">#}
+    {#                            <tr class="font-10 dark-light text-black">#}
+    {#                                <th scope="col">System</th>#}
+    {#                                <th scope="col">Last File Sent</th>#}
+    {#                                <th scope="col">Last File Received</th>#}
+    {#                                <th scope="col">Status</th>#}
+    {#                            </tr>#}
+    {#                        </thead>#}
+    {#                        <tbody>#}
+    {#                            <tr class="font-11 _600">#}
+    {#                                <td class="text-dark font-17">API</td>#}
+    {#                                <td id="tdEDILastFileSent" class="">#}
+    {#                                    <!-- Last File Sent goes here -->#}
+    {#                                </td>#}
+    {#                                <td id="tdEDILastFileReceived">#}
+    {#                                    <!-- Last File Received goes here -->#}
+    {#                                </td>#}
+    {#                                <td id="tdEDIStatus">#}
+    {#                                    <!-- EDI Status goes here -->#}
+    {#                                </td>#}
+    {#                            </tr>#}
+    {##}
+    {#                            <tr class="font-11 _600">#}
+    {#                                <td class="text-dark font-17">SFTP</td>#}
+    {#                                <td>12/12/2019 14:09</td>#}
+    {#                                <td>12/12/2019 14:09</td>#}
+    {#                                <td class="text-danger">STOPPED</td>#}
+    {#                            </tr>#}
+    {#                        </tbody>#}
+    {#                    </table>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    <!-- Parser Activity MTD -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-10">
+                            <label for="selectParserActivityRangeTableDetails" class="empower-color-blue _600 font-14">
+                                Parser Activity
+                            </label>
+                        </div>
+                        <div class="col-2">
+                            <select id="selectParserActivityRangeTableDetails" class="form-control" onchange="SERVICE_STATUS.load_data();">
+                                {% for range in data_ranges %}
+                                    <option value="{{ range.0 }}" {% if range.0 == 'MTD' %}selected{% endif %}>{{ range.0 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <table id="tableServiceStatus" class="table table-condensed table-hover table-borderless table-striped w-100">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-dark">
+                                    <th></th>
+                                    <th>Company</th>
+                                    <th>Partner</th>
+                                    <th class="text-center">State</th>
+                                    <th class="text-danger text-center">Errors<br/>(Unack/Ack)</th>
+                                    <th class="text-center">Trans</th>
+                                    <th class="text-center">PStat</th>
+                                    <th class="text-center">Last In</th>
+                                    <th class="text-center">Last Out</th>
+                                    <th class="text-center">Last SFTP</th>
+                                    <th class="text-center">CBs</th>
+                                    <th class="text-center">kChars</th>
+                                    <th class="text-center">Files</th>
+                                    <th class="text-center">Lines</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    {% include 'administration/service_status/modals.html' %}
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/libs/Chart.min.js' %}"></script>
+    <script src="{% static 'js/app/administration/service_status.js' %}"></script>
+{% endblock %}

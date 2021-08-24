@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block heading %}
+    <style>
+        table.dataTable thead {
+            background-color: #f8f9fa;
+        }
+        table.dataTable thead th {
+            position: relative;
+            background-image: none !important;
+        }
+
+        table.dataTable thead th.sorting:after,
+        table.dataTable thead th.sorting_asc:after,
+        table.dataTable thead th.sorting_desc:after {
+            position: absolute;
+            right: 8px;
+            display: block;
+            font-family: FontAwesome;
+            opacity: 1;
+        }
+        table.dataTable thead th.sorting:after {
+            content: "\f0dc";
+            color: #ddd;
+            font-size: 0.8em;
+            padding-top: 0.12em;
+        }
+        table.dataTable thead th.sorting_asc:after {
+            content: "\f0de";
+        }
+        table.dataTable thead th.sorting_desc:after {
+            content: "\f0dd";
+        }
+    </style>
+{% endblock %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+
+    <!-- Tickets  -->
+    <div class="container" style="max-width: 1180px!important">
+        <div class="row">
+            <div class="col" style="padding: 0;">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <p class="empower-color-blue _700 font-14">
+                            TICKETS
+                            <a id="btnZohoGrantAccess" class="btn btn-warning btn-sm pull-right" href="{{ zoho_authorization_grant_uri }}" style="display: none">
+                                <i class="fa fa-pull-left"></i>
+                            </a>
+                        </p>
+                        <table id="tableZohoTickets" class="table table-hover table-striped table-borderless font-11"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal - Add Comment to Ticket -->
+    <div class="modal fade" id="modalZohoTicketAddComment" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <form>
+                                <input id="inputZohoTicketId" type="hidden" value=""/>
+                                <div class="form-group">
+                                    <label for="textareaZohoTicketAddComment">Example textarea</label>
+                                    <textarea class="form-control font-12" id="textareaZohoTicketAddComment" style="resize: none; height: 100px!important"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" data-dismiss="modal">
+                        <i class="fa fa-refresh"></i> Cancel
+                    </a>
+                    <a class="btn btn-warning" onclick="HELPDESK.addTicketComment($(this))">
+                        <i class="fa fa-comment"></i> Submit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal - Close Ticket -->
+    <div class="modal fade" id="modalZohoCloseTicket" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-1 text-center">
+                            <img src="{% static 'images/alert_warning.png' %}" width="30" />
+                        </div>
+                        <div class="col mx-2">
+                            <p class="_600 text-justify font-12">
+                                <input id="inputZohoTicketIdCloseTicket" type="hidden" value=""/>
+                                Are you sure want to close the Ticket?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" data-dismiss="modal">
+                        <i class="fa fa-refresh"></i> Cancel
+                    </a>
+                    <a class="btn btn-warning" onclick="HELPDESK.closeTicket($(this))">
+                        <i class="fa fa-check"></i> Confirm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let ACCESS_TOKEN = "{{ access_token }}";
+        let REFRESH_TOKEN = "{{ refresh_token }}";
+        let ORG_ID = "{{ zoho_mdh_org_id }}";
+    </script>
+    <script src="{% static 'js/app/administration/help_desk.js' %}"></script>
+{% endblock %}

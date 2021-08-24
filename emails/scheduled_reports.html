@@ -1,0 +1,31 @@
+{% extends 'emails/base_schedule_reports.html' %}
+
+{% block title %}
+    <p>
+{#        Hello, {{ recipient.first_name }} {{ recipient.last_name }} ({{ recipient.email }}),#}
+        Hello {{ company_name }} team,
+    </p>
+{% endblock %}
+
+{% block email_content %}
+
+    {% if is_empty_result %}
+        <p>
+            There is no data available for the {{ report_frequency }} {{ report.name }} report.
+        </p>
+    {% else %}
+        <p>
+            Please see the attached file for the {{ report_frequency }} {{ report.name }} report.
+        </p>
+    {% endif %}
+
+
+    <br/>
+
+    <p>
+        Thank you,
+        <br/>
+        EmpowerRM Support
+    </p>
+
+{% endblock %}

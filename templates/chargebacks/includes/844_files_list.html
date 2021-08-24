@@ -1,0 +1,111 @@
+{% if results %}
+
+    <span class="font-12 _500">
+        Number of Files: <span class="font-14 _700">{{ 844_total_files }}</span> /
+        Selected Files: <span id="spanSelectedFiles" class="font-14 _700">0</span>
+    </span>
+    <table id="table844FilesList" class="display table table-hover table-condensed table-bordered" style="width:100%">
+        <thead class="bg-light">
+            <tr class="font-11 text-dark" >
+                <th class="text-center">
+                    <label class="md-check" title="Select All">
+                        <input type="checkbox" id="checkbox_844SelectAll" />
+                        <i class="blue"></i>
+                    </label>
+                </th>
+                <th>Filename</th>
+                <th class="text-center">DM Count</th>
+                <th class="text-center">Line count</th>
+                <th class="text-center">DateTime stamp</th>
+                <th class="text-center" id="action_col">
+                    <a onclick="CB_IMPORT_844.delete_844_file($(this), '');">
+                        <small>
+                            <i class="fa fa-trash"></i> <em>Delete All</em>
+                        </small>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr id="file_{{ result.file_id }}">
+                    <td class="text-center">
+                        <label class="md-check">
+                            <input type="checkbox" class="checkbox_844Files" value="{{ result.filename }}"/>
+                            <i class="blue"></i>
+                        </label>
+                    </td>
+                    <td>{{ result.filename }}</td>
+                    <td class="text-center">{{ result.cb_count }}</td>
+                    <td class="text-center">{{ result.cbline_count }}</td>
+                    <td class="text-center">{{ result.datetime_stamp }}</td>
+                    <td class="text-center" id="del_{{ result.file_id }}">
+                        <a title="Delete File"  onclick="CB_IMPORT_844.delete_844_file($(this), '{{ result.filename }}');">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <label class="alert alert-warning width-100 text-center text-black font-14">
+        No 844 files found
+    </label>
+{% endif %}
+
+<script>
+    $(function () {
+
+        let update_selected_files = function (){
+            let count = $(".checkbox_844Files:checked").length;
+            $("#spanSelectedFiles").html(count);
+        };
+
+        $("#checkbox_844SelectAll").click(function () {
+            let elem = $(this);
+            $(".checkbox_844Files").each(function () {
+                if (elem.is(':checked')){
+                    $(this).prop('checked', true);
+                }else{
+                    $(this).prop('checked', false);
+                }
+            });
+            // update selected files span
+            update_selected_files();
+        });
+
+        $(".checkbox_844Files").click(function () {
+            let elem = $(this);
+            if (!elem.is(':checked')){
+                $("#checkbox_844SelectAll").prop('checked', false);
+            }
+            // update selected files span
+            update_selected_files();
+        });
+
+        $('#table844FilesList').DataTable({
+            lengthMenu:     [[-1], ["All"]],
+            paging:         false,
+            info:           false,
+            order:          [[1, 'asc']],
+            language : {
+                search: "",
+                searchPlaceholder: "Search ..."
+            },
+            columnDefs: [
+                {
+                    "targets":      [0, 5],
+                    "orderable":    false,
+                    "sortable":    false,
+                },
+                {
+                    type: 'date',
+                    'targets': [4]
+                },
+            ],
+
+        });
+
+    });
+</script>

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load extras %}
+
+
+{% block content_body %}
+    <div class="row">
+        <div class="col-2 text-left"></div>
+        <div class="col-6 text-center">{% include 'report_builder/includes/menu.html' %}</div>
+        <div class="col-4 text-right"><button id="go_to_reports" class="btn btn-warning" onclick="REPORT_RUN_PARAMETERS.go_to_reports()">Go to Reports</button></div>
+    </div>
+    <hr class="empower_background_blue p-0 mt-0"/>
+    <div class="row mt-1">
+        <div class="col">
+            <div class="card p-1">
+                <div class="card-body">
+                    <table class="table table-striped table-bordered" id="reportRunParameters">
+                        <thead>
+                            <tr style="background-color: lightgrey">
+                              <th scope="col">Field</th>
+                              <th scope="col">Run Scope(Relative Date Range)</th>
+                              <th scope="col">Extend Range By</th>
+                              <th scope="col">Is Run Parameter</th>
+                              <th scope="col">Add to Report As Field</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6 text-right" id="save_button_container">
+                            <button class="btn btn-primary" onclick="REPORT_RUN_PARAMETERS.save_run_parameters()">Save Changes</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let REPORT_ID = '';
+        {% if report %}
+            REPORT_ID = "{{ report.get_id_str }}";
+        {% endif %}
+        let REPORT_FILTER_TYPES = [];
+        {% for rf in report_filter_types %}
+            REPORT_FILTER_TYPES.push({
+                "action": "{{ rf.0 }}",
+                "name": "{{ rf.1 }}",
+            });
+        {% endfor %}
+
+        let DATE_RANGES = [];
+        {% for dr in data_ranges %}
+            DATE_RANGES.push({
+                "range": "{{ dr.0 }}",
+                "range_name": "{{ dr.1 }}",
+            });
+        {% endfor %}
+        let ALL_STATIC_FIELDS = [];
+        {% for sf in static_fields %}
+            ALL_STATIC_FIELDS.push({
+                'id': "{{ sf.id }}",
+                'name': "{{ sf.name }}",
+                'field': "{{ sf.field }}"
+            });
+        {% endfor %}
+        let SATATIC_DATE_FORMAT = [];
+        {% for key, value in static_date_format_list.items %}
+            SATATIC_DATE_FORMAT.push({
+                'key': "{{ key }}",
+                'value': "{{ value }}",
+            });
+        {% endfor %}
+    </script>
+    <script src="{% static 'js/app/report_builder/run_parameters.js' %}"></script>
+    <script>
+        $(function () {
+            REPORT_RUN_PARAMETERS.load_report_run_parameters();
+        })
+    </script>
+
+{% endblock %}

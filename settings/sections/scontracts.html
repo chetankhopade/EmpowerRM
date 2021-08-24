@@ -1,0 +1,109 @@
+{% load static %}
+
+<div class="tab-pane" id="tabContracts">
+    <div class="p-3 b-b _600 empower-color-blue font-14">Contracts</div>
+    <div class="col-7 p-3">
+        <div class="row">
+            <div class="col-8">
+                <p class="font-12">Auto-assign Big 3 as contract servers</p>
+            </div>
+            <div class="col-4">
+                <label class="switch">
+                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'auto_assign_big_3_as_contract_servers')" {% if company_settings.auto_assign_big_3_as_contract_servers %}checked{% endif %}/>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+{#  TICKET EA-1275 Hide Settings options #}
+{#        <div class="row mt-1">#}
+{#            <div class="col-8">#}
+{#                <p class="font-12">Auto Contact Notifications Enabled</p>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <label class="switch">#}
+{#                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'auto_contact_notifications')" {% if company_settings.auto_contact_notifications %}checked{% endif %}/>#}
+{#                    <span class="slider round"></span>#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+        <div class="row mt-1">
+            <div class="col-8">
+                <p class="font-12">Membership Validation Enable</p>
+            </div>
+            <div class="col-4">
+                <label class="switch">
+                    <input id="inputMembershipValidationEnable" type="checkbox" onclick="SETTINGS.update_option($(this), 'membership_validation_enable')" {% if company_settings.membership_validation_enable %}checked{% endif %}/>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-8">
+                <p class="font-12">Auto Membership Validation</p>
+            </div>
+            <div class="col-4">
+                <label class="switch">
+                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'proactive_membership_validation')"  {% if company_settings.proactive_membership_validation %}checked{% endif %}/>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-8">
+                <p class="font-12">Class of Trade (CoT) Validation Enabled</p>
+            </div>
+            <div class="col-4">
+                <label class="switch">
+                    <input id="checkboxCotEnabled" type="checkbox" onclick="SETTINGS.update_option($(this), 'class_of_trade_validation_enabled')" {% if company_settings.class_of_trade_validation_enabled %}checked{% endif %}/>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-8">
+                <p class="font-12">Class of Trade (CoT) Manage</p>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalCompanySettingsCoTManager">Manage</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-8">
+                <p class="font-12">Expiration Notification Threshold (Days)</p>
+            </div>
+            <div class="col-4">
+                <div class="row" style="margin-left:0px!important;">
+            <span class="mr-2">
+                <label class="switch">
+                    <input type="checkbox"  onclick="SETTINGS.update_contract_threshold_option($(this), 'expired_contract_threshold','{{company_settings.enable_contract_expiration_threshold}}','{{company_settings.contract_expiration_threshold}}')" id="enable_expired_contract_threshold" {% if company_settings.enable_contract_expiration_threshold and company_settings.contract_expiration_threshold and company_settings.contract_expiration_threshold != None %}checked{% endif %} />
+
+                    <span class="slider round"></span>
+                </label>
+            </span>
+            <span class="width-60" id="contract_threshold"">
+
+                        <select id="expire_notification_contract_threshold" onchange="SETTINGS.update_contract_threshold_value_option($(this), 'val_expired_contract_threshold','{{company_settings.enable_contract_expiration_threshold}}','{{company_settings.contract_expiration_threshold}}')"  class="myselect2 form-control text-right">
+                            <!--<option value="">Select</option> -->
+                            {% for contract_threshold in contract_threshold_val %}
+                                <option value="{{ contract_threshold }}" {% if company_settings.contract_expiration_threshold == contract_threshold %}selected{% endif %}>
+                                    {{ contract_threshold }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% if company_settings.enable_contract_expiration_threshold == False %}
+    <script>
+        $(function (){
+            if($('#expire_notification_contract_threshold').val()== "None"){
+                $('#expire_notification_contract_threshold').val('');
+            }
+            $("#contract_threshold").hide();
+        });
+    </script>
+{% endif %}

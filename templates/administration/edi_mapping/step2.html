@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block heading %}
+    <style>
+        hr.black {
+            border-top: 1px solid lightgrey;
+            margin: 0;
+        }
+        .btnCollapsibleButtons:hover {
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .dataTables_sizing{
+            height: 25px!important;
+            padding: 0.5em 0;
+        }
+        table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::before{
+            top: 0.5em;
+        }
+        table.dataTable > tbody > tr.child ul.dtr-details {
+            display: block;
+            padding: 1em;
+        }
+        table.dataTable > tbody > tr.child span.dtr-title {
+            display: block;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 140px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+            z-index: 1;
+            left: -12em;
+        }
+
+        .dropdown-content a {
+            color: #0071BA;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #eee;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .spanSegmentID {
+            background-color: #FFCE07;
+            color: #000;
+        }
+    </style>
+{% endblock %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row mr-3">
+
+        <!-- Source Format -->
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body p-3">
+                    <p class="empower-color-blue _700 font-12">Source Format</p>
+                    <div class="row font-11">
+                        <div class="col">
+                            <label class="_700">File: <span class="_500">{{ edi_fh.filename }}</span></label><br/>
+                            <label class="_700">DocType: <span id="spanEDIMappingDocumentType" class="_500">{{ edi_fh.doctype }}</span></label>
+                        </div>
+                        <div class="col">
+                            <label class="_700">Type: <span class="_500">Text</span></label><br/>
+                            <label class="_700">Format: <span class="_500">Raw EDI</span></label>
+                        </div>
+                    </div>
+                    <hr class="black" />
+
+                    <div class="row p-2">
+                        <div class="col font-12 empower-color-blue _600">Segments List</div>
+                        <div class="col text-right font-10">
+                            <a id="btnExpandAllSegments" class="btnCollapsibleButtons">
+                                <i class="fa fa-expand"></i> Expand All
+                            </a>
+                            <a id="btnCollapseAllSegments" class="ml-2 btnCollapsibleButtons">
+                                <i class="fa fa-th-list"></i> Collapse All
+                            </a>
+                        </div>
+                    </div>
+
+                    <table id="tableEDIMappingSourceFormat" class="table table-borderless table-condensed" style="display: none">
+                        <thead class="bg-light">
+                        <tr class="font-9 dark-light text-black">
+                            <th>
+                                <p class="_600 empower-color-purple ml-4">Segment IDs</p>
+                            </th>
+                            <th class="text-right width-2"></th>
+                            <th class="none"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if segments_list %}
+                            {% for segment in segments_list %}
+                                <tr class="font-11 bg-light" sid="{{ segment.id }}" index="{{ forloop.counter }}">
+                                    <td class="tdSegmentsIDs{{ segment.id }} alert">
+                                        <span class="ml-1">{{ forloop.counter }}.</span>
+                                        <span class="spanSegmentID">{{ segment.id }}</span>
+                                        <span class="pull-right spanLoopTerm{{ segment.id }} font-11 _600"></span>
+                                    </td>
+                                    <td class="text-right width-2">
+                                        <span class="dropdown">
+                                            <span><i class="fas fa-bars"></i></span>
+                                            <span class="dropdown-content">
+                                                <a onclick="EDIMAPPING_STEP2.assign_loop_term('ML', '{{ segment.id }}')">
+                                                    <span class="font-12 _600 mr-1">ML</span> <i>(Main Loop)</i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP2.assign_loop_term('NL', '{{ segment.id }}')">
+                                                    <span class="font-12 _600 mr-1">NL</span> <i>(Nested Loop)</i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP2.assign_loop_term('EL', '{{ segment.id }}')">
+                                                    <span class="font-12 _600 mr-1">EL</span> <i>(End Loop)</i>
+                                                </a>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <!-- info table goes here -->
+                                        <table class="table table-borderless table-condensed" style="width: 100%">
+                                            <thead>
+                                            <tr class="font-9 dark-light text-black">
+                                                <th>Elem</th>
+                                                <th>Value</th>
+                                                <th class="text-center">Rows</th>
+                                                <th class="text-center">Col</th>
+                                                <th class="text-center">Chars</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for elem in segment.elements %}
+                                                <tr>
+                                                    <td>
+                                                        <!-- dont make an enter because cause issue in js functions when populate dynamically the segment input -->
+                                                        <a class="btnSegmentElement" onclick="EDIMAPPING_STEP2.add_segment_in_current_row($(this));">{{ elem.id }}</a>
+                                                    </td>
+                                                    <td>{{ elem.value }}</td>
+                                                    <td class="text-center">{{ elem.row|floatformat:0 }}</td>
+                                                    <td class="text-center">{{ elem.col|floatformat:0 }}</td>
+                                                    <td class="text-center">{{ elem.chars|floatformat:0 }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!-- info table end here -->
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destination Format -->
+        <div class="col-7">
+            <div class="card">
+                <div class="card-body p-3">
+                    <p class="empower-color-blue _700 font-12">Destination Format</p>
+
+                    <div class="form-group row mb-1">
+                        <label for="selectEDIMapping" class="col-3 col-form-label font-10 font-weight-bold">
+                            Select Mapping
+                        </label>
+                        <div class="col-9">
+                            <select id="selectExistingEDIMapping" onchange="EDIMAPPING_STEP2.select_existing_edi_mapping()" class="form-control myselect2">
+                                <option value="0">Create New</option>
+                                {% for emt in existing_mappings_templates %}
+                                    <option value="{{ emt.id }}">{{ emt }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row required mb-1">
+                        <label for="inputEDIMappingName" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Mapping Name
+                        </label>
+                        <div class="col-9">
+                            <input id="inputEDIMappingName" type="text" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-1">
+                        <label for="selectEDIMappingOutputFormat" class="col-3 col-form-label font-10 font-weight-bold">
+                            Mapping Type
+                        </label>
+                        <div class="col-3">
+                            <select id="selectEDIMappingOutputFormat" onchange="EDIMAPPING_STEP2.change_mapping_type()" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                {% for mt in edi_mapping_output_formats %}
+                                    <option value="{{ mt.0 }}">{{ mt.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-check">
+                                <label class="form-check-label md-check font-10">
+                                    <input id="radioEDIMappingDelimited" type="radio" class="form-check-input" onclick="EDIMAPPING_STEP2.enable_disable_fixed_width_columns()" name="optradio"/>
+                                    <i class="primary"></i> <span class="ml-2 text-dark _600">Delimited</span>
+                                </label>
+                            </div>
+                            <div class="form-check mt-2">
+                                <label class="form-check-label md-check font-10">
+                                    <input id="radioEDIMappingFixedWidth" type="radio" class="form-check-input" onclick="EDIMAPPING_STEP2.enable_disable_fixed_width_columns()" name="optradio" />
+                                    <i class="primary"></i> <span class="ml-2 text-dark _600"> Fixed Width</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div style="margin-top: -3px">
+                                <label for="inputEDIMappingDelimiter" class="col-form-label font-10 font-weight-bold">
+                                    Delimiter
+                                </label>
+                            </div>
+                            <div class="mt-1">
+                                <label for="checkboxEDIMappingShowHeaderRow" class="col-form-label font-10 font-weight-bold">
+                                    Header Row
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div>
+                                <input id="inputEDIMappingDelimiter" maxlength="1" type="text" class="form-control width-30px height-25" style="margin-left: -12px">
+                            </div>
+                            <div class="mt-2">
+                                <label class="md-check">
+                                    <input id="checkboxEDIMappingShowHeaderRow" type="checkbox" style="width: 30px"/>
+                                    <i class="primary"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- inputs to store looops definition -->
+                    <input type="hidden" id="inputMainLoopSegment" value=""/>
+                    <input type="hidden" id="inputNestedLoopSegment" value=""/>
+                    <input type="hidden" id="inputEndLoopSegment" value=""/>
+
+                    <hr class="black" />
+
+                    <div class="row">
+                        <div class="col">
+                            <table id="tableEDIMappingDestinationFormat" class="table table-borderless table-condensed" style="display: none">
+                                <thead class="bg-light">
+                                <tr class="font-10 dark-light text-black">
+                                    <th class="text-center width-2"></th>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center width-15">Seg/Elem</th>
+                                    <th class="text-center width-12">Descriptor</th>
+                                    <th class="text-center width-10">Row</th>
+                                    <th class="text-center width-10">Char Start</th>
+                                    <th class="text-center width-10">Length</th>
+                                    <th class="text-center width-7">Enable</th>
+                                    <th class="text-center width-2">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyEDIMappingDestinationFormat">
+                                <!-- dynamic rows will go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="mx-auto text-center">
+                            <a onclick="EDIMAPPING_STEP2.addRow()" class="btn btn-warning width-100px font-10">
+                                <i class="fas fa-plus font-8"></i> Add Row
+                            </a>
+                            <a href="#" class="btn btn-warning width-100px font-10 ml-2">
+                                <i class="fas fa-plus font-8"></i> Add Line End
+                            </a>
+                            <span db="default" target="/administration/edi_mapping/s1">
+                                <a onclick="APP.execute_url($(this), true)" class="btn btn-primary width-100px font-10 ml-2">
+                                    <i class="fa fa-arrow-left font-8"></i> Back
+                                </a>
+                            </span>
+                            <a onclick="EDIMAPPING_STEP2.save_mapping_template($(this));" class="btn btn-warning width-100px font-10 ml-2">
+                                <i class="fa fa-check font-8"></i> Save
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const EDI_MAPPING_OUTPUT_FORMAT_TEXT = "{{ edi_mapping_output_format_text }}";
+        const EDI_MAPPING_OUTPUT_FORMAT_CSV = "{{ edi_mapping_output_format_csv }}";
+
+        const EDI_MAPPING_TYPE_DELIMITED = parseInt("{{ edi_mapping_type_delimited }}");
+        const EDI_MAPPING_TYPE_FIXED_WIDTH = parseInt("{{ edi_mapping_type_fixed_width }}");
+
+        const FILENAME = "{{ edi_fh.filename }}"
+    </script>
+    <script src="{% static 'js/app/administration/edi_mapping/step2.js' %}"></script>
+
+    <script>
+
+        const tableEDIMappingDestinationFormat = $("#tableEDIMappingDestinationFormat");
+        const tableEDIMappingSourceFormat = $("#tableEDIMappingSourceFormat");
+        const btnExpandAllSegments = $('#btnExpandAllSegments');
+        const btnCollapseAllSegments = $('#btnCollapseAllSegments');
+
+        $(function () {
+
+            // Datatable - Source Format
+            let sourceTable = tableEDIMappingSourceFormat.DataTable({
+                scrollX:          false,
+                scrollY:          "56vh",
+                paging:           false,
+                bInfo:            false,
+                sorting:          false,
+                sDom:             "rtip",
+                responsive:       true,
+            });
+
+            // Datatable - Destination Format
+            tableEDIMappingDestinationFormat.DataTable({
+                scrollX:          false,
+                scrollY:          "45vh",
+                paging:           false,
+                bInfo:            false,
+                sorting:          false,
+                sDom:             "rtip",
+            });
+
+            // show DataTables
+            tableEDIMappingSourceFormat.show();
+            tableEDIMappingDestinationFormat.show();
+
+            {#// Add 1st row in the mapper table if is a new mapper#}
+            {#EDIMAPPING_STEP2.addRow();#}
+            EDIMAPPING_STEP2.select_existing_edi_mapping();
+
+            // buttons to expand or collpase segments in source format datatable
+            btnExpandAllSegments.click(function(){
+                sourceTable.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click');
+            });
+            btnExpandAllSegments.trigger('click');  // expanded by default
+
+            btnCollapseAllSegments.click(function(){
+                sourceTable.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
+            });
+
+        })
+    </script>
+{% endblock %}

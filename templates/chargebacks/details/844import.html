@@ -1,0 +1,31 @@
+{% load static %}
+{% load humanize %}
+{% load extras %}
+
+<div class="row">
+    <div class="col">
+        <div class="card p-3">
+            <div class="card-body height-68vh">
+                <table class="table table-bordered table-striped table-condensed w-100">
+                    <thead class="bg-light">
+                        <tr class="font-11 _300 dark-light text-black">
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for k, v in my_import844_header.items  %}
+                            <tr>
+                                <td>{{ k }}</td>
+                                <td>{{ v }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="text-right _700">
+                    File: <span class="font-11 _500">{{ my_import844_filename }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

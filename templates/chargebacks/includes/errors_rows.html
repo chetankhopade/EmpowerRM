@@ -1,0 +1,21 @@
+{% load static %}
+
+{% if dispute.is_active %}
+    <tr>
+{% else %}
+    <tr class='text-muted'>
+{% endif %}
+
+    <td>{{ dispute.dispute_code|default_if_none:'' }}</td>
+    <td>{{ dispute.dispute_note|default_if_none:'' }}</td>
+    <td class="text-center">{{ dispute.field_name|default_if_none:'' }}</td>
+    <td class="text-center">{{ dispute.field_value|default_if_none:'' }}</td>
+    <td class="text-center">{{ dispute.created_at|date:"m/d/Y" }}</td>
+    <td class="text-center _600">
+        {% if dispute.is_active %}
+            <span class="text-success">ACTIVE</span>
+        {% else %}
+            <span class="text-muted">RESOLVED</span>
+        {% endif %}
+    </td>
+</tr>

@@ -1,0 +1,279 @@
+{% load static %}
+{% load humanize %}
+{% load extras %}
+
+<!-- 1st Section -->
+<div class="row">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col">
+                        <p class="empower-color-blue _600 font-13">
+                            Chargeback
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CBID</span>
+                        <span class="font-13 text-dark">{{ chargeback.cbid }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">849 Generated</span>
+                        <span class="font-13 text-dark">
+                            {% if chargeback.is_export_849 %}
+                                <i class="fa fa-check"></i>
+                            {% else %}
+                                <i class="fa fa-minus"></i>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Status</span>
+                        <span class="font-13 text-dark">
+                            {{ chargeback.get_stage_display }}, {{ chargeback.get_substage_display }}
+                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Received Via</span>
+                        <span class="font-13 text-dark">
+                            {% if chargeback.is_received_edi %}
+                                EDI
+                            {% else %}
+                                {% if is_read_only_user %}
+                                <a {% if chargeback.stage < 3 %}class="empower-color-blue" onclick="APP.get_read_only_user_error();" {% endif %}>
+                                    Manual
+                                </a>
+                                {% else %}
+                                <a {% if chargeback.stage < 3 %}class="empower-color-blue" onclick="CB_MANUAL.show_modal('cb_detail');" {% endif %}>
+                                    Manual
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-6 d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">DocType</span>
+                        <span class="font-13 text-dark">{{ chargeback.document_type }}</span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-6 d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CBType</span>
+                        <span class="font-13 text-dark">{{ chargeback.type }}</span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-6 d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Date</span>
+                        <span class="font-13 text-dark">{{ chargeback.date|date:'m/d/Y' }}</span>
+                    </div>
+                </div>
+                <div class="row" mt-1>
+                    <div class="col-6 d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CB Number</span>
+                        <span class="font-13 text-dark">{{ chargeback.number }}</span>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end card -->
+    </div> <!-- end col -->
+
+    <div class="col pl-0">
+        <div class="card h-100">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col">
+                        <p class="empower-color-blue _600 font-13">
+                            Customer/Distributor
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Customer</span>
+                        <span class="font-13 text-dark">
+                            {% if my_customer %}
+                                {{ my_customer.get_name }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Address</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.get_complete_address }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Distributor</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.get_name }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">City</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.get_city }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">DEA No.</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.dea_number }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">State</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.get_state }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col"></div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Zip</span>
+                        <span class="font-13 text-dark">
+                            {% if my_distribution_center %}
+                                {{ my_distribution_center.get_zip_code }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end card -->
+    </div><!-- end col -->
+</div> <!-- end row 1st section -->
+
+<!-- 2nd Section -->
+<div class="row mt-2">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col">
+                        <p class="empower-color-blue _600 font-13">
+                            Resubmission
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Resub No.</span>
+                        <span class="font-13 text-dark">
+                            {% if chargeback.resubmit_number %}
+                                {{ chargeback.resubmit_number }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Description</span>
+                        <span class="font-13 text-dark">
+                            {% if chargeback.resubmit_description %}
+                                {{ chargeback.resubmit_description }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Original CBID</span>
+                        <span class="font-13 text-dark">
+                            {% if chargeback.original_chargeback_id %}
+                                {{ chargeback.original_chargeback_id }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end card -->
+    </div> <!-- end col -->
+
+    <div class="col pl-0">
+        <div class="card h-100">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col">
+                        <p class="empower-color-blue _600 font-13">
+                            Claim Info
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Submitted ($)</span>
+                        <span class="font-13 text-dark">{{ chargeback.claim_subtotal|floatformat:2|intcomma }}</span>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Sum of all Lines ($)</span>
+                        <span class="font-13 text-dark">{{ sum_lines_credit_amt|floatformat:2|intcomma }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Total Lines</span>
+                        <span class="font-13 text-dark">{{ chargeback.total_line_count|floatformat:0 }}</span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Calculated ($)</span>
+                        <span class="font-13 text-dark">{{ chargeback.claim_calculate|floatformat:2|intcomma }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CM Number</span>
+                        <span class="font-13 text-dark">{{ chargeback.accounting_credit_memo_number|default:'N/A' }}</span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Adjustment ($)</span>
+                        <span class="font-13 text-dark">{{ chargeback.claim_adjustment|floatformat:2|intcomma }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CM Date</span>
+                        <span class="font-13 text-dark">{{ chargeback.accounting_credit_memo_date|date:'m/d/Y' }}</span>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">Issued ($)</span>
+                        <span class="font-13 text-dark">{{ chargeback.claim_issue|floatformat:2|intcomma }}</span>
+                    </div>
+                    <div class="col d-flex justify-content-between">
+                        <span class="font-12 _700 text-dark">CM Amount ($)</span>
+                        <span class="font-13 text-dark">{{ chargeback.accounting_credit_memo_amount|floatformat:2|intcomma  }}</span>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end card -->
+    </div> <!-- end col -->
+</div> <!-- end row 2nd section -->

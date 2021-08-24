@@ -1,0 +1,132 @@
+{% load static %}
+
+<!-- Parser Activity Details/Chart modal -->
+<div class="modal fade" id="modalParserActivityChartDetails" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-40"></div>
+            <div class="modal-body">
+                <div class="card shadow-sm bg-white rounded">
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-2">
+                                <p class="empower-color-blue _700 font-14 text-center">
+                                    Step Balance (<span class="spanTitleParserActivity"></span>)
+                                </p>
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="border-right"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td rowspan="7" class="border-right"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-13 _700">844Vin</td>
+                                        <!-- 844Vin - Count of CBs in all incoming RAW Edi 844 files parsed by the system in {timerange} -->
+                                        <td id="td844Vin" class="font-14 _600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="_700">997Vout</td>
+                                        <!-- 997Vout - Count of CBs in all outbound RAW Edi 997 files parsed by the system in {timerange} -->
+                                        <td id="td997Vout" class="font-14 _600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="_700">844Ein</td>
+                                        <!-- 844Ein - Count of CBs in all 844 PIPE files parsed by the system -->
+                                        <td id="td844Ein" class="font-14 _600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="_700">849Eout</td>
+                                        <!-- 849Eout - Count of CBs in all outgoing RAW Edi 849 files parsed by the system in {timerange} -->
+                                        <td id="td849Eout" class="font-14 _600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="_700">AtERM</td>
+                                        <!-- AtERM - Current Count of open CBs for this Partner (regardless of timerange) -->
+                                        <td id="tdAtERM" class="font-14 _600"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="_700">ERM</td>
+                                        <!-- ERM - Count of total (open or archived) CBs for this Partner in (timerange) -->
+                                        <td class="_500"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="border-right"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="border-right"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="border-right"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td class="border-right"></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-10">
+
+                                <!-- Title and Select2 -->
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <p class="empower-color-blue _700 font-14 ml-4">
+                                            Activity Chart (<span class="spanTitleParserActivity"></span>)
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select id="selectParserActivityChartTimeframe" onchange="SERVICE_STATUS.update_parser_activity_data();" class="form-control width-120px">
+                                            {% for range in data_ranges %}
+                                                {% if range.0 != 'YTD' and range.0 != 'LY'%}
+                                                    <option value="{{ range.0 }}" {% if range.0 == 'MTD' %}selected{% endif %}>{{ range.0 }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select id="selectParserActivityChartMetrics" onchange="SERVICE_STATUS.update_parser_activity_data();" class="form-control width-120px">
+                                            <option value="cbs">CBs</option>
+                                            <option value="kchars">KChars</option>
+                                            <option value="files">Files</option>
+                                            <option value="lines">Lines</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Chart -->
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="divParserActivityChartLoader" class="text-center" style="display: none">
+                                            <img src='{% static 'images/loading2.gif' %}' width='55' height='55' alt='chart_loader'/>
+                                        </div>
+                                        <canvas id="canvasParserActivityChart"></canvas>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal"> Close</a>
+            </div>
+        </div>
+    </div>
+</div>

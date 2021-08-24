@@ -1,0 +1,33 @@
+<div class="modal fade" id="modalCloneReport" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Clone Report</h5>
+            </div>
+            <input type="hidden" name="parent_report_id" id="parent_report_id" value=""/>
+            <div class="modal-body text-center p-lg">
+                <div class="form-group row required">
+                    <label for="clone_report_name" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                        Report Name
+                    </label>
+                    <div class="col-9">
+                        <input type="text" name="clone_report_name" id="clone_report_name" class="form-control height-30" placeholder="Report Name">
+                    </div>
+                </div>
+
+                <div class="form-group row mt-2">
+                    <label for="clone_report_description" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                        Description
+                    </label>
+                    <div class="col-9">
+                        <input type="text" name="clone_report_description" id="clone_report_description" class="form-control height-30" placeholder="Report Description">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="btnCloneReport" class="btn btn-warning" onclick="REPORT_OPERATIONS.clone_report();">Clone</a>
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>

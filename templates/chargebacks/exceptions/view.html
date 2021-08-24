@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_header_center %}
+    {% include 'chargebacks/menu.html' %}
+{% endblock %}
+{% block content_body %}
+    {% if has_duplicates_header %}
+        <div class="row">
+            <input type="hidden" id="inputExceptionsDuplicatesSelectedRow"/>
+            <input type="hidden" id="inputDisputeCodeClicked"/>
+
+            <div id="headerSidebar" class="sidebar">
+                {#              Duplicate Header table will go here#}
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-9 text-left">
+                                        <button class="openbtn" onclick="CB_EXCEPTIONS.close_header_slider()">
+                                            <span id="sliderButtonIconClose">
+                                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                        <button class="disSelectHeaderOption" onclick="">
+                                            <span id="disSelectHeaderOption">
+                                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                        Choose a common issue filter to apply
+                                    </div>
+                                    <div class="col-3 text-right">
+                                        <button class="btn btn-sm btn-primary" id="tableDuplicateHeaders_download" onclick="CB_EXCEPTIONS.export_duplicate_headers()">Export</button>
+                                    </div>
+                                </div>
+
+                                <div class="col" style="height: 100%">
+                                    <table id="tableExceptionsDuplicatesHeader" class="table table-hover table-condensed table-borderless table-striped w-100" style="width:100%">
+                                        <thead class="bg-light">
+                                        <tr class="font-11 text-black">
+                                            <th>SubContract No.</th>
+                                            <th>Contract No.</th>
+                                            <th>NDC</th>
+                                            <th>WAC Sub</th>
+                                            <th>WAC Sys</th>
+                                            <th>CP Sub</th>
+                                            <th>CP Sys</th>
+                                            <th>Errors Count</th>
+                                            <th>Dispute Notes</th>
+                                            <th>Min Invoice Date</th>
+                                            <th>Max Invoice Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbodyExceptionsDuplicatesHeader"></tbody>
+                                    </table>
+
+                                    <table id="tableExceptionsDuplicatesHeaderBB" class="table table-hover table-condensed table-borderless table-striped w-100" style="height: 100%;width:100%">
+                                        <thead class="bg-light">
+                                        <tr class="font-10 dark-light text-black">
+                                            <th>SubContract No.</th>
+                                            <th>Contract No.</th>
+                                            <th>Errors Count</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbodyExceptionsDuplicatesHeaderBB"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div  id="sliderOpner">
+                <button class="openbtn" onclick="CB_EXCEPTIONS.open_header_slider()"><span id="sliderButtonIcon"><i class="fa fa-caret-left" aria-hidden="true"></i></span></button>
+            </div>
+        </div>
+
+        <!-- Table with duplicates -->
+        <div class="row">
+            <div class="col text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- table with duplicates goes here -->
+                        <div class="row" id="coTdropDwon">
+                            <div class="col-6">
+                                <label class="d-inline-block mt-2" for="selectExceptionsDuplicatesCoT">
+                                    <small class="_600">Change CoT To: </small>
+                                </label>
+                            </div>
+                            <div class="col-6">
+                            {% if is_read_only_user %}
+                                <select onchange="APP.get_read_only_user_error();" class="form-control d-inline-block myselect2">
+                                    <option value=""></option>
+                                    {% for cot in enabled_cots %}
+                                        <option value="{{ cot.id }}">{{ cot.trade_class }}</option>
+                                    {% endfor %}
+                                </select>
+                             {% else %}
+                                <select id="selectExceptionsCoT" class="form-control d-inline-block myselect2">
+                                    <option value=""></option>
+                                    {% for cot in enabled_cots %}
+                                        <option value="{{ cot.id }}">{{ cot.trade_class }}</option>
+                                    {% endfor %}
+                                </select>
+                             {% endif %}
+                            </div>
+                        </div>
+                        <div class="row" id="active_dispute_container">
+                            <div class="container" style="text-align: left !important;">
+                                <div class="col-12">
+                                    <div id="dc_pills_container">
+                                        <span>ACTIVE DISPUTES: </span>
+                                        <button dc_code="" onclick="CB_EXCEPTIONS.search_by_dispute_code($(this))" class="active_dispute_pill btn btn-default" style="border-color:white !important">
+                                            <span><strong>ALL</strong></span>&nbsp;
+                                            <span class="badge badge-primary">{{ dispute_result_total_count }}</span>&nbsp;
+                                        </button>
+                                        <span> | </span>
+                                        {% for dc in dispute_result %}
+                                            <button title="{{ dc.tooltip }}" dc_code="{{ dc.dispute_code }}" onclick="CB_EXCEPTIONS.search_by_dispute_code($(this))" class="active_dispute_pill btn btn-default tt" style="border-color:white !important">
+                                                <span><strong>{{ dc.dispute_code }}</strong></span>&nbsp;
+                                                <span class="badge badge-primary">{{ dc.count }}</span>&nbsp;
+                                            </button>
+                                            {% if not forloop.last %}
+                                                <span> | </span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="duplicate_details_export_button_container">
+                                <a class="btn btn-sm btn-primary tt" onclick="CB_EXCEPTIONS.export_duplicate_details('excel')" title="Export to Excel">
+                                    <i class="fa fa-file-excel-o"></i>
+                                </a>
+                                <a class="btn btn-sm btn-primary tt ml-1" onclick="CB_EXCEPTIONS.export_duplicate_details('csv')" title="Export to CSV">
+                                    <i class="fa fa-file-text-o"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <table id="tableExceptionsDuplicatesDetails" class="table table-hover table-condensed table-borderless table-striped w-100 nowrap">
+                                <thead class="bg-light">
+                                <tr class="font-11 text-black">
+                                    <th style="display: none">Id</th>
+                                    <th>CBID</th>
+                                    <th>CBLNID</th>
+                                    <th>Customer</th>
+                                    <th>DC</th>
+                                    <th>CBNumber</th>
+                                    <th>SubContractNo</th>
+                                    <th>ContractNo</th>
+                                    <th>LocNo</th>
+                                    <th>IndCustName</th>
+                                    <th>Address1</th>
+                                    <th>Address2</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Zip</th>
+                                    <th>NDC</th>
+                                    <th>Inv.Date</th>
+                                    <th>Inv.No</th>
+                                    <th>WAC Sub</th>
+                                    <th>WAC Sys</th>
+                                    <th>CP Sub</th>
+                                    <th>CP Sys</th>
+                                    <th>Dispute Codes</th>
+                                    <th>CoT</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="mt-2">
+                            <ul class="nav nav-pills nav-fill" id="exception_action_container">
+                                 {% if is_read_only_user %}
+                                <li class="nav-item" id="ex_rerun_validation_li">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Rerun Validation
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_alter_contract_no_li">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Alter Contract No.
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_dispute_li">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Dispute
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_autocorrect_li">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Autocorrect
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_overrride_li">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Override
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_allow_member_li" style="display: none">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Allow Member
+                                    </a>
+                                </li>
+
+                                <li class="nav-item" id="ex_indirect_customer_li" style="display: none">
+                                    <a class="btn btn-warning nav-link" onclick="APP.get_read_only_user_error();">
+                                        Add Indirect Customer
+                                    </a>
+                                </li>
+                                 {% else %}
+                                 <li class="nav-item" id="ex_rerun_validation_li">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'rerun_validations')">
+                                        Rerun Validation
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_alter_contract_no_li">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'alter_contract_no')">
+                                        Alter Contract No.
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_dispute_li">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'dispute_cb')">
+                                        Dispute
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_autocorrect_li">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'autocorrect_price')">
+                                        Autocorrect
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_overrride_li">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'override')">
+                                        Override
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_allow_member_li" style="display: none">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'allow_member')">
+                                        Allow Member
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="ex_indirect_customer_li" style="display: none">
+                                    <a class="btn btn-warning nav-link" onclick="CB_EXCEPTIONS.confirmation_to_action_to_execute($(this), 'add_indirect_customer')">
+                                        Add Indirect Customer
+                                    </a>
+                                </li>
+
+                                 {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col text-center">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <i class="far fa-times-circle font-40 mx-1 empower-color-yellow"></i>
+                            <h3 class="mx-1">No common issues found.</h3>
+                            <a class="btn btn-lg btn-warning align-middle mt-4" onclick="APP.ajax_redirect_url('/{{ db_name }}/chargebacks')">
+                                Return to Chargebacks
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- CB Exceptions -->
+    {% include 'chargebacks/modals/modals_exceptions.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <!-- CB Exceptions -->
+    <script src="{% static 'js/app/exceptions.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% load static %}
+
+<!-- Import Company Data Button -->
+<div class="modal fade" id="modalImportCompanyData" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Import Company Data</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <form id="formImportCompanyDataDZ" action="/{{ db_name }}/settings/uploads/company_data" class="dropzone">
+                        <div class="fallback">
+                            <input type="file" name="file" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Import Company CBHistory -->
+<div class="modal fade" id="modalImportCompanyCBHistory" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Import Company - CB History</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <form id="formImportCompanyCBHistoryDZ" action="/{{ db_name }}/settings/uploads/company_cbhistory" class="dropzone">
+                        <div class="fallback">
+                            <input type="file" name="file" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Import Membership Upload Button -->
+<div class="modal fade" id="modalMembershipFileUpload" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Membership File Upload</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <!--<form id="formMembershipFileUploadDZ" action="/{{ db_name }}/chargebacks/files/upload" class="dropzone">
+                        <div class="fallback">
+                            <input type="file" name="file" multiple />
+                        </div>
+                    </form>-->
+
+{#                    <form id="formMembershipFileUploadDZ" action="/{{ db_name }}/settings/uploads/membership_data" class="dropzone">#}
+{#                        <div class="fallback">#}
+{#                            <input type="file" name="file" />#}
+{#                        </div>#}
+{#                    </form>#}
+                    <!-- EA-1225 - Membership Uploads Improvements -->
+                    <form id="formMembershipFileUploadDZ" action="/{{ db_name }}/settings/uploads/membership_data" class="dropzone">
+                        <div class="fallback">
+                            <input type="file" name="file" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col"></div>
+                <div class="col text-right">
+                    <!--<a id="btnImportCh" class="btn btn-warning">Import</a>-->
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalContractMembersUploadResults" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadMembersContinue" class="btn btn-warning" style="display: none" onclick="CONTRACT_Membership.check_and_process_upload()">Continue</a>
+                <a id="uploadMembersClose" class="btn btn-primary" filename="" onclick="CONTRACT_Membership.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUploadMemberConfirmContractsResults" tabindex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">Membership Upload Results</h5>
+            </div>
+            <div class="modal-body height-500" style="overflow-y: scroll"></div>
+            <div class="modal-footer">
+                <a id="uploadMemberConfirmContinue" class="btn btn-warning" style="display: none" onclick="CONTRACT_Membership.confirm_and_process_upload()">Continue</a>
+                <a id="uploadMemberConfirmClose" class="btn btn-primary" filename="" onclick="CONTRACT_Membership.close_upload_result_modal($(this))">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
+<div class="modal fade " id="pleaseWaitDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background:#0000003d;">
+  <div class="modal-dialog">
+    <div class="modal-content" style="margin-top: 50%;">
+      <div class="modal-header">
+          <h5 style="margin-top:-11px;">Processing...</h5>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar progress-bar-success progress-bar-striped bg-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <span class="sr-only">100% Complete (success)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'contracts/modals.html' %}

@@ -1,0 +1,11 @@
+<div class="form-inline">
+    <label class="sr-only" for="report_name">Name</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="report_name" value="{{ report.name }}" placeholder="Report Name" style="width:40%">
+
+    <label class="sr-only" for="report_description">Description</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="report_description" value="{{ report.description }}" placeholder="Report Description" style="width:40%">
+
+    <button class="btn btn-primary btn-sm mb-2" onclick="REPORT_BUILDER.update_report();">Save</button>
+</div>
+
+<div class="divider"></div>

@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="col">
+    <div class="card">
+        <div class="card-body">
+            <form id="fmReportAMPFilters" autocomplete="off" action="">
+                <div class="row">
+
+                    <div class="col">
+                        <label for="inputReportAMPFiltersStartDate" class="col-form-label font-10 font-weight-bold">
+                            Start Date
+                        </label>
+                        <div class="input-group">
+                            <input id="inputReportAMPFiltersStartDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" value="" style="height: 33px!important;">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label for="inputReportAMPFiltersEndDate" class="col-form-label font-10 font-weight-bold">
+                            End Date
+                        </label>
+                        <div class="input-group">
+                            <input id="inputReportAMPFiltersEndDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" value="" style="height: 33px!important;">
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="text-right mt-3">
+                <a class="btn btn-primary width-80px" onclick="APP.show_app_loader(); location.reload();">Clear</a>
+                <a class="btn btn-warning width-80px ml-1" onclick="REPORT_AMP.search();">Search</a>
+                <a class="btn btn-primary width-80px ml-1" onclick="APP.show_app_loader(); location.href='/{{ db_name }}/reports' ">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>

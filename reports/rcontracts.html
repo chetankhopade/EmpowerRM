@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content_body %}
+    <div class="row">
+        <div class="col-4 text-left empower-color-blue font-14">{{ header_title }}</div>
+        <div class="col-4 text-center"></div>
+        <div class="col-4 text-right"></div>
+    </div>
+    <hr class="empower_background_blue p-0 mt-0"/>
+    <div class="row">
+        {% include 'reports/includes/report_contract_filters_form.html' %}
+    </div>
+
+    <div class="row mt-1">
+        <div class="col">
+            <div class="card p-1">
+                <div class="text-right">
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_CONTRACTS.export('excel')" title="Export to Excel">
+                        <i class="fa fa-file-excel-o"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default tt" onclick="REPORT_CONTRACTS.export('csv')" title="Export to CSV">
+                        <i class="fa fa-file-text-o"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="tableReportContracts" class="table table-condensed table-hover table-borderless w-100">
+                        <thead class="bg-light">
+                        <tr class="font-10 text-dark">
+                            <th style="display: none">Id</th>
+                            <th>Contract Name</th>
+                            <th>Contract Number</th>
+                            <th>Contract Type</th>
+                            <th>Contract Start</th>
+                            <th>Contract End</th>
+                            <th>Product ID</th>
+                            <th>Product Type</th>
+                            <th>Product Name</th>
+                            <th>Unit Measure</th>
+                            <th>Unit Contract Price</th>
+                            <th>Product Start</th>
+                            <th>Product End</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="font-10"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/reports/contracts.js' %}"></script>
+{% endblock %}

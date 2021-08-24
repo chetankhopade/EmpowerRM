@@ -1,0 +1,76 @@
+<div id="usersModal" class="modal black-overlay" data-backdrop="false">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;">
+                <h6 class="modal-title mb-2">Create New User</h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+
+                <form class="p-x-xs" id="fmUser">
+                    <input type="hidden" name="action" value="create"/>
+                    {% csrf_token %}
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            FirstName
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="u_firstname" name="u_firstname" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            LastName
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="u_lastname" name="u_lastname" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Email
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="u_email" name="u_email" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Phone
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="u_phone" name="u_phone" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Companies
+                        </label>
+                        <div class="col-sm-9 text-left font-11">
+                            {% for mycompany in user_companies %}
+                                <label class="md-check checkbox-inline">
+                                    <input type="checkbox" class="checkboxCompany" cid="{{ mycompany.id }}">
+                                    <i class="green"></i>
+                                    {{ mycompany }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a id="btnUsersModalCancel" class="btn btn-primary" data-dismiss="modal">
+                    Cancel
+                </a>
+                <a id="btnUsersModalSubmit" class="btn btn-warning" onclick="USERS.create()">
+                    Create User
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_right %}
+    {% if is_read_only_user %}
+    <a onclick="APP.get_read_only_user_error();" class="btn btn-warning">
+        Create Product
+    </a>
+    {% else %}
+    <a onclick="PRODUCTS.show_modal($(this));" class="btn btn-warning"
+       action="create"
+       current_view="details">
+        Create Product
+    </a>
+
+    {% endif %}
+    {% if is_read_only_user %}
+    <a onclick="APP.get_read_only_user_error();" class="btn btn-primary"
+       action="edit"
+       current_view="details">
+        Edit Product
+    </a>
+    {% else %}
+    <a onclick="PRODUCTS.show_modal($(this));" class="btn btn-primary"
+       action="edit"
+       current_view="details"
+       iid="{{ item.id }}"
+       ndc="{{ item.get_formatted_ndc }}"
+       description="{{ item.description|default_if_none:'' }}"
+       account_number="{{ item.account_number|default_if_none:'' }}"
+       strength="{{ item.strength|default_if_none:'' }}"
+       size="{{ item.size|default_if_none:'' }}"
+       brand="{{ item.brand|default_if_none:'' }}"
+       upc="{{ item.upc|default_if_none:'' }}"
+       status="{{ item.status }}">
+        Edit Product
+    </a>
+
+    {% endif %}
+    <a class="btn btn-warning" onclick="APP.show_notifications('Item');">
+        <i class="fas fa-tasks"></i>
+    </a>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <input id="productId" value="{{ item.id }}" hidden>
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="card p-3">
+                        <div class="pt-3 text-center text-primary font-24">
+                            {{ contract_revenue_mtd|floatformat:2|intcomma }}
+                        </div>
+                        <div class="mt-3 pb-3 text-center font-11">Contract Revenue MTD</div>
+                    </div>
+                </div>
+                <div class="col pl-0">
+                    <div class="card p-3">
+                        <div class="pt-3 text-center {% if item_total > 0 %}text-success{% else %}text-danger{% endif %} font-24">
+                            {{ total_sold|floatformat:0 }}
+                        </div>
+                        <div class="mt-3 pb-3 text-center font-11">Total Product Sold MTD</div>
+                    </div>
+                </div>
+                <div class="col pl-0">
+                    <div class="card p-3">
+                        <div class="pt-3 text-center text-muted font-24">
+                            {{ avg_contract_price_system|floatformat:2|intcomma }}
+                        </div>
+                        <div class="mt-3 pb-3 text-center font-11">Avg CB Amount: MTD</div>
+                    </div>
+                </div>
+                <div class="col pl-0">
+                    <div class="card p-3">
+                        <div class="pt-3 text-center text-muted font-24">
+                            {{ avg_claim_issued|floatformat:2|intcomma }}
+                        </div>
+                        <div class="mt-3 pb-3 text-center font-11">Avg Contract Price: MTD</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Contract Lines -->
+            <div class="row mt-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="empower-color-blue _600 font-13">
+                                        Direct Price by Contract
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- New Direct Price by contract-->
+                            <table id="tableProductDetailsDirectPrice" class="table table-condensed table-borderless table-hover w-100">
+                                <thead class="bg-light">
+                                <tr class="font-10 dark-light text-black">
+                                    <th>Contract</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Start Date</th>
+                                    <th class="text-center">End Date</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody class="font-10"></tbody>
+                            </table>
+                            <!-- DIrect Price by contract Ends-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indirect Contract Lines -->
+            <div class="row mt-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="empower-color-blue _600 font-13">
+                                        Indirect Price by Contract
+                                    </p>
+                                </div>
+                            </div>
+                            <table id="tableProductDetailsIndirectPrice" class="table table-condensed table-borderless table-hover w-100">
+                                <thead class="bg-light">
+                                <tr class="font-10 dark-light text-black">
+                                    <th>Contract</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Start Date</th>
+                                    <th class="text-center">End Date</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody class="font-10"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty placeholder if there is not data -->
+            {% if not direct_contracts_lines and not indirect_contracts_lines %}
+                <div class="row mt-2">
+                    <div class="col">
+                        <div class="card p-4 text-center empower-color-purple">
+                            <div class="card-body">
+                                <i class="fas fa-file-alt fa-6x"></i>
+                                <p class="mt-2">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span class="font-16">This product is not added to any Contract yet</span>
+                                </p>
+                                <p class="mt-2">
+                            <span db="{{ db_name }}" target="/contracts/create">
+                                <a onclick="APP.execute_url($(this))" class="btn btn-warning">
+                                    Add this item to a Contract
+                                </a>
+                            </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="col-4 pl-0">
+            <div class="card h-100 p-3">
+
+                <div class="row font-16">
+                    <div class="col">
+                        <p class="empower-color-blue _600 font-13">
+                            Product Information
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        NDC
+                    </div>
+                    <div class="col text-left">
+                        {{ item.get_formatted_ndc }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1 ">
+                    <div class="col-4 text-right empower-color-blue">
+                        Description
+                    </div>
+                    <div class="col text-left">
+                        {{ item.description }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        Account No
+                    </div>
+                    <div class="col text-left">
+                        {{ item.account_number }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        Strength
+                    </div>
+                    <div class="col text-left">
+                        {{ item.strength|default_if_none:'' }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        Bottle Size
+                    </div>
+                    <div class="col text-left">
+                        {{ item.size|floatformat:0 }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        Brand
+                    </div>
+                    <div class="col text-left">
+                        {{ item.brand|default_if_none:'' }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        UPC
+                    </div>
+                    <div class="col text-left">
+                        {{ item.upc|default_if_none:'' }}
+                    </div>
+                </div>
+
+                <div class="row font-16 mt-1">
+                    <div class="col-4 text-right empower-color-blue">
+                        Status
+                    </div>
+                    <div class="col text-left">
+                        {{ item.get_status_display }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    {% include 'products/modals.html' %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    <!-- Custom Scripts -->
+    <script src="{% static 'js/libs/Chart.min.js' %}"></script>
+    <script src="{% static 'js/app/products.js' %}"></script>
+{% endblock %}

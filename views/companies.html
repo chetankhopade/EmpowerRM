@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content_body %}
+
+    {% for company in user_companies_list %}
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="box text-center">
+                    <div class="box-header">
+                        <h2>{{ company.name }}</h2>
+                    </div>
+                    <div class="box-body" db="{{ company.database }}" target="{{company.cb_start_page}}">
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="APP.execute_url($(this))">
+                            Select Company
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="box text-center">
+                    <div class="box-body text-muted">
+                        <h6 class="text-muted">Contracts</h6>
+                        <p class="font-28 empower-color-purple">
+                            {{ company.total_contracts|floatformat:0 }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="box text-center">
+                    <div class="box-body text-muted">
+                        <h6 class="text-muted">Products</h6>
+                        <p class="font-28 empower-color-purple">
+                            {{ company.total_products|floatformat:0 }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="box text-center">
+                    <div class="box-body text-muted">
+                        <h6 class="text-muted">Direct Customers</h6>
+                        <p class="font-28 empower-color-purple">
+                            {{ company.total_direct_customers|floatformat:0 }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

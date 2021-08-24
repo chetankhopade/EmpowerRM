@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block heading %}
+    <style>
+        hr.lightgrey {
+            border-top: 1px solid lightgrey;
+            margin: 0 0 10px 0;
+        }
+        #btnSourceFileOutputFile:hover, #btnSourceFileOutputHtml:hover, #btnDestinationFileOutputFile:hover, #btnDestinationFileOutputHtml:hover{
+            font-size: 11px;
+        }
+    </style>
+{% endblock %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="container" style="max-width: 1180px!important">
+        <div class="row">
+
+            <!-- Source Format -->
+            <div class="col-5" style="padding-left: 0!important;">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-8 font-12 empower-color-blue _600">
+                                Source Format
+                            </div>
+                            <div class="col-4 font-10 text-right">
+                                <a onclick="EDIMAPPING_STEP3.get_source_data('file')" id="btnSourceFileOutputFile">
+                                    <i class="fa fa-file-alt"></i> File
+                                </a>
+                                <a onclick="EDIMAPPING_STEP3.get_source_data('html')" class="ml-1" id="btnSourceFileOutputHtml">
+                                    <i class="fa fa-html5"></i> Html
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-condensed table-bordered table-sm">
+                                    <thead class="bg-light">
+                                    <tr class="text-dark font-9">
+                                        <th>FileName</th>
+                                        <th class="width-12 text-center">DocType</th>
+                                        <th class="width-12 text-center">Type</th>
+                                        <th class="width-12 text-center">Format</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="font-10">
+                                        <td id="tdStep3SourceFileName"></td>
+                                        <td id="tdStep3SourceDocType" class="text-center"></td>
+                                        <td class="text-center">text</td>
+                                        <td class="text-center">raw edi</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr class="lightgrey" />
+                        <div class="row">
+                            <div class="col">
+                                <pre id="divStep3SourceFileContainer">
+                                    <!-- source format file data goes here -->
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destination Format -->
+            <div class="col-7" style="padding: 0;">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-8 font-12 empower-color-blue _600">Destination Format</div>
+                            <div class="col-4 font-10 text-right">
+                                <a onclick="EDIMAPPING_STEP3.get_destination_data('file')" id="btnDestinationFileOutputFile">
+                                    <i class="fa fa-file-alt"></i> File
+                                </a>
+                                <a onclick="EDIMAPPING_STEP3.get_destination_data('html')" class="ml-1" id="btnDestinationFileOutputHtml">
+                                    <i class="fa fa-html5"></i> Html
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-condensed table-bordered table-sm">
+                                    <thead class="bg-light">
+                                    <tr class="text-dark font-9">
+                                        <th>Mapping Name</th>
+                                        <th class="width-12 text-center">Output</th>
+                                        <th class="width-12 text-center">Type</th>
+                                        <th class="width-7 text-center">Delimiter</th>
+                                        <th class="width-7 text-center">Header?</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="font-10">
+                                        <td id="tdStep3DestinationMappingName"></td>
+                                        <td id="tdStep3DestinationMappingOutput" class="text-center"></td>
+                                        <td id="tdStep3DestinationMappingType" class="text-center"></td>
+                                        <td id="tdStep3DestinationMappingDelimiter" class="text-center font-12"></td>
+                                        <td id="tdStep3DestinationMappingShowHeader" class="text-center font-12"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr class="lightgrey" />
+                        <div class="row">
+                            <div class="col font-11">
+                                <pre id="divStep3DestinationFileContainer">
+                                    <!-- destination format mapper data goes here -->
+                                </pre>
+                                <div id="divStep3DestinationFileViewDownload" class="pull-right">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div id="divStep3DestinationButtons" class="card-footer">
+                        <div class="mx-auto text-right">
+                            <span db="default" target="/administration/edi_mapping/s2?fn={{ filename }}">
+                                <a onclick="APP.execute_url($(this), true)" class="btn btn-primary width-100px font-10 ml-2">
+                                    <i class="fa fa-arrow-left font-9"></i> Back
+                                </a>
+                            </span>
+                            <a onclick="EDIMAPPING_STEP3.approve_mapping($(this))" class="btn btn-warning width-100px font-10 ml-2">
+                                <i class="fa fa-check font-9"></i> Approve
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        const FILENAME = "{{ filename }}";
+        const MAPID = "{{ mapid }}";
+        const EDI_MAPPING_STATUS_COMPLETE = "{{ edi_mapping_status_complete }}";
+        const EDI_MAPPING_TYPE_DELIMITED = parseInt("{{ edi_mapping_type_delimited }}");
+        const EDI_MAPPING_TYPE_FIXED_WIDTH = parseInt("{{ edi_mapping_type_fixed_width }}");
+    </script>
+    <script src="{% static 'js/app/administration/edi_mapping/step3.js' %}"></script>
+
+    <script>
+
+        $(function () {
+
+            // Get Data for both: Source and Destination cards when page loads
+            EDIMAPPING_STEP3.get_source_data('html');
+            EDIMAPPING_STEP3.get_destination_data('html');
+
+        });
+    </script>
+{% endblock %}

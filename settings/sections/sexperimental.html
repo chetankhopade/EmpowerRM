@@ -1,0 +1,52 @@
+{% load static %}
+
+<div class="tab-pane" id="tabExperimental">
+    <div class="p-3 b-b _600 empower-color-blue font-14">Experimental</div>
+    <div class="col-md-7 p-3">
+{#  TICKET EA-1275 Hide Settings options #}
+{#        <div class="row">#}
+{#            <div class="col-8">#}
+{#                <p class="font-12">Enable Daily Report</p>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <label class="switch">#}
+{#                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'enable_daily_report')" {% if company_settings.enable_daily_report %}checked{% endif %}/>#}
+{#                    <span class="slider round"></span>#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-8">#}
+{#                <p class="font-12">Auto Chargeback Reports Enable</p>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <label class="switch">#}
+{#                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'auto_chargeback_reports_enable')" {% if company_settings.auto_chargeback_reports_enable %}checked{% endif %}/>#}
+{#                    <span class="slider round"></span>#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-8">#}
+{#                <p class="font-12">Default WAC Enable</p>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <label class="switch">#}
+{#                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'default_wac_enable')" {% if company_settings.default_wac_enable %}checked{% endif %}/>#}
+{#                    <span class="slider round"></span>#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-8">#}
+{#                <p class="font-12">Global Customer updates overrides local changes</p>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <label class="switch">#}
+{#                    <input type="checkbox" onclick="SETTINGS.update_option($(this), 'global_customer_list_updates_overrides_local_changes')" {% if company_settings.global_customer_list_updates_overrides_local_changes %}checked{% endif %}/>#}
+{#                    <span class="slider round"></span>#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+</div>

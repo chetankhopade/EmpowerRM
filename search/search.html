@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% load extras %}
+
+{% block content_body %}
+
+    <div class="row">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">
+                                <i class="fa fa-clipboard fa-lg mr-1"></i> Contracts
+                            </p>
+                            <div class="card-divider"></div>
+                        </div>
+                    </div>
+                    {% for contract in contracts %}
+                        <div class="row mt-2 font-11">
+                            <div class="col" db="{{ db_name }}" target="/contracts/{{ contract.id }}/details">
+                                <a onclick="APP.execute_url($(this))" class="empower-color-blue">
+                                    {{ contract.number }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col pl-0">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">
+                                <i class="fa fa-product-hunt fa-lg mr-1"></i> Products
+                            </p>
+                            <div class="card-divider"></div>
+                        </div>
+                    </div>
+                    {% for item in items %}
+                        <div class="row mt-2 font-11">
+                            <div class="col" db="{{ db_name }}" target="/products/{{ item.id }}/details">
+                                <a onclick="APP.execute_url($(this))" class="empower-color-blue">
+                                    {{ item.ndc|ndc_formatter }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col pl-0">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">
+                                <i class="fa fa-briefcase fa-lg mr-1"></i> Direct Customers
+                            </p>
+                            <div class="card-divider"></div>
+                        </div>
+                    </div>
+                    {% for direct_customer in direct_customers %}
+                        <div class="row mt-2 font-11">
+                            <div class="col" db="{{ db_name }}" target="/customers/direct/{{ direct_customer.id }}/details/info">
+                                <a onclick="APP.execute_url($(this))" class="empower-color-blue">
+                                    {{ direct_customer.name }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col pl-0">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p class="empower-color-blue _600 font-14">
+                                <i class="fas fa-briefcase-medical fa-lg mr-1"></i> Indirect Customers
+                            </p>
+                            <div class="card-divider"></div>
+                        </div>
+                    </div>
+                    {% for indirect_customer in indirect_customers %}
+                        <div class="row mt-2 font-11">
+                            <div class="col" db="{{ db_name }}" target="/customers/indirect/{{ indirect_customer.id }}/details/info">
+                                <a onclick="APP.execute_url($(this))" class="empower-color-blue">
+                                    {{ indirect_customer.company_name }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+    </div>
+{% endblock %}
+

@@ -1,0 +1,179 @@
+{% load static %}
+<!-- Sales Distrubution modal detailsModal -->
+<div class="modal fade m-5" id="mdSalesDistriDetails" tabindex="-1" role="dialog" aria-labelledby="mdSalesDistriDetails"
+     aria-hidden="true" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div id="mdSalesDistriDetailsBody" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<!-- Sales Distrubution modal detailsModal -->
+<div class="modal fade m-5" id="mdSalesDistriDetailsNoData" tabindex="-1" role="dialog" aria-labelledby="mdSalesDistriDetails" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title">No Data available at this time</h5>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-dcs-tab">Sort By:</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-dcs-tab" data-toggle="pill" href="#pills-dcs" role="tab" aria-controls="pills-dcs" aria-selected="true">Distribution Center</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-contracts-tab" data-toggle="pill" href="#pills-contracts" role="tab" aria-controls="pills-contracts" aria-selected="false">Contracts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="false">Products</a>
+                        </li>
+                    </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-dcs" role="tabpanel" aria-labelledby="pills-dcs-tab">
+                        <canvas id="emptyDcChart"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="pills-contracts" role="tabpanel" aria-labelledby="pills-contracts-tab">
+                        <canvas id="emptyContractsChart"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
+                        <canvas id="emptyProductsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Expand Indirect sales graph which is generated for other categories (i.e drilldown)  -->
+<div class="modal fade" id="other_category_indirect_sales_expand_graph_modal" tabindex="1" role="dialog" aria-labelledby="other_category_indirect_sales_expand_graph_modal">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title" id="indirect_sales_expand_graph_modal_title"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 text-center">
+                    <div id="indirectSalesExpandGraphLoader" style="display: none">
+                        <img src="{% static 'images/loading2.gif' %}" width='55' height='55' alt='chart_loader'/>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <canvas id="indirect_sales_expanded_other_category_graph"></canvas>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Expand Chargeback graph which is generated for other categories (i.e drilldown)  -->
+<div class="modal fade" id="other_category_chargebacks_expand_graph_modal" role="dialog" aria-labelledby="other_category_chargebacks_expand_graph_modal" aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title" id="chargebacks_expand_graph_modal_title">Chargebacks</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 text-center">
+                    <div id="chargebacksExpandGraphLoader" style="display: none">
+                        <img src="{% static 'images/loading2.gif' %}" width='55' height='55' alt='chart_loader'/>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <canvas id="chargebacks_expanded_other_category_graph"></canvas>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Common Sales graph which is generated for other categories (i.e drilldown)  -->
+<div class="modal fade" id="common_category_expand_graph_modal" tabindex="1" role="dialog" aria-labelledby="common_category_expand_graph_modal">
+    <div class="modal-dialog modal-xxlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                 <h5 class="modal-title" id="common_category_expand_graph_modal_title">(YD) WAC Sales</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding:4px;margin-right:0px;"><span aria-hidden="true">&times;</span>
+        </button>
+        <!-- <a class="btn btn-primary" data-dismiss="modal">X</a> -->
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-8">
+                    <span id="chart_limit_record_selection_container">
+                      Top  <select id="chart_limit_record_selection">
+                            <option value=10>10</option>
+                            <option value=20>20</option>
+                            <option value=30>30</option>
+                        </select> Records
+                        <strong class="ml-3">Log: </strong>
+                        <label class="switch" style="padding-top: inherit">
+                            <input id="toggleLog" type="checkbox" checked onclick="DASHBOARD.toggle_chart_y_axis_type($(this))"/>
+                            <span class="slider round"></span>
+                        </label>
+                        </span>
+                     <span id="export_buttons_container" style="display: none">
+                        <a class="btn btn-sm" title="Export to Excel" onclick="DASHBOARD.export_grid_data('excel')" style="vertical-align: initial !important;"><i class="fas fa-file-excel-o dashboard_metric_icon"></i></a>
+                        <a class="btn btn-sm" title="Export to CSV" onclick="DASHBOARD.export_grid_data('csv')" style="vertical-align: initial !important;"><i class="fa fa-file-text-o dashboard_metric_icon"></i></a>
+                     </span>
+                        <a class="btn btn-sm ml-3" title="Toggle Grid View" id="graphGridViewToggle" onclick="DASHBOARD.toggle_grid_view()" style="vertical-align: initial !important;"><i class="fas fa-th-large dashboard_metric_icon"></i></a>
+
+
+                        <span id="date_ranges_container">
+                        <select id="pop_up_range" class="form-control ml-4" style="width: auto !important;display: inline">
+                            <option disabled value="" style="background-color: #dedede">Custom</option>
+                            {% for range in data_ranges %}
+                                <option value="{{ range.0 }}" {% if query_filter == range.0 %}selected{% endif %}>{{ range.0 }} - {{ range.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="ml-2" id="graph_range_sd"></span> To <span id="graph_range_ed"></span>
+                        </span>
+                    </div>
+{#                    <div class="col-8" id="export_buttons_container" style="display: none">#}
+{#                        <a class="btn btn-sm" title="Export to Excel" onclick="DASHBOARD.export_grid_data('excel')"><i class="fas fa-file-excel-o dashboard_metric_icon"></i></a>#}
+{#                        <a class="btn btn-sm" title="Export to CSV" onclick="DASHBOARD.export_grid_data('csv')"><i class="fa fa-file-text-o dashboard_metric_icon"></i></a>#}
+{#                    </div>#}
+                    <div class="col-4 text-right">
+                        <a class="btn btn-sm" title="By Product"  id="graphproduct" style="vertical-align: initial !important;"><i class="fas fa-prescription-bottle-alt dashboard_metric_icon"></i></a>
+                        <a class="btn btn-sm" title="By Contract" id="graphcontract" style="vertical-align: initial !important;"><i class="fas fa-receipt dashboard_metric_icon"></i></a>
+                        <a class="btn btn-sm" title="By Distributor" id="graphdistributor" style="vertical-align: initial !important;"><i class="fas fa-dolly dashboard_metric_icon"></i></a>
+{#                        <a class="btn btn-sm" title="Toggle Grid View" id="graphGridViewToggle" onclick="DASHBOARD.toggle_grid_view()"><i class="fas fa-th-large dashboard_metric_icon"></i></a>#}
+                    </div>
+                </div>
+
+                <div class="col-12 text-center">
+                    <div id="commonCategoryExpandGraphLoader" style="display: none">
+                        <img src="{% static 'images/loading2.gif' %}" width='55' height='55' alt='chart_loader'/>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2" id="graph_container">
+                    <canvas id="common_category_expand_graph"></canvas>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2" id="grid_container" style="display: none">
+                    <table id="graphGridTable" class="table table-condensed table-striped table-borderless w-100 mt-4">
+                        <thead class="bg-light">
+                        <tr class="text-dark">
+                            <th>Entity</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

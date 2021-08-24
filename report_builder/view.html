@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load extras %}
+
+<!-- Content Header -->
+{% block content_header_right %}
+
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="container">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="empower-color-blue _600 font-17">
+                                Custom Reports
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <span class="pull-right">
+                                <button id="add_report_button" class="btn btn-warning" data-toggle="modal" data-target="#add_report">+ Add Report</button>
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <table class="table table-striped table-bordered" id="reportBuilder">
+                        <thead>
+                            <tr style="background-color: lightgrey">
+                              <th scope="col">Id</th>
+                              <th scope="col"></th>
+                              <th scope="col">Edit</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Description</th>
+                              <th scope="col">Root Model</th>
+                              <th scope="col">Created</th>
+                              <th scope="col">Modified</th>
+                              <th scope="col">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports_list">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add_report" class="modal fade">
+        <div class="modal-dialog animate">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add New Report</h5>
+                </div>
+                <div class="modal-body text-center p-lg">
+                    <div class="form-group row required">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+                            Report Name.
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="report_name" id="report_name" class="form-control height-30" placeholder="Report Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3 control-label">
+                            Description
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="report_description" id="report_description" class="form-control height-30"  placeholder="Description">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+                            Root Model
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <select id="select_root_model" name="select_root_model" class="form-control myselect2" data-placeholder="Select Root Model" tabindex="-1" aria-hidden="true">
+                                <option value="">--Select Root Model--</option>
+                                {% for model in include_models %}
+                                    <option value="{{ model }}">{{ model }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="btnCreateReport" class="btn btn-warning" onclick="REPORT_BUILDER.create_report($(this));">Create Report</a>
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/report_builder/report_builder.js' %}"></script>
+{% endblock %}

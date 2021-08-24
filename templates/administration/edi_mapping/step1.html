@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block heading %}
+    <style>
+        .dropzone {
+            border: 2px dashed #dedede;
+            border-radius: 4px;
+            background: aliceblue;
+            padding: 0;
+            min-height: 130px!important;
+            max-height: 130px!important;
+        }
+        .dropzone i{
+            font-size: 3rem;
+        }
+
+        .dropzone .dz-message {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 1em;
+        }
+        .center {
+            height: 120px;
+            position: relative;
+            text-align: center;
+        }
+
+        .center p {
+            margin: 0;
+            position: absolute;
+            top: 80%;
+            left: 25%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+{% endblock %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="row">
+        <div class="col-1"></div>
+            <!-- Import File for mapping -->
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Dropzone col -->
+                            <div class="col-6">
+                                <p class="empower-color-blue _700">Create New Mapping from File</p>
+                                <form id="formDropzoneEDIMapping" enctype="multipart/form-data" class="dropzone dz-clickable">
+                                    <div class="dz-message d-flex flex-column">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        <p class="no-line-height mt-2">Drag &amp; drop a file here</p>
+                                        <p class="no-line-height">or</p>
+                                        <p class="text-center no-line-height">
+                                            <a href="#" class="btn btn-warning btn-sm w-25">
+                                                <span class="text-muted"> Browse for File</span>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- File Selected and Buttons col -->
+                            <div class="col-1 center">
+                                <p>
+                                    <i class="fa fa-caret-right font-50"></i>
+                                </p>
+                            </div>
+                            <div class="col-2 center font-11">
+                                <p class="ml-2 mr-1">
+                                    <span>File Selected</span>
+                                    <br/>
+                                    <span id="spanFileName" class="badge badge-pill badge-secondary p-1 mt-2"></span>
+                                </p>
+                            </div>
+                            <div class="col-1 center">
+                                <p>
+                                    <i class="fa fa-caret-right font-50"></i>
+                                </p>
+                            </div>
+                            <div class="col-2 center">
+                                <p>
+                                    <span id="spanEDIMappingImportFile" db="default">
+                                        <a onclick="APP.execute_url($(this), true)" class="btn btn-warning width-110px">Import</a>
+                                    </span>
+                                    <a onclick="EDIMAPPING_STEP1.cancel();" class="btn btn-primary width-110px mt-4">Cancel</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+            <!-- Mappings Table -->
+            <div class="col mt-2">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="empower-color-blue _700 font-14">Mappings</p>
+                        <table id="tableEDIExistingMappings" class="table table-condensed table-hover table-borderless">
+                            <thead class="bg-light">
+                            <tr class="font-10 dark-light text-black">
+                                <th>Company</th>
+                                <th>Partner</th>
+                                <th>Mapping Name</th>
+                                <th class="text-center">DocType</th>
+                                <th class="text-center">Output Format</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Started</th>
+                                <th class="text-center">Completed</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% if mappings_templates %}
+                                    {% for emt in mappings_templates %}
+                                        <tr class="font-11">
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ emt.name }}</td>
+                                            <td class="text-center">{{ emt.document_type }}</td>
+                                            <td class="text-center">{{ emt.output_format }}</td>
+                                            <td class="text-center {% if emt.is_complete %}text-success{% endif %}">
+                                                {{ emt.get_my_current_status }}
+                                            </td>
+                                            <td class="text-center">{{ emt.created_at|date:'m/d/Y' }}</td>
+                                            <td class="text-center">
+                                                {% if emt.is_complete %}
+                                                    <i class="fa fa-check text-success fa-2x"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center" mapid="{{ emt.id }}">
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'view')" class="tt" title="View">
+                                                    <i class="fa fa-eye font-14 text-dark"></i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'active')" class="ml-1 tt" title="Active">
+                                                    <i class="fa fa-play-circle font-14 text-success"></i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'disable')" href="#" class="ml-1 tt" title="Disable">
+                                                    <i class="fa fa-stop-circle font-14 text-dark"></i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'edit')" class="ml-1 tt" title="Edit">
+                                                    <i class="fa fa-edit font-14"></i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'clone')" class="ml-1 tt" title="Clone">
+                                                    <i class="fa fa-clone font-14 text-dark"></i>
+                                                </a>
+                                                <a onclick="EDIMAPPING_STEP1.execute_action($(this), 'delete')" class="ml-1 tt" title="Delete">
+                                                    <i class="fa fa-trash font-14 text-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        <div class="col-1"></div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/administration/edi_mapping/step1.js' %}"></script>
+
+    <script>
+        const tableEDIExistingMappings = $("#tableEDIExistingMappings");
+
+        $(function () {
+
+            // Datatable for Source Format
+            tableEDIExistingMappings.DataTable({
+                scrollX:          true,
+                scrollY:          "30vh",
+                paging:           false,
+                bInfo:            false,
+                sDom:             "rtip",
+                bAutoWidth:       false,
+            });
+
+        });
+    </script>
+
+{% endblock %}

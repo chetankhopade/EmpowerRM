@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load extras %}
+
+{% block content_body %}
+
+    <div class="d-sm-flex">
+
+        <!-- Tabs Options -->
+        <div class="w-nm w-auto-xs light bg bg-auto-sm b-r">
+            <div class="py-3">
+                <div class="nav-active-border left b-primary">
+                    <ul class="nav nav-nm flex-column">
+                        <!-- All files -->
+                        <li class="nav-item">
+                            <p class="_700 font-12 m-0 border-bottom w-75">All Files</p>
+                            <a class="nav-link  font-11" id="btnFMFilterAllFiles" onclick="FILEMANAGER.refresh_data($(this));" >All Files</a>
+                        </li>
+
+                        <!-- 844s -->
+                        <li class="nav-item mt-2">
+                            <p class="_700 font-12 m-0 border-bottom w-75">844s</p>
+                            <ul class="nav nav-nm flex-column">
+                                {% for elem in 844_folders_structure %}
+                                    <li class="nav-item font-11 m-0">
+                                        <a onclick="FILEMANAGER.filter_link($(this), '{{ elem.0 }}','844')" class="nav-link" id="{{ elem.0 }}">
+                                            {{ elem.1 }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <!-- 849s -->
+                        <li class="nav-item mt-2">
+                            <p class="_700 font-12 m-0 border-bottom w-75">849s</p>
+                            <ul class="nav nav-nm flex-column">
+                                {% for elem in 849_folders_structure %}
+                                    <li class="nav-item font-11 m-0">
+                                        <a onclick="FILEMANAGER.filter_link($(this), '{{ elem.0 }}','849')" class="nav-link" id="{{ elem.0 }}">
+                                            {{ elem.1 }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <!-- User Generated -->
+                        <li class="nav-item mt-2">
+                            <p class="_700 font-12 m-0 border-bottom w-75">User Generated</p>
+                            <ul class="nav nav-nm flex-column">
+                                {% for elem in user_uploads_folders_structure %}
+                                    <li class="nav-item font-11 m-0">
+                                        <a onclick="FILEMANAGER.filter_link($(this), '{{ elem.0 }}','file_storage')" class="nav-link" id="{{ elem.0 }}">
+                                            {{ elem.1 }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <!-- User Generated -->
+                        <li class="nav-item mt-2">
+                            <p class="_700 font-12 m-0 border-bottom w-75">Errors</p>
+                            <a onclick="FILEMANAGER.filter_link($(this), '{{ errors_folders_structure.0 }}','errors')" class="nav-link font-11" id="{{ errors_folders_structure.0 }}">
+                                {{ errors_folders_structure.1|cut:"844s" }}
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <div class="col-2 text-right _700 font-11">Type</div>
+                <div class="col-3">
+                    <select class="custom-select" id="selectFileType">
+                        <option value="-1">All...</option>
+                        <option value="844">844s</option>
+                        <option value="849">849s</option>
+                        <option value="file_storage">Files Storage</option>
+                        <option value="errors">Errors</option>
+                    </select>
+                </div>
+                <div class="col-2 text-right _700 font-11">Stage</div>
+                <div class="col-3">
+                    <select class="custom-select" id="selectFileStage">
+                        <option selected value="-1">All...</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <a onclick="FILEMANAGER.clear()" class="btn btn-primary btn-block">Clear</a>
+                </div>
+            </div>
+
+            <div class="row mt-1">
+                <div class="col-2 text-right _700 font-11">Create Date</div>
+                <div class="col-3">
+                    <input id="inputCreateDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" style="height: 30px!important;">
+                </div>
+                <div class="col-2 text-right _700 font-11">End Date</div>
+                <div class="col-3">
+                    <input id="inputEndDate" type='text' class="form-control datepicker" placeholder="mm/dd/yyyy" style="height: 30px!important;">
+                </div>
+                <div class="col-2">
+                    <a onclick="FILEMANAGER.filter()" class="btn btn-warning btn-block">Filter</a>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="tableFiles" class="table table-hover table-borderless table-condensed " style="width:100%"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Confirmation message - Delete File -->
+    {% include 'file_manager/modal_delete_file.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const FILES_STAGES = {
+            "844": {
+                {% for e in 844_folders_structure %}
+                    '{{ e.0 }}': '{{ e.1 }}' {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            },
+            "849": {
+                {% for e in 849_folders_structure %}
+                    '{{ e.0 }}': '{{ e.1 }}' {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            },
+            "file_storage": {
+                {% for e in user_uploads_folders_structure %}
+                    '{{ e.0 }}': '{{ e.1 }}' {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            },
+            "errors": {
+                "{{ errors_folders_structure.0 }}": "{{ errors_folders_structure.1|cut:'844s' }}"
+            }
+        };
+    </script>
+    <script>
+     let is_read_only_user = false
+     {% if is_read_only_user %}
+          is_read_only_user = true
+     {% endif %}
+     </script>
+    <script src="{% static 'js/app/file_manager.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

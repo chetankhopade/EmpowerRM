@@ -1,0 +1,112 @@
+<!-- Schedule Report modal -->
+<div id="modalScheduleReport" class="modal fade">
+    <div class="modal-dialog modal-xlg animate" role="document">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h5 class="modal-title mb-2">
+                    Schedule report
+                </h5>
+            </div>
+            <div class="modal-body text-center p-lg">
+                    <input type="hidden" id="rs_report_id" name="rs_report_id">
+                    <input type="hidden" id="rs_schedule_id" name="rs_schedule_id" value="">
+                    <div class="form-group row mt-2 required">
+                        <label class="col-sm-3 col-form-label font-12 font-weight-bold ml-3 control-label">
+                            Name
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" id="rs_name" name="rs_name" class="form-control height-30">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2 required" id="report_edit_container" style="display:none">
+                        <label class="col-sm-3 col-form-label font-12 font-weight-bold ml-3 control-label">
+                            Report
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1" style="text-align:left !important">
+                            <select id="rs_report_edit_id" name="rs_report_edit_id" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2 required">
+                        <label class="col-sm-3 col-form-label font-12 font-weight-bold ml-3 control-label">
+                            Frequency
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1" style="text-align:left !important">
+                            {% for elem in report_schedule_frequencies %}
+                                <input type="radio" name="radio_report_schedule_frequencies" onclick="SCHEDULE_REPORT.show_hide_daytime_entities()" value="{{ elem.0 }}" {% if elem.0 == report_schedule_frequency_daily %} checked {% endif %} /><label for="report_schedule_frequencies">{{ elem.1 }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2 required">
+                        <label class="col-sm-3 col-form-label font-12 font-weight-bold ml-3 control-label">
+                            When
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-4" id="rs_monthdays_container" style="display: none">
+                                    <select id="rs_monthdays" name="rs_monthdays" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                        {% for rsm in report_schedule_monthdays %}
+                                            <option value="{{ rsm.0 }}">{{ rsm.1 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3" id="rs_weekdays_container" style="display: none">
+                                    <select id="rs_weekdays" name="rs_weekdays" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                        {% for rsw in report_schedule_weekdays %}
+                                            <option value="{{ rsw.0 }}">{{ rsw.1 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-1 mt-2">at</div>
+                                <div class="col-sm-2">
+                                    <select id="rs_hours" name="rs_hours" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                        {% for i in report_schedule_hours %}
+                                            <option value={{ i }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select id="rs_minutes" name="rs_minutes" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                        {% for i in report_schedule_minutes %}
+                                            <option value={{ i }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2 required">
+                        <label class="col-sm-3 col-form-label font-12 font-weight-bold ml-3  control-label">
+                            Is Enabled
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1" style="text-align:left !important">
+                            <label class="switch">
+                                <input id="rs_is_enabled" type="checkbox" checked/>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+{##}
+{#                    <div class="form-group row mt-2 required">#}
+{#                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3  control-label">#}
+{#                            Recurring#}
+{#                        </label>#}
+{#                        <div class="col-sm-7 col-sm-offset-1" style="text-align:left !important">#}
+{#                            <label class="switch">#}
+{#                                <input id="rs_is_recurring" type="checkbox" />#}
+{#                                <span class="slider round"></span>#}
+{#                            </label>#}
+{#                        </div>#}
+{#                    </div>#}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary mr-2" data-dismiss="modal">Cancel</a>
+                <a id="schedule_submit" class="btn btn-warning" onclick="SCHEDULE_REPORT.submit_report_schedule('create')">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>

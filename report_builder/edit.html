@@ -1,0 +1,489 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load extras %}
+
+
+{#{% block content_header_center %}#}
+{#    {% include 'report_builder/includes/menu.html' %}#}
+{#{% endblock %}#}
+
+{% block content_body %}
+
+    <div class="d-sm-flex">
+
+        <!-- Tabs Options -->
+        <div class="w w-auto-xs light bg bg-auto-sm b-r">
+            <div class="py-3">
+                <div class="nav-active-border left b-primary">
+                    <ul class="nav nav-nm flex-column">
+                        <!-- Root Model -->
+                        <li class="nav-item">
+                            <p class="_700 font-12 m-0 border-bottom w-75">Main Table</p>
+                            <a class="nav-link menus active" onclick="REPORT_BUILDER.get_model_fields('{{ root_model }}','','',$(this))">{{ root_model }}</a>
+                        </li>
+                        <!-- Related fields -->
+                        <li class="nav-item mt-1">
+                            <p class="_700 font-12 m-0 border-bottom w-75">Related Fields</p>
+                            <ul class="nav nav-nm flex-column related_fields_container" style=" height: 200px; overflow: auto" id="related_fields_container">
+                                {% for elem in related_fields %}
+                                    <li class="nav-item font-11 m-0">
+                                        <a class="nav-link menus related_fields" model_name="{{ elem.model_name }}" field_name="{{ elem.name }}" ref_path="{{ elem.name }}__" onclick="REPORT_BUILDER.get_all_fields($(this))"> {{ elem.name }} </a>
+                                        <ul style="list-style-type:none;" id="{{ elem.model_name }}_____{{ elem.name }}"></ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <!-- Regular model fields -->
+                        <li class="nav-item mt-1">
+                            <p class="_700 font-12 m-0 border-bottom w-75">Fields</p>
+                            <ul class="nav nav-nm flex-column regular_fields_container mt-2" style=" height: 200px; overflow: auto" id="regular_fields_container">
+                                {% for elem in regular_fields %}
+                                    <li class="nav-item font-11 m-0" style="display : inline-block; word-break : break-all;">
+                                        <a class="nav-link menus"> {{ elem.name }} <i class="fa fa-plus-square float-right empower-color-blue" ref_path="" onclick="REPORT_BUILDER.add_field_to_report($(this))" field_name="{{ elem.name }}" field_data_type="{{ elem.field_type }}"></i></a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="col p-2">
+            <div class="tab-content pos-rlt">
+
+                <div id="content">
+                    <div class="row">
+                        <div class="col-2 text-left"></div>
+                        <div class="col-6 text-center">{% include 'report_builder/includes/menu.html' %}</div>
+                        <div class="col-4 text-right"><button id="go_to_reports" class="btn btn-warning" onclick="REPORT_BUILDER.go_to_reports()">Go to Reports</button></div>
+                    </div>
+                    <hr class="empower_background_blue p-0 mt-0"/>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    {% include 'report_builder/includes/update_report.html' %}
+                                    <table class="table table-striped table-bordered" id="reportFields">
+                                        <thead>
+                                            <tr style="background-color: lightgrey">
+                                              <th scope="col">Order</th>
+                                              <th scope="col">Field</th>
+                                              <th scope="col">Display Name</th>
+                                              <th scope="col">Custom value</th>
+                                              <th scope="col">Dateformat</th>
+                                              <th scope="col">Is Currency</th>
+                                                <th scope="col" class="tt" title="Set Decimal Length">Decimal</th>
+                                              <th scope="col">Sort</th>
+                                              <th scope="col">Is Ascending</th>
+                                              <th scope="col">Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-9 text-left" id="button_add_custom_field">
+                                            <button id="add_custom_field_button" class="btn btn-warning" data-toggle="modal" data-target="#add_custom_field_modal">+ Add Static Field</button>
+                                            <button id="add_calculated_field_button" class="btn btn-warning" data-toggle="modal" data-target="#add_calculation_field_modal">+ Add Calculated Field</button>
+                                            <button id="add_percent_field_button" class="btn btn-warning" data-toggle="modal" data-target="#add_percent_field_modal">+ Add Percent Field</button>
+                                            <button id="add_case_field_button" class="btn btn-warning" data-toggle="modal" data-target="#add_case_field_modal">+ Add Case Field</button>
+                                            <span style="font-weight:bold;padding:5px;">Is Distinct <input type="checkbox" id="isDistinct" class="inputIsDistinct" {{ is_distinct }} onchange="REPORT_BUILDER.update_is_distinct($(this))" > </span>
+                                        </div>
+                                        <div class="col-3 text-right" id="save_button_container">
+                                            <button class="btn btn-primary" id="save_field_button" onclick="REPORT_BUILDER.save_field_changes()" disabled>Save Changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Static/Custom field modal -->
+    <div id="add_custom_field_modal" class="modal fade">
+        <div class="modal-dialog animate">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add Static Field</h5>
+                </div>
+                <div class="modal-body text-center p-lg">
+                    <div class="form-group row required">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3">
+                           Display Name
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="display_name" id="display_name" class="form-control height-30" placeholder="Display Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold ml-3 control-label">
+                            Value
+                        </label>
+                        <div class="col-sm-7 col-sm-offset-1">
+                            <input type="text" name="field_value" id="field_value" class="form-control height-30"  placeholder="Value">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-warning" onclick="REPORT_BUILDER.add_custom_field_to_report();">Submit</a>
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculation field modal -->
+    <div id="add_calculation_field_modal" class="modal fade">
+        <div class="modal-dialog animate modal-xxl">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add Calculated Field</h5>
+                </div>
+                <div class="modal-body text-center p-lg">
+                    <div class="form-group required row mt-2">
+                        <label for="calculated_display_name" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Display Name
+                        </label>
+                        <div class="col-9">
+                            <input type="text" name="calculated_display_name" id="calculated_display_name" class="form-control height-30" placeholder="Display Name">
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="calculation_field1" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Field 1
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <div class="row">
+                                <div class="col-6">
+                                    <select id="calculation_field1" name="calculation_field1" class="form-control myselect2" tabindex="-1" aria-hidden="true" onchange="REPORT_BUILDER.update_calculated_dropdown_options('calculation_field1')">
+                                    <option value="{{ root_model }}">{{ root_model }}</option>
+                                    {% for elem in related_fields %}
+                                        <option value="{{ elem.model_name }}@@@{{ elem.name }}">{{ elem.model_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-6">
+                                    <select id="calculation_field1_field" name="calculation_field1_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="operand" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Operand
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <select id="operand" name="operand" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                                <option value="/">/</option>
+                                <option value="*">*</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="calculation_field2" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Field 2
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <div class="row">
+                                <div class="col-6">
+                                <select id="calculation_field2" name="calculation_field2" class="form-control myselect2" tabindex="-1" aria-hidden="true" onchange="REPORT_BUILDER.update_calculated_dropdown_options('calculation_field2')">
+                                <option value="{{ root_model }}">{{ root_model }}</option>
+                                {% for elem in related_fields %}
+                                    <option value="{{ elem.model_name }}@@@{{ elem.name }}">{{ elem.model_name }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                                <div class="col-6">
+                                    <select id="calculation_field2_field" name="calculation_field2_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <label for="operand" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Operand
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <select id="operand2" name="operand2" class="form-control myselect2" tabindex="-1" aria-hidden="true">
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                                <option value="/">/</option>
+                                <option value="*">*</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <label for="calculation_field2" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Field 3
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <input type="text" id="calculation_field3" name="calculation_field3" class="form-control height-30" onkeypress="return isNumberKey(this, event);" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-warning" onclick="REPORT_BUILDER.add_calculated_field_to_report();">Submit</a>
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Percent field modal -->
+    <div id="add_percent_field_modal" class="modal fade">
+        <div class="modal-dialog animate modal-xxl">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add Percent Field</h5>
+                </div>
+                <div class="modal-body text-center p-lg">
+                    <div class="form-group required row mt-2">
+                        <label for="percent_display_name" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Display Name
+                        </label>
+                        <div class="col-9">
+                            <input type="text" name="percent_display_name" id="percent_display_name" class="form-control height-30" placeholder="Display Name">
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="percent_field" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Field
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <div class="row">
+                                <div class="col-6">
+                                    <select id="percent_field" name="percent_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" onchange="REPORT_BUILDER.update_calculated_dropdown_options('percent_field')">
+                                    <option value="{{ root_model }}">{{ root_model }}</option>
+                                    {% for elem in related_fields %}
+                                        <option value="{{ elem.model_name }}@@@{{ elem.name }}">{{ elem.model_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-6">
+                                    <select id="percent_field_field" name="percent_field_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="percent_value" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Value
+                        </label>
+                        <div class="col-9">
+                            <input type="number" step="0.1" name="percent_value" id="percent_value" class="form-control height-30" placeholder="Value in numbers only">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-warning" onclick="REPORT_BUILDER.add_percent_field_to_report();">Submit</a>
+                    <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Statement modal -->
+    <div class="modal fade" id="add_case_field_modal" tabindex="1" role="dialog" aria-hidden="true" style="top: 20%">
+        <div class="modal-dialog modal-xxlg" role="document">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add Case Statement Field</h5>
+                </div>
+                <div class="modal-body text-center p-lg" style="overflow-y: scroll">
+                    <div class="form-group required row mt-2">
+                        <label for="case_display_name" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Display Name
+                        </label>
+                        <div class="col-9">
+                            <input type="text" name="case_display_name" id="case_display_name" class="form-control height-30" placeholder="Display Name">
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="case_field" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            Field
+                        </label>
+                        <div class="col-9" style="text-align:left !important">
+                            <div class="row">
+                                <div class="col-4">
+                                    <select id="case_field" name="case_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" onchange="REPORT_BUILDER.update_calculated_dropdown_options('case_field', '1', 'case_statement_field')">
+                                    <option value="{{ root_model }}">{{ root_model }}</option>
+                                    {% for elem in related_fields %}
+                                        <option value="{{ elem.model_name }}@@@{{ elem.name }}">{{ elem.model_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-3">
+                                    <select id="case_field_fk" name="case_field_fk" onchange="CASE_FIELDS.update_dropdown_fields('case_field_fk', 'case_field', 'case_field_field')" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <select id="case_field_field" name="case_field_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-2">
+                        <label for="case_field" class="col-3 col-form-label font-10 font-weight-bold control-label">
+                            <input type="checkbox" name="case_is_custom_default" id="case_is_custom_default" onclick="CASE_FIELDS.show_hide_custom_inputs()" checked/> Custom Default
+                        </label>
+                        <div class="col-9" id="custom_default_field_container" style="text-align:left !important;display: none">
+                            <div class="row">
+                                <div class="col-4">
+                                    <select id="case_default_value_field" name="case_default_value_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" onchange="REPORT_BUILDER.update_calculated_dropdown_options('case_default_value_field', '1', 'case_statement_field')">
+                                    <option value="{{ root_model }}">{{ root_model }}</option>
+                                    {% for elem in related_fields %}
+                                        <option value="{{ elem.model_name }}@@@{{ elem.name }}">{{ elem.model_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-4">
+                                    <select id="case_default_value_field_fk" name="case_default_value_field_fk" onchange="CASE_FIELDS.update_dropdown_fields('case_default_value_field_fk', 'case_default_value_field', 'case_default_value_field_field')" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select id="case_default_value_field_field" name="case_default_value_field_field" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9" id="custom_default_text_container">
+                            <input type="text" name="case_text_custom_value" id="case_text_custom_value" class="form-control height-30" placeholder="Default">
+                        </div>
+                    </div>
+                    <div class="form-group required row mt-3">
+                        <div class="col-4"></div>
+                        <div class="col-4"><strong>Case(s): </strong><!--<button class="btn btn-warning">+ Add Case</button>--></div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div id="divAddCaseFieldContainer">
+
+                    </div>
+                </div>
+                <div class="modal-footer mt-2">
+                    <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                    <a class="btn btn-warning" onclick="CASE_FIELDS.add_case_field_to_report();"> Save</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add_mini_modal" tabindex="1" role="dialog" aria-hidden="true" style="top: 10%">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header empower_background_yellow">
+                    <h5 class="modal-title">Add Mini Modal</h5>
+                </div>
+                <div  class="modal-body">
+                <div id="hiddenElem" type="hidden"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <select id="case_field_field_mini_model" name="case_field_field_mini_model" class="form-control myselect2" tabindex="-1" aria-hidden="true" >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-2">
+                    <a class="btn btn-primary" data-dismiss="modal"> Cancel</a>
+                    <a class="btn btn-warning" onclick="CASE_FIELDS.add_case_field_field_mini_model();"> Save</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let REPORT_ID = '';
+        {% if report %}
+            REPORT_ID = "{{ report.get_id_str }}";
+        {% endif %}
+
+        const ROOTMODEL = "{{ root_model }}";
+
+        const REPORT_FIELD_SYSTEM = "{{ REPORT_FIELD_SYSTEM }}";
+        const REPORT_FIELD_STATIC = "{{ REPORT_FIELD_STATIC }}";
+        const REPORT_FIELD_CALCULATED = "{{ REPORT_FIELD_CALCULATED }}";
+        const REPORT_FIELD_PERCENT = "{{ REPORT_FIELD_PERCENT }}";
+        const REPORT_FIELD_CASE_STATEMENT = "{{ REPORT_FIELD_CASE_STATEMENT }}";
+    </script>
+    <script src="{% static 'js/app/report_builder/report_builder.js' %}"></script>
+    <script src="{% static 'js/app/reports/case_fields.js' %}"></script>
+    <script>
+        $(function () {
+
+            REPORT_BUILDER.load_report_field();
+
+            REPORT_BUILDER.update_calculated_dropdown_options('calculation_field1');
+            REPORT_BUILDER.update_calculated_dropdown_options('calculation_field2');
+            REPORT_BUILDER.update_calculated_dropdown_options('percent_field');
+
+            let tableOrderData = [];
+            let field_id = "";
+            let order = "";
+            $("#reportFields tbody").sortable({
+
+                update: function(event, ui) {
+                    $('#reportFields tr').each(function() {
+                        field_id = $(this).attr('id');
+                        order = $(this).index();
+                        if (typeof(field_id) != "undefined" && field_id != "") {
+                            tableOrderData.push({"field_id": field_id, "order": order});
+                        }
+                    });
+                    if(tableOrderData){
+                        $.ajax({
+                            url: `/${DB_NAME}/report_builder/${REPORT_ID}/change_field_order`,
+                            type: "POST",
+                            data: {
+                                'field_data': JSON.stringify(tableOrderData)
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if(response.result === 'ok') {
+                                    REPORT_BUILDER.load_report_field();
+                                    {#show_toast_success_message(response.message, 'bottomRight');#}
+                                }
+                                else{
+                                    show_toast_error_message(response.message, 'bottomRight');
+                                }
+                            },
+                            error: function (response) {
+                                show_toast_error_message(response.message, 'bottomRight');
+                            }
+                        });
+                    }
+                },
+            }).disableSelection();
+
+            /*
+            $( "#reportFields tbody" ).sortable({
+                {#start: log,#}
+                {#change: log,#}
+                update: log,
+                {#over: log,#}
+                {#out: log,#}
+                {#stop: log#}
+            });
+            function log(event, ui) {
+                    console.log(event.type,
+                    ui.item.prev().attr("id") || "begining",
+                    ui.item.attr("id"),
+                    ui.item.next().attr("id") || "end"
+                );
+            }*/
+        })
+    </script>
+
+{% endblock %}

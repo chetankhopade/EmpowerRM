@@ -1,0 +1,114 @@
+{% load static %}
+{% load extras %}
+
+<script>
+    let dcChart = document.getElementById('dcChart').getContext('2d');
+    let contractsChart = document.getElementById('contractsChart').getContext('2d');
+    let productsChart = document.getElementById('productsChart').getContext('2d');
+
+    let barOptions = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    // Include a dollar sign in the ticks
+                    callback: function(value, index, values) {
+                        return '$' + value;
+                    }
+                }
+            }]
+        }
+    };
+
+    let distributionCenterSalesCart = new Chart(dcChart, {
+        type: 'bar',
+        data: {
+            datasets: [
+                {% for dc in direct_customer_data_dict.distros %}
+                    {
+                        label: "{{ dc.name }}",
+                        backgroundColor: "{{ dc.color }}",
+                        data: [{{ dc.revenue}}{% if not forloop.last %},{% endif %}]
+                    },
+                {% empty %}
+                    {
+                        data: [0]
+                    }
+                {% endfor %}
+            ]
+        },
+        options: barOptions
+    });
+
+    let contractsSalesCart = new Chart(contractsChart, {
+        type: 'bar',
+        data: {
+            datasets: [
+                {% for contract in direct_customer_data_dict.contracts %}
+                    {
+                        label: "{{ contract.name }}",
+                        backgroundColor: "{{ contract.color }}",
+                        data: [{{ contract.revenue }}{% if not forloop.last %},{% endif %}]
+                    },
+                {% empty %}
+                    {
+                        data: [0]
+                    }
+                {% endfor %}]
+        },
+        options: barOptions
+     });
+
+    let itemsSalesCart = new Chart(productsChart, {
+        type: 'bar',
+        data: {
+            datasets: [
+            {% for item in direct_customer_data_dict.items %}
+                {
+                    label: "{{ item.name|ndc_formatter }}",
+                    backgroundColor: "{{ item.color }}",
+                    data: [{{ item.revenue }}{% if not forloop.last %},{% endif %}]
+                },
+            {% empty %}
+                {
+                    data: [0]
+                }
+            {% endfor %}]
+        },
+        options: barOptions
+     });
+
+</script>
+
+<div class="modal-header empower_background_yellow">
+    <h5 class="modal-title">{{ direct_customer_obj.name }}</h5>
+        <a type="button" class="close p-1" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="pills-dcs-tab">Sort By:</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-dcs-tab" data-toggle="pill" href="#pills-dcs" role="tab" aria-controls="pills-dcs" aria-selected="true">Distribution Center</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-contracts-tab" data-toggle="pill" href="#pills-contracts" role="tab" aria-controls="pills-contracts" aria-selected="false">Contracts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="false">Products</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-dcs" role="tabpanel" aria-labelledby="pills-dcs-tab">
+            <canvas id="dcChart"></canvas>
+        </div>
+        <div class="tab-pane fade" id="pills-contracts" role="tabpanel" aria-labelledby="pills-contracts-tab">
+            <canvas id="contractsChart"></canvas>
+        </div>
+        <div class="tab-pane fade" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
+            <canvas id="productsChart"></canvas>
+        </div>
+    </div>
+</div>
