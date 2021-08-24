@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load extras %}
+
+{% block content_body %}
+
+
+    <div class="row">
+        <div class="col-4 text-left font-10s">
+            <h5 class="empower-color-blue _700">
+                <span db="{{ db_name }}" target="{{ header_target }}">
+                    <a onclick="APP.execute_url($(this))" style="cursor: pointer">
+                        {{ header_title }}
+                    </a>
+                </span>
+                <span>
+                    <a style="cursor: none">
+                        {{ breadcrumb_title1 }}
+                    </a>
+                </span>
+            </h5>
+        </div>
+        <div class="col-5 text-center"></div>
+        <div class="col-3 text-right mb-1">
+            <span db="{{ db_name }}" target="/report_builder/edit/{{ report.id }}">
+                <button id="go_to_reports" class="btn btn-warning" onclick="APP.execute_url($(this))">Edit</button>
+            </span>
+            <button class="btn btn-warning" onclick="RUN.run_report_with_changed_filters(true)">Download</button>
+        </div>
+    </div>
+    <hr class="empower_background_blue p-0 mt-0"/>
+    <div class="card mb-2">
+                <div class="card-body">
+                    <p class="empower-color-blue _600 font-17">
+                        Filters
+                    </p>
+                    <table class="table table-striped table-bordered nowrap" id="reportFilterFields">
+                        <thead>
+                            <tr style="background-color: lightgrey">
+                              <th scope="col">Field</th>
+                              <th scope="col">Action</th>
+                              <th scope="col">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6 text-right">
+                            <button class="btn btn-primary" onclick="RUN.run_report_with_changed_filters(false)">Search</button>
+                        </div>
+                    </div>
+                    <hr class="empower_background_blue p-0 mt-1">
+                    <table class="table table-striped table-bordered" id="runReport">
+                        <thead>
+                            <tr style="background-color: lightgrey">
+                                {% for header in display_headers %}
+                                    <th>{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let REPORT_ID = '';
+        let ERM_REPORT_API_TOKEN = "{{ ERM_REPORT_API_TOKEN }}";
+        let ERM_REPORT_API_URL = "{{ ERM_REPORT_API_URL }}";
+        let Email_ID = "{{ Email_ID }}";
+        let IS_USE_EXTERNAL_REPORT_SERVICE = false;
+        IS_USE_EXTERNAL_REPORT_SERVICE = "{{ USE_EXTERNAL_REPORT_SERVICE }}".toLowerCase();
+
+        {% if report %}
+            REPORT_ID = "{{ report.get_id_str }}";
+        {% endif %}
+
+        // columns for datatables
+        let DATATABLE_COLUMNS = [];
+        let dc_val = '';
+        {% for dc in datatable_columns %}
+
+            DATATABLE_COLUMNS.push({
+                "data": "{{ dc }}",
+                "render": function (data, type, row) { dc_val=data; if(!isNumericData(data) && data && isDate(data)){ dc_val = get_date_from_string(data); } if(data == 'null' || data == null || data=="None"){ dc_val=''; } return '<span>'+dc_val+'</span>'}
+            });
+
+
+        {% endfor %}
+        // Custom columns should not be sorted
+        let EXCLUDE_SORT = [];
+        {% for es in exclude_sort %}
+            EXCLUDE_SORT.push({{ es }});
+        {% endfor %}
+
+        // Report Filters for drop-down
+        let REPORT_FILTER_TYPES = [];
+        {% for rf in report_filter_types %}
+            REPORT_FILTER_TYPES.push({
+                "action": "{{ rf.0 }}",
+                "name": "{{ rf.1 }}",
+            });
+        {% endfor %}
+    </script>
+    <script src="{% static 'js/app/report_builder/run.js' %}"></script>
+{% endblock %}
