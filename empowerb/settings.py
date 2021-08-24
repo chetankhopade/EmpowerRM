@@ -69,7 +69,7 @@ DATABASES = {
         'NAME': 'erm_master',
         'USER': "chetan",
         'PASSWORD': "*NA}pJDc3?",
-        'HOST': "127.0.0.1",
+        'HOST': "localhost",
         'PORT': "3306",
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {
@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'precisiondose',
         'USER': "chetan",
         'PASSWORD': "*NA}pJDc3?",
-        'HOST': "127.0.0.1",
+        'HOST': "localhost",
         'PORT': '3306',
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {
