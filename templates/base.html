@@ -1,0 +1,449 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- meta -->
+    <meta charset="utf-8" />
+    <meta name="description" content="EmpowerRM Web Application" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Flatkit">
+
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-icon" href="{% static 'images/empower_logo_xs.png' %}">
+
+    <!-- Page Title -->
+    <title>{{ title }}</title>
+
+    <!-- logo -->
+    <link rel="shortcut icon" sizes="196x196" href="{% static 'images/empower_logo_xs.png' %}">
+
+    <!-- STYLES -->
+    <!-- libs -->
+    <link rel="stylesheet" href="{% static 'css/libs/builder.min.css' %}" type="text/css" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/libs/font-awesome.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/libs/dropzone.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/libs/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/libs/bootstrap-datepicker.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/libs/iziToast.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/libs/select2.min.css' %}" type="text/css" />
+
+    <!-- assets -->
+    <link rel="stylesheet" href="{% static 'css/app/app.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/app/style.css' %}" type="text/css" />
+
+    {% block heading %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+{% if user.is_anonymous %}
+    <div class="d-flex flex-column flex">
+        <div id="content-body">
+            <div class="mt-10 text-center w-100">
+                <div class="mx-auto w-xxl w-auto-xs">
+                    <div class="px-3">
+                        <div>
+                            <img src="{% static 'images/empower_logo_sm.png' %}" alt="empower_log">
+                        </div>
+                        <!-- Custom app content for visitors -->
+                        {% block visitors_content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+
+    <div class="app" id="app">
+
+        <!-- MENU -->
+        {% include 'menu.html' %}
+
+        <!-- CONTENT -->
+        <div class="app-content" role="main">
+
+            <!-- Page Header -->
+            {% include 'header.html' %}
+
+            <!-- Content Main Canvas -->
+
+
+                <div class="container-fluid my-3">
+
+                    {% if menu_option != 'menu_settings' and menu_option != 'menu_file_manager' and menu_option != 'menu_reports' %}   <!-- exclude this section for settings page -->
+                        <!-- Content Header -->
+                        <div class="row">
+
+                            <div class="col-4 text-left font-10">
+                                <h5 class="empower-color-blue _700">
+                                    <span db="{{ db_name }}" target="{{ header_target }}">
+                                        <a {% if header_target %}onclick="APP.execute_url($(this))" style="cursor: pointer" {% else %} style="cursor: none" {% endif %} id="header_title_txt">
+                                            {{ header_title }}
+                                        </a>
+                                    </span>
+
+                                    {% if breadcrumb_title1 %}
+                                        <span db="{{ db_name }}" target="{{ breadcrumb_target1 }}">
+                                            <a {% if breadcrumb_target1 %}onclick="APP.execute_url($(this))" style="cursor: pointer" {% else %} style="cursor: none" {% endif %}>
+                                                {{ breadcrumb_title1 }}
+                                            </a>
+                                        </span>
+                                    {% endif %}
+
+                                    {% if breadcrumb_title2 %}
+                                        <span db="{{ db_name }}" target="{{ breadcrumb_target2 }}">
+                                            <a {% if breadcrumb_target2 %}onclick="APP.execute_url($(this))" style="cursor: pointer" {% else %} style="cursor: none" {% endif %}>
+                                                {{ breadcrumb_title2 }}
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                </h5>
+                            </div>
+
+                            <div class="col-5 text-center">
+                                {% block content_header_center %}{% endblock %}
+                            </div>
+                            {% if contract_url_path == request.path %}
+                                <div class="col-3 text-right mb-1" style="max-width:100%;float:right;flex:0 0 101%">
+                            {% else %}
+                                <div class="col-3 text-right mb-1">
+                            {% endif %}
+                                    {% block content_header_right %}{% endblock %}
+                                </div>
+
+                        </div>
+
+                        <!-- section divider -->
+                        <hr class="empower_background_blue p-0 mt-0"/>
+                    {% endif %}
+
+                    <!-- Content Body -->
+                    {% block content_body %}{% endblock %}
+                </div>
+
+            <!-- Content Footer -->
+            <!-- exclude this section for settings page -->
+            {% if menu_option != 'menu_settings' and menu_option != 'menu_file_manager' %}
+                <div class="content-footer empower_background_blue" id="content-footer">
+                    <div class="d-flex p-3">
+                        <span class="text-sm text-muted flex">Copyright {% now 'Y' %} &copy; EmpowerRM</span>
+                        <div class="text-sm text-muted">Version 2.1</div>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- End Content Footer -->
+
+        </div>
+    </div>
+{% endif %}
+
+<div id="app_loader" style="display:none; margin: 0 auto; width: 100px; height: 100px; background-color: transparent">
+    <img src="{% static 'images/logo_loader.png' %}" width="100px" alt="logo_loader"/>
+    <img src="{% static 'images/loading.gif' %}" width="60px" height="60px" alt="logo_loader_gif" style="margin-top: -10px"/>
+</div>
+
+<!-- SESSION INACTIVITY MODAL -->
+<div id="mdlSessionInactivity" class="modal fade" style="z-index: 9999">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h6 class="modal-title mb-2 _600">Session Inactivity</h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                <!-- Message to Logout , close user session -->
+                <div class="divReturnToLogin" style="display: none;">
+                    <p >
+                        Your session has expired due to inactivity.
+                        Press the button to return to the Login screen.
+                    </p>
+                    <a id="btnSessionInactivityLogoutAction" class='btn btn-warning'>
+                        <i class='fa fa-sign-in'></i> Return to Login
+                    </a>
+                </div>
+                <!-- Message to show alert for users before to close its sessions -->
+                <div class="divContinueWorking" style="display: none;">
+                    <p >
+                        Your session is about to expire due to inactivity.
+                        Click to continue your session.
+                    </p>
+                    <a id="btnSessionInactivityAlertMessage" class='btn btn-warning'>
+                        <i class='fa fa-refresh'></i> Continue Working
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- NOTIFICATIONS MODAL -->
+<div id="modalNotifications" class="modal fade">
+    <div class="modal-dialog modal-lg animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title mb-2">Recent Activity</h5>
+            </div>
+            <div class="modal-body text-center height-65vh">
+                <!-- data goes here dynamically from API calls -->
+            </div>
+            <div class="modal-footer height-40">
+                <a class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Read Only user MODAL -->
+<div id="mdlreadonlyUser" class="modal fade" style="z-index: 9999">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow">
+                <h5 class="modal-title mb-2 _600">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding:4px;margin-right:0px;"><span aria-hidden="true">&times;</span>
+            </div>
+
+            <div class="modal-body text-center p-lg">
+                <!-- Message to Logout , close user session -->
+
+                    <p>
+                        Your account has been set to a READ ONLY role.  Please see your account administrator to change your permissions.
+                    </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+
+<script src="{% static 'js/libs/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/libs/pdfmake_vfonts.min.js' %}"></script>
+<script src="{% static 'js/libs/builder.min.js' %}"></script>
+
+<script src="{% static 'js/libs/jquery.blockUI.js' %}"></script>
+<script src="{% static 'js/libs/jquery-ui.js' %}"></script>
+<script src="{% static 'js/libs/jquery.inputmask.js' %}"></script>
+<script src="{% static 'js/libs/jquery.inputmask.binding.js' %}"></script>
+<script src="{% static 'js/libs/jquery.mask.min.js' %}"></script>
+
+<script src="{% static 'js/libs/popper.min.js' %}"></script>
+<script src="{% static 'js/libs/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/libs/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'js/libs/bootstrap-typeahead.min.js' %}"></script>
+<script src="{% static 'js/libs/dataTables.scroller.min.js' %}"></script>
+
+<script src="{% static 'js/libs/isiToast.min.js' %}"></script>
+<script src="{% static 'js/libs/select2.min.js' %}"></script>
+<script src="{% static 'js/libs/multiselect.js' %}"></script>
+<script src="{% static 'js/libs/dropzone.js' %}"></script>
+
+<script src="{% static 'js/app/app.js' %}"></script>
+
+<script>
+
+    // global vars
+    const SPINNER_LOADER_LG = "<img src='/static/images/loading2.gif' width='70' height='70' alt='spinner_large' />";
+    const SPINNER_LOADER = "<img src='/static/images/loading2.gif' width='50' height='50' alt='spinner_normal' />";
+    const SPINNER_LOADER_MD = "<img src='/static/images/loading2.gif' width='36' height='36' alt='spinner_medium' />";
+    const SPINNER_LOADER_SM = "<img src='/static/images/loading2.gif' width='24' height='24' alt='spinner_small' />";
+    const SPINNER_LOADER_XS = "<img src='/static/images/loading2.gif' width='17' height='17' alt='spinner_extrasmall' />";
+
+    const STATUS_ACTIVE = "{{ status_active }}";
+    const STATUS_INACTIVE = "{{ status_inactive }}";
+    const STATUS_PENDING = "{{ status_pending }}";
+    const STATUS_PROPOSED = "{{ status_proposed }}";
+
+    const SUBSTAGE_TYPE_NO_ERRORS = "{{ substage_type_no_errors }}";
+    const SUBSTAGE_TYPE_NO_ERRORS_DISPLAY = "{{ substage_type_no_errors_display }}";
+    const SUBSTAGE_TYPE_ERRORS_DISPLAY = "{{ substage_type_errors_display }}";
+    const STAGE_TYPE_IN_PROCESS_DISPLAY = "{{ stage_type_in_process_display }}";
+    const STAGE_TYPE_POSTED_DISPLAY = "{{ stage_type_posted_display }}";
+
+    const EDI_API_URL = "{{ edi_api_url }}";
+    const EDI_API_TOKEN = "{{ edi_api_token }}";
+
+    const DB_NAME = "{{ db_name }}";
+    // EA-1756
+    const USE_EXTERNAL_REPORT_SERVICE = "{{ USE_EXTERNAL_REPORT_SERVICE }}";
+    //alert(USE_EXTERNAL_REPORT_SERVICE);
+    const IS_ADMIN = '{{ is_sysadmin }}';
+
+    $(function () {
+
+        // Initialize DatePicker Plugin
+        $('.datepicker').datepicker({
+            autoclose: true,
+            format: "mm/dd/yyyy"
+        });
+
+        $(".validFloatNumber").blur(function(){
+            isValidNumber($(this), -999999999, 999999999, 2);
+        });
+
+        $(".validIntNumber").blur(function(){
+            isValidNumber($(this), -999999999, 999999999, 0);
+        });
+
+        $(".validIntNumberOnlyPositive").blur(function(){
+            isValidNumber($(this), 0, 999999999, 0);
+        });
+
+        {# EA-958 - Invoice Line number to be alphanumeric for manual chargeback creation #}
+        $(".validAlphaNumeric").keydown(function (e){
+            let k = e.keyCode || e.which;
+            let ok = k >= 65 && k <= 90 || // A-Z
+                k >= 96 && k <= 105 || // a-z
+                k >= 35 && k <= 40 || // arrows
+                k == 9 || //tab
+                k == 46 || //del
+                k == 8 || // backspaces
+                (!e.shiftKey && k >= 48 && k <= 57); // only 0-9 (ignore SHIFT options)
+
+            if(!ok || (e.ctrlKey && e.altKey)){
+                e.preventDefault();
+            }
+	    });
+
+        let mdlSessionInactivity = $("#mdlSessionInactivity");
+        let btnSessionInactivityLogoutAction = $("#btnSessionInactivityLogoutAction");
+        let btnSessionInactivityAlertMessage = $("#btnSessionInactivityAlertMessage");
+
+        let check_user_activity = function (){
+            $.ajax({
+                type: "POST",
+                url: "{% url 'check_user_activity' %}",
+                data: {},
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                },
+                success: function (response) {
+                    if( response.result === 'ok'){
+
+                        let alert_close_session_by_timeout = response.alert_close_session_by_timeout;
+                        let close_session_by_timeout = response.close_session_by_timeout;
+
+                        if (close_session_by_timeout || alert_close_session_by_timeout){
+
+                            if (close_session_by_timeout){
+                                mdlSessionInactivity.find('.divReturnToLogin').show();
+                                mdlSessionInactivity.find('.divContinueWorking').hide();
+                            }else{
+                                mdlSessionInactivity.find('.divContinueWorking').show();
+                                mdlSessionInactivity.find('.divReturnToLogin').hide();
+                            }
+                            mdlSessionInactivity.modal({backdrop: 'static'}).modal("show");
+                        }
+                    }
+                },
+                error: function (response) {
+                    show_toast_error_message(response.message);
+                }
+            });
+        };
+
+        btnSessionInactivityLogoutAction.click(function () {
+            mdlSessionInactivity.modal("hide");
+            APP.show_app_loader();
+            setTimeout(function () {
+                location.href = "{% url 'logout' %}";
+            }, 300);
+        });
+
+        btnSessionInactivityAlertMessage.click(function () {
+
+            // reset request.session['last_activity'] to now
+            $.ajax({
+                type: "POST",
+                url: "{% url 'reset_user_activity' %}",
+                data: {},
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                },
+                success: function (response) {
+                    if( response.result === 'ok'){
+                        show_toast_success_message(response.message, 'topRight');
+                        mdlSessionInactivity.modal("hide");
+                    }
+                },
+                error: function (response) {
+                    show_toast_error_message(response.message);
+                }
+            });
+        });
+
+        // Analize where to add it later to avoid performance issues
+        {#// check api status#}
+        {#let check_api_status = function (){#}
+        {#    let elem = $("#tdEDIStatus");#}
+        {#    $.ajax({#}
+        {#        type: "GET",#}
+        {#        url: "{{ check_api_status_endpoint }}",#}
+        {#        data: {},#}
+        {#        dataType: 'json',#}
+        {#        beforeSend: function () {#}
+        {#            elem.removeClass('text-success').removeClass('text-danger');#}
+        {#            elem.html('<img src="{% static 'images/loading2.gif' %}" width="24" height="24" />');#}
+        {#        },#}
+        {#        success: function (response) {#}
+        {#            if (response.status === 'success'){#}
+        {#                elem.addClass('text-success').html('RUNNING');#}
+        {#            }else{#}
+        {#                elem.addClass('text-danger').html('STOPPED');#}
+        {#            }#}
+        {#        },#}
+        {#        error: function (response) {#}
+        {#            elem.addClass('text-danger').html('STOPPED');#}
+        {#        }#}
+        {#    });#}
+        {# };#}
+
+        {% if not user.is_anonymous %}
+            // call first time or if the user reloads page
+            check_user_activity();
+            // call function every certain amount of seconds
+            setInterval(check_user_activity, {{ delta_to_check_user_session }});
+
+            // Analize where to add it later to avoid performance issues
+            {#// call first time or if the user reloads page#}
+            {#check_api_status();#}
+            {#// call function every certain amount of seconds#}
+            {#setInterval(check_api_status, {{ delta_to_check_api_status }});#}
+        {% endif %}
+    });
+
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

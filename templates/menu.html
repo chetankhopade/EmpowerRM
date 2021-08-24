@@ -1,0 +1,70 @@
+{% load static %}
+
+<div id="aside" class="app-aside fade box-shadow-x nav-expand white" aria-hidden="true" >
+    <div class="sidenav modal-dialog dk white empower_background_purple">
+        <!-- sidenav top -->
+        <div class="navbar empower_background_purple">
+            <!-- brand -->
+            <a href="{% url 'index' %}" class="navbar-brand">
+                <img src="{% static 'images/empower_logo_sm.png' %}" alt=".">
+            </a>
+            <!-- / brand -->
+        </div>
+
+        <!-- Flex nav content -->
+        <div class="flex hide-scroll">
+            <div class="scroll">
+                <div class="nav-stacked">
+                    <ul id="mainMenu" class="nav">
+
+                        {% ifnotequal db_name 'NoOP' %}
+                            <div class="mb-3 mx-3" >
+                                <div id="default" db="default" target="/dashboard"></div>
+                                 {% for company in user_companies_list %}
+                                <div id="{{ company.database }}" db="{{ company.database }}" target="{{ company.cb_start_page }}"></div>
+                                {% endfor %}
+                                <select id="selectCompany" class="form-control empower_background_purple p-1" onchange="APP.home_execute_url($(this))">
+                                    {% for my_company in user_companies %}
+                                        <option value="{{ my_company.database }}" {% if my_company.database == db_name %}selected{% endif %}>
+                                            {{ my_company }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            {% for module in modules %}
+                                <div class="m-3" style="color: #FFCE07; font-size: 12px">
+                                    <a class="btnCollapse" mid="{{ module.id }}" role="button" >
+                                        {{ module }}
+                                        <i class="fa fa-caret-down ml-2"></i>
+                                    </a>
+                                </div>
+                                <div class="collapse" id="divCollapse_{{ module.id }}">
+                                    {% for view in module.get_my_views %}
+                                        <li class="menu_options {% if menu_option == view.option %}is_active{% endif %}" db="{% if module.is_administration or module.is_edi %}default{% else %}{{ db_name }}{% endif %}" target="{{ view.link }}">
+                                            {% if is_read_only_user and view.name == 'Settings' %}
+                                            <a class="menu_options_link" onclick="APP.get_read_only_user_error()">
+                                                <span class="nav-icon">
+                                                    <i class="{{ view.icon }}"></i>
+                                                </span>
+                                                <span class="nav-text">{{ view.name }}</span>
+                                            </a>
+                                            {% else %}
+                                                <a class="menu_options_link" onclick="APP.execute_url($(this), {% if module.is_administration or module.is_edi %}true{% else %}false{% endif %})">
+                                                <span class="nav-icon">
+                                                    <i class="{{ view.icon }}"></i>
+                                                </span>
+                                                <span class="nav-text">{{ view.name }}</span>
+                                            </a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% endifnotequal %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

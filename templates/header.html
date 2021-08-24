@@ -1,0 +1,260 @@
+{% load static %}
+
+<div class="content-header white  box-shadow-2" id="content-header">
+    <div class="navbar navbar-expand-lg">
+        <!-- btn to toggle sidenav on small screen -->
+        <a class="d-lg-none mx-2" data-toggle="modal" data-target="#aside">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+                <path d="M80 304h352v16H80zM80 248h352v16H80zM80 192h352v16H80z"/>
+            </svg>
+        </a>
+        <!-- Navbar toggle btn -->
+        <li class="d-lg-none d-flex align-items-center"  >
+            <a href="#" class="mx-2" data-toggle="collapse" data-target="#navbarToggler" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512">
+                    <path d="M64 144h384v32H64zM64 240h384v32H64zM64 336h384v32H64z"/>
+                </svg>
+            </a>
+        </li>
+        <!-- Following the mockup here we need to add the Search -->
+        <div class="navbar-text nav-title flex"  >
+            <div class="collapse navbar-collapse no-grow order-lg-1" id="navbarToggler" >
+                {% ifnotequal db_name 'NoOP' %}
+                    <span class="input-group-btn">
+                            <button type="button" class="btn no-border no-bg no-shadow" >
+                               <i class="fa fa-search" ></i>
+                            </button>
+                        </span>
+                    <input id="input-search" type="text" db="{{db_name}}" class="form-control no-border no-bg no-shadow" placeholder="Search" onkeyup="APP.search(event)">
+                {% endifnotequal %}
+            </div>
+        </div>
+        <ul class="nav flex-row order-lg-2">
+
+            <!-- Add button -->
+            {% if db_name != 'default' %}
+
+                <li class="dropdown d-flex align-items-center">
+                    <a href="#" data-toggle="dropdown" class="d-flex align-items-center">
+                        <span class="font-20 m-2">
+                            <i class="fas fa-plus-circle"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right w pt-0 mt-2 animate fadeIn">
+                        {% if is_read_only_user %}
+                        <div class="font-14">
+                            <a onclick="APP.get_read_only_user_error();" class="nav-link">
+                                <i class="fas fa-prescription-bottle"></i> <span class="ml-2">Add Product</span>
+                            </a>
+                        </div>
+
+                        <div class="font-14">
+                            <a onclick="APP.get_read_only_user_error();" class="nav-link">
+                                <i class="fas fa-dolly-flatbed"></i> <span class="ml-1">Add Customer</span>
+                            </a>
+                        </div>
+
+                        <div class="font-14">
+                            <a class="nav-link" onclick="APP.get_read_only_user_error();">
+                                <i class="fas fa-file-invoice-dollar"></i> <span class="ml-2">Add Contract</span>
+                            </a>
+                        </div>
+                      {% else %}
+                        <div class="font-14">
+                            <a href="javascript:void(0);" class="nav-link" data-toggle="modal" data-target="#headerModalProduct" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+                                <i class="fas fa-prescription-bottle"></i> <span class="ml-2">Add Product</span>
+                            </a>
+                        </div>
+
+                        <div class="font-14">
+                            <a href="javascript:void(0);" class="nav-link" data-toggle="modal" data-target="#headermdlCreateCustomer" data-toggle-class="fade-left" data-toggle-class-target="#animate">
+                                <i class="fas fa-dolly-flatbed"></i> <span class="ml-1">Add Customer</span>
+                            </a>
+                        </div>
+
+                        <div class="font-14" db="{{ db_name }}" target="/contracts/create">
+                            <a class="nav-link" onclick="APP.execute_url($(this))">
+                                <i class="fas fa-file-invoice-dollar"></i> <span class="ml-2">Add Contract</span>
+                            </a>
+                        </div>
+
+                      {% endif %}
+                    </div>
+                </li>
+            {% endif %}
+
+            <!-- User dropdown menu -->
+            <li class="dropdown d-flex align-items-center">
+                <a href="#" data-toggle="dropdown" class="d-flex align-items-center">
+	    	        <span class="avatar w-32">
+                        {% with avatar=my_profile.download_avatar %}
+                            <img id="headerAvatar" src="{% if avatar %}{{ avatar }}{% else %} {% static 'images/a1.jpg' %} {% endif %}" alt="avatar">
+                        {% endwith %}
+	    	        </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right w pt-0 mt-2 animate fadeIn">
+                    <div db="default" target="/companies">
+                        <a class="dropdown-item black" href="javascript:void(0);" onclick="APP.execute_url($(this), true)">
+                            <i class="fa fa-list"></i> Companies
+                        </a>
+                    </div>
+                    <div db="default" target="/profile">
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="APP.execute_url($(this), true)">
+                            <i class="fa fa-user"></i> Profile
+                        </a>
+                    </div>
+                    {% if is_owner %}
+                        <div db="default" target="/users">
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="APP.execute_url($(this), true)">
+                                <i class="fa fa-user"></i> Users
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                    {% if is_read_only_user %}
+                        <div>
+                            <a class="dropdown-item" onclick="APP.get_read_only_user_error();">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    {% else %}
+                        <div db="{{ db_name }}" target="/settings">
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="APP.execute_url($(this))">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    {% endif %}
+{#                    <div db="{{ db_name }}" target="/help">#}
+{#                        <a class="dropdown-item" href="javascript:void(0);" onclick="APP.execute_url($(this))">#}
+{#                            <i class="fa fa-info-circle"></i> Need help?#}
+{#                        </a>#}
+{#                    </div>#}
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<!--
+EA-885 - Add Products window is not opening when click on Add Product link on + icon
+EA-886 - Create button of create direct customer pop up is not working on Header
+
+@To-Do - Remove different modals created below , create one generic modal andd pass
+all required information to it.
+-->
+
+<!-- Modal section -->
+<!-- HEADER PRODUCT MODAL -->
+<div id="headerModalProduct" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title">Create Product</h5>
+            </div>
+            <form class="p-x-xs" id="headerfmProduct" autocomplete="off">
+                {% csrf_token %}
+                <div class="modal-body text-center p-lg">
+                    <div class="form-group row required">
+                        <label for="headerinputProductNDC" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            NDC
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="headerinputProductNDC" class="form-control height-25" data-mask="00000-0000-00" placeholder="00000-0000-00">
+                            <p class="form-text text-muted font-9 pull-left">
+                                Enter the NDC number that identifies this product.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="margin-top: -1em">
+                        <label for="headerinputProductDescription" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Description
+                        </label>
+                        <div class="col-sm-9">
+                            <textarea id="headerinputProductDescription" class="form-control height-50 font-12" style="resize: none"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2 required">
+                        <label for="headerinputProductAccountNumber" class="col-sm-3 col-form-label font-10 font-weight-bold control-label">
+                            Accounting No.
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="headerinputProductAccountNumber" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="headerinputProductBrand" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Brand
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" id="headerinputProductBrand" class="form-control height-25">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="headerinputProductStrength" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Strength
+                        </label>
+                        <div class="col-sm-3">
+                            <input type="text" id="headerinputProductStrength" class="form-control height-25">
+                        </div>
+
+                        <label for="headerinputProductSize" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Bottle Size
+                        </label>
+                        <div class="col-sm-3">
+                            <input type="text" id="headerinputProductSize" class="form-control height-25">
+                        </div>
+
+                        <label for="headerinputProductUPC" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            UPC
+                        </label>
+                        <div class="col-sm-3">
+                            <input type="text" id="headerinputProductUPC" class="form-control height-25">
+                        </div>
+
+                        <label class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Is Active?
+                        </label>
+                        <div class="col-sm-3 text-left mt-1">
+                            <label class="switch">
+                                <input id="headertoggleProductStatus" type="checkbox" checked/>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <a id="headerbtnProductSubmit" class="btn btn-warning" onclick="HEADER.product_submit($(this));">Submit</a>
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Direct Customer -->
+<div id="headermdlCreateCustomer" class="modal fade">
+    <div class="modal-dialog animate">
+        <div class="modal-content">
+            <div class="modal-header empower_background_yellow" style="height: 40px;">
+                <h6 class="modal-title mb-2">
+                    Create Direct Customer
+                </h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+                {% include 'customers/direct/includes/main_form.html' with formid='headerfmCreateDirectCustomer' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/libs/builder.min.js' %}"></script>
+<script src="{% static 'js/app/header.js' %}"></script>
