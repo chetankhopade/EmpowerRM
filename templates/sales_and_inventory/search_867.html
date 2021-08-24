@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load extras %}
+{% load humanize %}
+
+{% block content_header_left %}
+    {{ header_title }}
+{% endblock %}
+
+{% block content_body %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form id="fm867DataSearch" autocomplete="off" action="">
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Wholesaler
+                                </label>
+                                <div class="input-group">
+                                    <select id="selectSearchFiltersCustomer" class="myselect2 form-control">
+                                        <option value="">All Wholesalers</option>
+                                        {% for wholesaler in wholesalers %}
+                                            <option value="{{ wholesaler.name }}">
+                                                {{ wholesaler.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Distribution Center DEA
+                                </label>
+                                <div class="input-group">
+                                    <select id="selectSearchFiltersDistributor" class="myselect2 form-control">
+                                        <option value="">All Distributors</option>
+                                        {% for distributor in distributors %}
+                                            <option value="{{ distributor.dea_number }}">
+                                                {{ distributor.dea_number }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Contract Number
+                                </label>
+                                <div class="input-group">
+                                    <select id="selectSearchFiltersContractNumber" class="myselect2 form-control">
+                                        <option value="">All Contracts</option>
+                                        {% for contract in contracts %}
+                                            <option value="{{ contract.number }}">
+                                                {{ contract.number }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Report Start Date
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersReportStartDate" type='text' class="form-control height-32 datepicker" placeholder="mm/dd/yyyy" value="{{ ch_end_date|date:'m/d/Y' }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Report End Date
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersReportEndDate" type='text' class="form-control height-32 datepicker" placeholder="mm/dd/yyyy" value="{{ ch_end_date|date:'m/d/Y' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Transfer Type
+                                </label>
+                                <div class="input-group">
+                                    <select id="selectSearchFiltersTransferType" class="myselect2 form-control">
+                                        <option value="">All</option>
+                                        <option value="BQ">Pre-Book</option>
+                                        <option value="DS">Drop Ship Sale</option>
+                                        <option value="IB">Inter-Company Transfer</option>
+                                        <option value="RV">Returns</option>
+                                        <option value="SD">Credit  Non-Return</option>
+                                        <option value="SH">Re-Bill</option>
+                                        <option value="SS">Stock Sale</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Created Date
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersCreateDate" type='text' class="form-control height-32 datepicker" placeholder="mm/dd/yyyy" value="{{ ch_start_date|date:'m/d/Y' }}">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Report Run Date
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersReportRunDate" type='text' class="form-control height-32 datepicker" placeholder="mm/dd/yyyy" value="{{ ch_start_date|date:'m/d/Y' }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Invoice Date
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersInvoiceDate" type='text' class="form-control height-32 datepicker" placeholder="mm/dd/yyyy" value="{{ ch_start_date|date:'m/d/Y' }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label class="col-form-label font-10 font-weight-bold">
+                                    Invoice Number
+                                </label>
+                                <div class="input-group">
+                                    <input id="inputSearchFiltersInvoiceNumber" type='text' class="form-control height-32">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="text-right mt-3">
+                        <a class="btn btn-primary" onclick="DATA_867.clear();">Clear</a>
+                        <a class="btn btn-warning" onclick="DATA_867.search();">Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <div class="card p-1">
+                <div class="text-right">
+                    <a class="btn btn-sm btn-default tt" onclick="DATA_867.export('excel')" title="Export to Excel">
+                        <i class="fa fa-file-excel-o"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default tt" onclick="DATA_867.export('csv')" title="Export to CSV">
+                        <i class="fa fa-file-text-o"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="tableSearch867Data" class="table table-condensed table-hover table-borderless table-striped nowrap">
+                        <thead class="bg-light">
+                        <tr class="font-10 text-dark">
+                            <th>Wholesaler Name</th>
+                            <th>Distribution Center</th>
+                            <th>Distribution Center DEA</th>
+                            <th>Report Start Date</th>
+                            <th>Report End Date</th>
+                            <th>Ship To Name</th>
+                            <th>Ship To DEA Number</th>
+                            <th>Ship_To_hin_number</th>
+                            <th>Ship To Address1</th>
+                            <th>Ship_To Address2</th>
+                            <th>Ship_To_City</th>
+                            <th>Ship_To_State</th>
+                            <th>Ship_To_ZipCode</th>
+                            <th>Transfer Type</th>
+                            <th>Item NDC</th>
+                            <th>Item Description</th>
+                            <th>Contract Number</th>
+                            <th>Invoice Number</th>
+                            <th>Invoice Date</th>
+                            <th>Quantity</th>
+                            <th>UOM</th>
+                            <th>Unite Price</th>
+                            <th>Extended Amount</th>
+                            <th>Report Run Date</th>
+                            <th>Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/app/sales_and_inventory/data_867.js' %}"></script>
+{% endblock %}
