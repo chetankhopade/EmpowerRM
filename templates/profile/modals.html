@@ -1,0 +1,170 @@
+<!-- Modal for Profile -->
+<div id="profileModal" class="modal black-overlay" data-backdrop="false">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;">
+                <h6 class="modal-title mb-2">Edit Profile</h6>
+            </div>
+            <div class="modal-body text-center p-lg">
+
+                <form class="p-x-xs" id="fmEditProfile">
+                    <!-- About -->
+                    <div class="form-group row">
+                        <h6 class="empower-color-blue ml-3 _600">ABOUT</h6>
+                    </div>
+                    <div class="form-group row" style="margin-bottom: 0.4em!important;">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Title
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfileTitle" name="p_title" type="text" class="form-control" value="{{ my_profile.title|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="margin-bottom: 0.4em!important;">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Department
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfileDepartment" name="p_department" type="text" class="form-control" value="{{ my_profile.department|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="margin-bottom: 0.4em!important;">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Company
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfileCompany" name="p_company" type="text" class="form-control" value="{{ my_profile.company|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Timezone
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfileTimeZone" name="p_timezone" type="text" class="form-control" value="{{ my_profile.timezone|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="form-group row mt-2">
+                        <h6 class="empower-color-blue ml-3 _600">CONTACT</h6>
+                    </div>
+                    <div class="form-group row" style="margin-bottom: 0.4em!important;">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Email
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfileEmail" name="p_email" type="email" class="form-control" value="{{ my_profile.user.email|default_if_none:'' }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label font-10 font-weight-bold">
+                            Phone
+                        </label>
+                        <div class="col-9">
+                            <input id="editProfilePhone" name="p_phone" type="text" class="form-control" value="{{ my_profile.phone|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal">
+                    Cancel
+                </a>
+                <a id="btnEditProfileModalSubmit" class="btn btn-warning" onclick="PROFILE.save_changes();">
+                    Save Changes
+                </a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+
+<!-- Modal for Change Password -->
+<div id="profileChangePasswordModal" class="modal black-overlay" data-backdrop="false">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content modal-md">
+            <div class="modal-header empower_background_yellow height-30">
+                <h5 class="modal-title">Edit Password</h5>
+            </div>
+            <div class="modal-body text-center p-3">
+                <form autocomplete="off">
+                    <div class="form-group row">
+                        <label for="inputProfileOldPassword" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Old Password
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="inputProfileOldPassword" type="password" class="form-control" value="" onblur="PROFILE.check_required_field($(this));" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group mt-1 row">
+                        <label for="inputProfileNewPassword" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            New Password
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="inputProfileNewPassword" type="password" class="form-control" value="" onblur="PROFILE.check_required_field($(this));" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group mt-1 row">
+                        <label for="inputProfileConfirmPassword" class="col-sm-3 col-form-label font-10 font-weight-bold">
+                            Confirm Password
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="inputProfileConfirmPassword" type="password" class="form-control" value="" onblur="PROFILE.check_required_field($(this));" autocomplete="off">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" data-dismiss="modal" >Cancel</a>
+                <a class="btn btn-warning" onclick="PROFILE.change_password($(this));">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Feedback -->
+<div id="feedbackModal" class="modal black-overlay" data-backdrop="false" >
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;">
+                <h6 class="modal-title mb-2">Feedback</h6>
+            </div>
+            <div class="modal-body text-center p-lg,rating-widget, rating">
+                <h4 class="empower-color-purple mt-1">Tell Us How We Are Doing!</h4>
+
+                <form class="p-x-xs" id="fmEditFeedback">
+                    <input type="hidden" id="inputStars" name="f_rating" value=""/>
+                    {% csrf_token %}
+
+                    <!-- stars -->
+                    <div id="divStars" class='starrr'></div>
+                    <div id="divStarsMessage" class='success-box' style="display: none;">
+                        <div class='clearfix'></div>
+                        <img alt='tick image' width='20' src='data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA0MjYuNjY3IDQyNi42NjciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQyNi42NjcgNDI2LjY2NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIHN0eWxlPSJmaWxsOiM2QUMyNTk7IiBkPSJNMjEzLjMzMywwQzk1LjUxOCwwLDAsOTUuNTE0LDAsMjEzLjMzM3M5NS41MTgsMjEzLjMzMywyMTMuMzMzLDIxMy4zMzMgIGMxMTcuODI4LDAsMjEzLjMzMy05NS41MTQsMjEzLjMzMy0yMTMuMzMzUzMzMS4xNTcsMCwyMTMuMzMzLDB6IE0xNzQuMTk5LDMyMi45MThsLTkzLjkzNS05My45MzFsMzEuMzA5LTMxLjMwOWw2Mi42MjYsNjIuNjIyICBsMTQwLjg5NC0xNDAuODk4bDMxLjMwOSwzMS4zMDlMMTc0LjE5OSwzMjIuOTE4eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K'/>
+                        <div class='text-message'></div>
+                        <div class='clearfix'></div>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class=" col-form-label font-11 font-weight-bold">
+                            Please provide any feedback on how we can improve EmpowerRM
+                        </label>
+                        <div class="">
+                            <textarea name="f_comments" class="form-control height-50" style="resize: none" ></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" >
+                <a class="btn btn-primary" data-dismiss="modal">Cancel</a>
+                <a class="btn btn-warning" onclick="PROFILE.send_feedback();">Send Feedback</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
